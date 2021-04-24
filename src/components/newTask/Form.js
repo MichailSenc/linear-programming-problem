@@ -5,13 +5,14 @@ import { GRAPHICAL, ARTIFICAL, SIMPLEX, TYPE_FUNCTION, TYPE_REFERENCE, TYPE_BASI
 import Button from "react-bootstrap/Button";
 import Table from "./Table/Table";
 import Context from "../../context/newTask/context";
+import SolutionContext from "../../context/solution/solutionContext";
 import { SOLUTION_REF } from "../../refs";
 
 const Form = () => {
     const { typeData, setTypeData, varCount, refCount, setVarCount, setRefCount } = useContext(Context);
+    const { setSolutionData, solutionData } = useContext(SolutionContext);
 
     const [dataState, setDataState] = useState({
-        borderStyle: "",
         messageForVar: "",
         messageForRef: "",
         generalMessage: "",
@@ -19,18 +20,27 @@ const Form = () => {
     });
 
     useEffect(() => {
+        console.log(solutionData);
+    }, [solutionData])
+
+    useEffect(() => {
         console.log("effect!");
         if (varCount < refCount) {
             setDataState({
-                borderStyle: "border border-danger",
                 messageForVar: "Число переменных должно быть не меньше числа ограничений",
                 messageForRef: "Число ограничений должно быть не больше числа переменных",
-                generalMessage: "При данных параметрах таблицы составить не возможно",
+                generalMessage: "При данных параметрах таблицы составить невозможно",
+                isError: true,
+            });
+        } else if (varCount < 1 || refCount < 1) {
+            setDataState({
+                messageForVar: varCount < 1 ? "Число переменных не может быть меньше 1" : "",
+                messageForRef: refCount < 1 ? "Число ограничений не может быть меньше 1" : "",
+                generalMessage: "При данных параметрах таблицы составить невозможно",
                 isError: true,
             });
         } else {
             setDataState({
-                borderStyle: "",
                 messageForVar: "",
                 messageForRef: "",
                 generalMessage: "",
@@ -43,6 +53,29 @@ const Form = () => {
         return currentType === typeData;
     };
 
+    const getDataArray = (type) => {
+        let data = [];
+
+        document.querySelectorAll(`[input_type=${type}]`).forEach((item) => {
+            data.push([item.value, +item.getAttribute("position_index")]);
+        });
+
+        data = data.sort((a, b) => a[1] - b[1]).map((item) => item[0]);
+        return data;
+    };
+
+    const getRefArray = () => {
+        let data = [];
+        for (let i = 0; i < refCount; i++) {
+            let str = [];
+            document.querySelectorAll(`[input_type='${TYPE_REFERENCE}'][row_index='${i + 1}']`).forEach((item) => {
+                str.push([item.value, +item.getAttribute("position_index")]);
+            });
+            data.push(str.sort((a, b) => a[1] - b[1]).map((item) => item[0]));
+        }
+        return data;
+    };
+
     const submitData = (e) => {
         e.preventDefault();
         console.log("SUBMIT-EVENT!");
@@ -52,36 +85,16 @@ const Form = () => {
             return;
         }
 
-        if (!varCount || !refCount) {
-            setDataState({
-                borderStyle: "border border-danger",
-                messageForVar: varCount ? "" : "Введите число переменных",
-                messageForRef: refCount ? "" : "Введите число ограничений",
-                generalMessage: "Ошибка не все параметры были введены",
-                isError: true,
-            });
-            return;
-        }
-
-        let isError = false;
-
-        document.querySelectorAll("[input_type]").forEach((item) => {
-            if (item.value === "") {
-                item.classList.add("bg-gradient-primary");
-                // item.classList.add("border-danger");
-            }
+        setSolutionData({
+            func: getDataArray(TYPE_FUNCTION),
+            restrictions: getRefArray(),
+            baseVector: typeData === ARTIFICAL ? [] : getDataArray(TYPE_BASIS),
+            varCount,
+            refCount,
+            isArt: typeData === ARTIFICAL,
         });
 
-        setTimeout(() => {
-            document.querySelectorAll("[input_type]").forEach((item) => {
-                item.classList.remove("bg-gradient-primary");
-                // item.classList.remove("border-danger");
-            });
-        }, 1000);
-
-        if (isError) return;
-
-        window.location.href = SOLUTION_REF;
+        // window.location.href = SOLUTION_REF;
     };
 
     const solveTask = () => {

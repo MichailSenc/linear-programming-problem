@@ -12,30 +12,32 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-.ref_table tbody tr{
-    td,
-    th {
-      padding: 0;
-        // width: var(--element-width);
-        input {
-          border: none;
-          background-color: inherit;
-          outline: none;
-          // padding: 12px;
-          width: 100%;
-          height: 100%;
-          text-align: center;
-        }
-        input:hover {
-          background-color: #DCDCDC;
+.ref_table {
+    table-layout: fixed;
+    width: 100%;
+    tbody tr {
+        td,
+        th {
+            width: 2%;
+            padding: 0;
+            input,
+            select {
+                border: none;
+                background-color: inherit;
+                outline: none;
+                width: 100%;
+                height: 100%;
+                text-align: center;
+                text-align-last: center;
+            }
+            input:hover,
+            select:hover {
+                background-color: #dcdcdc;
+            }
         }
     }
 }
 
-.ref_table thead tr th{
-  text-align: center;
-}
-
-input {
-  background-color: red;
+.ref_table thead tr th {
+    text-align: center;
 }

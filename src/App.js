@@ -3,24 +3,27 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import NewTask from "./pages/NewTask";
 // import { About } from "./pages/About";
 import NewTaskState from "./context/newTask/newTaskState";
+import SolutionState from "./context/solution/solutonState";
 import NavBar from "./components/NavBar";
 import { NEW_REF } from "./refs";
 
 function App() {
     return (
         <NewTaskState>
-            <div className="container-fluid">
-                <div className="row">
-                    <BrowserRouter>
-                        <NavBar />
-                        <div className="container pt-4">
-                            <Switch>
-                                <Route exact path={NEW_REF} component={NewTask} />
-                            </Switch>
-                        </div>
-                    </BrowserRouter>
+            <SolutionState>
+                <div className="container-fluid">
+                    <div className="row">
+                        <BrowserRouter>
+                            <NavBar />
+                            <div className="container pt-4">
+                                <Switch>
+                                    <Route exact path={NEW_REF} component={NewTask} />
+                                </Switch>
+                            </div>
+                        </BrowserRouter>
+                    </div>
                 </div>
-            </div>
+            </SolutionState>
         </NewTaskState>
     );
 }

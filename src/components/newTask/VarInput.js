@@ -1,7 +1,7 @@
 import React from "react";
 
 const VarInput = (props) => {
-    const { label, id, plValue, setValue, border, message } = props;
+    const { label, id, plValue, setValue, message } = props;
 
     // вот ЭТО сильно... аааааа
     const changeValue = (e) => {
@@ -21,7 +21,7 @@ const VarInput = (props) => {
         setValue(valForState);
     };
 
-    const typeClass = border ? `${border} ` : "";
+    const typeClass = message ? "border border-danger " : "";
     return (
         <div className="form-group row">
             <label htmlFor={id} className="col-sm-5 col-form-label">
@@ -34,8 +34,9 @@ const VarInput = (props) => {
                     id={id}
                     placeholder={`например ${plValue}`}
                     onChange={(e) => changeValue(e)}
+                    defaultValue={1}
                 />
-                    <small className="form-text text-muted position-absolute w-100 mt-0">{message}</small>
+                <small className="form-text text-muted position-absolute w-100 mt-0">{message}</small>
             </div>
         </div>
     );

@@ -4,8 +4,6 @@ import Row from "./TableRow";
 const Table = (props) => {
     const { varCount, refCount, type } = props;
 
-    // console.log(varCount, refCount);
-
     const getCols = () => {
         const colls = [];
         for (let i = 0; i < varCount; i++) {
@@ -32,7 +30,9 @@ const Table = (props) => {
             <table className="table table-striped ref_table table-bordered">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
+                        <th scope="col" style={{ width: "5%" }}>
+                            #
+                        </th>
                         {getCols()}
                         <th scope="col">res</th>
                     </tr>
