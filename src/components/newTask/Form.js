@@ -5,6 +5,7 @@ import { GRAPHICAL, ARTIFICAL, SIMPLEX, TYPE_FUNCTION, TYPE_REFERENCE, TYPE_BASI
 import Button from "react-bootstrap/Button";
 import Table from "./Table/Table";
 import Context from "../../context/newTask/context";
+import { SOLUTION_REF } from "../../refs";
 
 const Form = () => {
     const { typeData, setTypeData, varCount, refCount, setVarCount, setRefCount } = useContext(Context);
@@ -46,6 +47,11 @@ const Form = () => {
         e.preventDefault();
         console.log("SUBMIT-EVENT!");
 
+        if (dataState.isError) {
+            setDataState({ ...dataState, generalMessage: "Ошибка, проверьте корректновсть введённых данных" });
+            return;
+        }
+
         if (!varCount || !refCount) {
             setDataState({
                 borderStyle: "border border-danger",
@@ -54,7 +60,28 @@ const Form = () => {
                 generalMessage: "Ошибка не все параметры были введены",
                 isError: true,
             });
+            return;
         }
+
+        let isError = false;
+
+        document.querySelectorAll("[input_type]").forEach((item) => {
+            if (item.value === "") {
+                item.classList.add("bg-gradient-primary");
+                // item.classList.add("border-danger");
+            }
+        });
+
+        setTimeout(() => {
+            document.querySelectorAll("[input_type]").forEach((item) => {
+                item.classList.remove("bg-gradient-primary");
+                // item.classList.remove("border-danger");
+            });
+        }, 1000);
+
+        if (isError) return;
+
+        window.location.href = SOLUTION_REF;
     };
 
     const solveTask = () => {
@@ -103,28 +130,28 @@ const Form = () => {
                     />
                 </div>
                 <fieldset className="form-group col-sm-6">
-                        <legend className="col-form-label col-sm-3 pl-0">
-                            <strong>Тип задачи</strong>
-                        </legend>          
-                        <div className="d-flex flex-column  h-75 justify-content-around">
-                            <TaskInput
-                                value={ARTIFICAL}
-                                label="Метод исккусственного базиса"
-                                checked={isChecked(ARTIFICAL)}
-                                setTypeData={setTypeData}
-                            />
-                            <TaskInput
-                                value={SIMPLEX}
-                                label="Симплекс метод"
-                                checked={isChecked(SIMPLEX)}
-                                setTypeData={setTypeData}
-                            />
-                            <TaskInput
-                                value={GRAPHICAL}
-                                label="Графический метод"
-                                checked={isChecked(GRAPHICAL)}
-                                setTypeData={setTypeData}
-                            />
+                    <legend className="col-form-label col-sm-3 pl-0">
+                        <strong>Тип задачи</strong>
+                    </legend>
+                    <div className="d-flex flex-column  h-75 justify-content-around">
+                        <TaskInput
+                            value={ARTIFICAL}
+                            label="Метод исккусственного базиса"
+                            checked={isChecked(ARTIFICAL)}
+                            setTypeData={setTypeData}
+                        />
+                        <TaskInput
+                            value={SIMPLEX}
+                            label="Симплекс метод"
+                            checked={isChecked(SIMPLEX)}
+                            setTypeData={setTypeData}
+                        />
+                        <TaskInput
+                            value={GRAPHICAL}
+                            label="Графический метод"
+                            checked={isChecked(GRAPHICAL)}
+                            setTypeData={setTypeData}
+                        />
                     </div>
                 </fieldset>
             </div>

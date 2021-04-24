@@ -3,8 +3,13 @@ import React from "react";
 const Row = (props) => {
     const { rowNumb, count, type } = props;
 
-    const onChange = () => {
+    const onChange = (e) => {
         console.log("INPUT-ON-CHANGE!");
+
+        let initVal = +e.target.value;
+        if (/(^0[0-9]+)/.exec(e.target.value)) {
+            e.target.value = initVal;
+        }
     };
 
     const getRowInputs = () => {
@@ -17,7 +22,8 @@ const Row = (props) => {
                         type="number"
                         input_type={type}
                         index={`${i + 1}-${rowNumb}`}
-                        onChange={onChange}
+                        defaultValue="0"
+                        onChange={(e) => onChange(e)}
                     />
                 </td>
             );

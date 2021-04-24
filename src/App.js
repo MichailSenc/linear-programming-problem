@@ -4,6 +4,7 @@ import NewTask from "./pages/NewTask";
 // import { About } from "./pages/About";
 import NewTaskState from "./context/newTask/newTaskState";
 import NavBar from "./components/NavBar";
+import { NEW_REF } from "./refs";
 
 function App() {
     return (
@@ -14,8 +15,7 @@ function App() {
                         <NavBar />
                         <div className="container pt-4">
                             <Switch>
-                                {/* <Route path={"/"} exact component={Home} /> */}
-                                <Route exact path={"/new_task"} component={NewTask} />
+                                <Route exact path={NEW_REF} component={NewTask} />
                             </Switch>
                         </div>
                     </BrowserRouter>
