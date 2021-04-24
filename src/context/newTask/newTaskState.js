@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Context from "./context";
 import { ARTIFICAL } from "../../components/newTask/taskTypes";
 
-export const AlertState = ({ children }) => {
+const NewTaskState = ({ children }) => {
     const [varCount, setVarCount] = useState(1);
     const [refCount, setRefCount] = useState(1);
     const [typeData, setTypeData] = useState(ARTIFICAL);
@@ -22,3 +22,5 @@ export const AlertState = ({ children }) => {
         </Context.Provider>
     );
 };
+
+export default NewTaskState;

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import VarInput from "./VarInput";
 import TaskInput from "./TaskTypeInput";
 import { GRAPHICAL, ARTIFICAL, SIMPLEX, TYPE_FUNCTION, TYPE_REFERENCE, TYPE_BASIS } from "./taskTypes";
@@ -9,13 +9,52 @@ import Context from "../../context/newTask/context";
 const Form = () => {
     const { typeData, setTypeData, varCount, refCount, setVarCount, setRefCount } = useContext(Context);
 
+    const [dataState, setDataState] = useState({
+        borderStyle: "",
+        messageForVar: "",
+        messageForRef: "",
+        generalMessage: "",
+        isError: false,
+    });
+
+    useEffect(() => {
+        console.log("effect!");
+        if (varCount < refCount) {
+            setDataState({
+                borderStyle: "border border-danger",
+                messageForVar: "Число переменных должно быть не меньше числа ограничений",
+                messageForRef: "Число ограничений должно быть не больше числа переменных",
+                generalMessage: "При данных параметрах таблицы составить не возможно",
+                isError: true,
+            });
+        } else {
+            setDataState({
+                borderStyle: "",
+                messageForVar: "",
+                messageForRef: "",
+                generalMessage: "",
+                isError: false,
+            });
+        }
+    }, [varCount, refCount]);
+
     const isChecked = (currentType) => {
         return currentType === typeData;
     };
 
     const submitData = (e) => {
         e.preventDefault();
-        console.log("SUB");
+        console.log("SUBMIT-EVENT!");
+
+        if (!varCount || !refCount) {
+            setDataState({
+                borderStyle: "border border-danger",
+                messageForVar: varCount ? "" : "Введите число переменных",
+                messageForRef: refCount ? "" : "Введите число ограничений",
+                generalMessage: "Ошибка не все параметры были введены",
+                isError: true,
+            });
+        }
     };
 
     const solveTask = () => {
@@ -34,13 +73,8 @@ const Form = () => {
     };
 
     const Tables = (jsx) => {
-        if (varCount < refCount) {
-            return (
-                <>
-                    <h6 className="text-danger">Число ограничений больше числа переменных</h6>
-                    <h6 className="text-danger">При данных параметрах таблицы составить не возможно</h6>
-                </>
-            );
+        if (dataState.isError) {
+            return <h6 className="text-danger">{dataState.generalMessage}</h6>;
         }
         return jsx;
     };
@@ -50,6 +84,8 @@ const Form = () => {
             <div className="d-flex">
                 <div className="col-sm-6">
                     <VarInput
+                        message={dataState.messageForVar}
+                        border={dataState.borderStyle}
                         label="Число переменных"
                         id="varCount"
                         value={varCount}
@@ -57,6 +93,8 @@ const Form = () => {
                         setValue={setVarCount}
                     />
                     <VarInput
+                        message={dataState.messageForRef}
+                        border={dataState.borderStyle}
                         label="Число ограничений"
                         id="refCount"
                         value={refCount}
@@ -65,11 +103,10 @@ const Form = () => {
                     />
                 </div>
                 <fieldset className="form-group col-sm-6">
-                    <div className="row">
-                        <legend className="col-form-label col-sm-3 pt-0">
+                        <legend className="col-form-label col-sm-3 pl-0">
                             <strong>Тип задачи</strong>
-                        </legend>
-                        <div className="col-sm-6 d-flex flex-column ">
+                        </legend>          
+                        <div className="d-flex flex-column  h-75 justify-content-around">
                             <TaskInput
                                 value={ARTIFICAL}
                                 label="Метод исккусственного базиса"
@@ -88,7 +125,6 @@ const Form = () => {
                                 checked={isChecked(GRAPHICAL)}
                                 setTypeData={setTypeData}
                             />
-                        </div>
                     </div>
                 </fieldset>
             </div>
@@ -110,7 +146,7 @@ const Form = () => {
                 </>
             )}
             <div className="d-flex justify-content-start p-3">
-                <Button className="mr-1" variant="primary" onClick={() => solveTask()}>
+                <Button className="mr-1" type="submit" variant="primary">
                     Решить задачу
                 </Button>
                 <Button className="mr-1" variant="secondary" onClick={() => clearParams()}>

@@ -15,7 +15,6 @@ const Row = (props) => {
                 <td key={i}>
                     <input
                         type="number"
-                        // defaultValue={0}
                         input_type={type}
                         index={`${i + 1}-${rowNumb}`}
                         onChange={onChange}
