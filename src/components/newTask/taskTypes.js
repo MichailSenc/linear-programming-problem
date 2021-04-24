@@ -1,0 +1,7 @@
+export const GRAPHICAL = "GRAPHICAL"
+export const ARTIFICAL = "ARTIFICAL_BASIS"
+export const SIMPLEX = "SIMPLEX"
+export const TYPE_FUNCTION = "TYPE_FUNCTION"
+export const TYPE_REFERENCE = "TYPE_REFERENCE"
+export const TYPE_BASIS = "TYPE_BASIS"
+

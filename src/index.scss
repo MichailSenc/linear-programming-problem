@@ -1,0 +1,41 @@
+@import "~bootstrap/scss/bootstrap";
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+        "Droid Sans", "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+.ref_table tbody tr{
+    td,
+    th {
+      padding: 0;
+        // width: var(--element-width);
+        input {
+          border: none;
+          background-color: inherit;
+          outline: none;
+          // padding: 12px;
+          width: 100%;
+          height: 100%;
+          text-align: center;
+        }
+        input:hover {
+          background-color: #DCDCDC;
+        }
+    }
+}
+
+.ref_table thead tr th{
+  text-align: center;
+}
+
+input {
+  background-color: red;
+}
