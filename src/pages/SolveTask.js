@@ -2,7 +2,7 @@ import React from "react";
 
 const SolveTask = () => {
     return (
-        <h1>Hello!</h1>
+        <h1>Hello SolveTask!</h1>
     );
 };
 

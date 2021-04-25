@@ -6,7 +6,6 @@ const VarInput = (props) => {
     // вот ЭТО сильно... аааааа
     const changeValue = (e) => {
         let initVal = +e.target.value;
-        console.log(initVal);
         let valForState = initVal;
         if (initVal > 16) {
             initVal = valForState = 16;

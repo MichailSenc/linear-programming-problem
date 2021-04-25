@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
-import { NEW_REF, LOAD_REF, INFP_REF } from "../refs";
+import { NEW_REF, LOAD_REF, INFO_REF } from "../refs";
 
 const MainNavbar = () => {
     return (
@@ -19,7 +19,7 @@ const MainNavbar = () => {
                     </NavLink>
                 </Nav>
                 <Nav>
-                    <NavLink className="mr-2 nav-link" to={INFP_REF}>
+                    <NavLink className="mr-2 nav-link" to={INFO_REF}>
                         More deets
                     </NavLink>
                     <NavLink className="mr-2 nav-link" to="/memes">

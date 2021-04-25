@@ -26,20 +26,18 @@ const Table = (props) => {
     };
 
     return (
-        <>
-            <table className="table table-striped ref_table table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col" style={{ width: "5%" }}>
-                            #
-                        </th>
-                        {getCols()}
-                        <th scope="col">res</th>
-                    </tr>
-                </thead>
-                <tbody>{getRows()}</tbody>
-            </table>
-        </>
+        <table className="table table-striped ref_table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col" style={{ width: "5%" }}>
+                        #
+                    </th>
+                    {getCols()}
+                    <th scope="col">res</th>
+                </tr>
+            </thead>
+            <tbody>{getRows()}</tbody>
+        </table>
     );
 };
 

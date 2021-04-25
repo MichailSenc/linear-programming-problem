@@ -5,8 +5,6 @@ const Row = (props) => {
     const { rowNumb, count, type } = props;
 
     const onChange = (e) => {
-        console.log("INPUT-ON-CHANGE!");
-
         let initVal = +e.target.value;
         if (/(^0[0-9]+)/.exec(e.target.value)) {
             e.target.value = initVal;

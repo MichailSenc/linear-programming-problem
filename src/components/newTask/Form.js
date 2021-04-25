@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { GRAPHICAL, ARTIFICAL, SIMPLEX, TYPE_FUNCTION, TYPE_REFERENCE, TYPE_BASIS } from "./taskTypes";
-import { SOLUTION_REF } from "../../refs";
+import { GAPHICAL_REF, SIMPLEX_REF } from "../../refs";
 import VarInput from "./VarInput";
 import TaskInput from "./TaskTypeInput";
 import Button from "react-bootstrap/Button";
@@ -12,6 +12,7 @@ import SolutionContext from "../../context/solution/solutionContext";
 const Form = () => {
     const { typeData, setTypeData, varCount, refCount, setVarCount, setRefCount } = useContext(Context);
     const { setSolutionData } = useContext(SolutionContext);
+
     const history = useHistory();
 
     const [dataState, setDataState] = useState({
@@ -21,6 +22,7 @@ const Form = () => {
         isError: false,
     });
 
+    // при изменении числа переменных/ограничений проверить на ошибку
     useEffect(() => {
         if (varCount < refCount) {
             setDataState({
@@ -46,6 +48,7 @@ const Form = () => {
         }
     }, [varCount, refCount]);
 
+    // возвращает отсортированный массив данных функции/базиса
     const getDataArray = (type) => {
         let data = [];
 
@@ -53,10 +56,10 @@ const Form = () => {
             data.push([item.value, +item.getAttribute("position_index")]);
         });
 
-        data = data.sort((a, b) => a[1] - b[1]).map((item) => item[0]);
-        return data;
+        return data.sort((a, b) => a[1] - b[1]).map((item) => item[0]);
     };
 
+    // возвращает матрицу функций-ограничений
     const getRefArray = () => {
         let data = [];
         for (let i = 0; i < refCount; i++) {
@@ -69,6 +72,7 @@ const Form = () => {
         return data;
     };
 
+    // сабмит формы
     const submitData = (e) => {
         e.preventDefault();
 
@@ -83,18 +87,33 @@ const Form = () => {
             baseVector: typeData === ARTIFICAL ? [] : getDataArray(TYPE_BASIS),
             varCount,
             refCount,
+            type: typeData,
             isArt: typeData === ARTIFICAL,
         });
 
-        history.push(SOLUTION_REF);
+        switch (typeData) {
+            case GRAPHICAL:
+                history.push(GAPHICAL_REF);
+                break;
+            case ARTIFICAL:
+                history.push(SIMPLEX_REF);
+                break;
+            case SIMPLEX:
+                history.push(SIMPLEX_REF);
+                break;
+            default:
+                break;
+        }
     };
 
+    // очистить всем параматрам таблиц присвоить 0
     const clearParams = () => {
         document.querySelectorAll("input[input_type]").forEach((item) => {
             item.value = 0;
         });
     };
 
+    // сохранить данные в файл
     const save = () => {
         // TODO дописать сохранение конфигурации в файл
         console.log("SAVE!");
