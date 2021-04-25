@@ -1,4 +1,10 @@
-import { CHANGE_VAR_COUNT, CHANGE_REF_COUNT, CHANGE_TYPE_DATA, CHANGE_GENERAL_MESSAGE } from "../../types";
+import {
+    CHANGE_VAR_COUNT,
+    CHANGE_REF_COUNT,
+    CHANGE_TYPE_DATA,
+    CHANGE_GENERAL_MESSAGE,
+} from "../../types";
+
 import { NO_ERROR, VAR_LOWER_REF, LOWER_THAN_ONE } from "./messages";
 
 const checkData = ({ varCount, refCount }) => {
@@ -8,10 +14,13 @@ const checkData = ({ varCount, refCount }) => {
 };
 
 const handlers = {
-    [CHANGE_VAR_COUNT]: (state, { varCount }) => ({ ...state, varCount, errors: checkData({...state, varCount}) }),
-    [CHANGE_REF_COUNT]: (state, { refCount }) => ({ ...state, refCount, errors: checkData({...state, refCount}) }),
+    [CHANGE_VAR_COUNT]: (state, { varCount }) => ({ ...state, varCount, errors: checkData({ ...state, varCount }) }),
+    [CHANGE_REF_COUNT]: (state, { refCount }) => ({ ...state, refCount, errors: checkData({ ...state, refCount }) }),
     [CHANGE_TYPE_DATA]: (state, { typeData }) => ({ ...state, typeData }),
-    [CHANGE_GENERAL_MESSAGE]: (state, { generalMessage }) => ({ ...state, errors: {...state.errors, generalMessage} }),
+    [CHANGE_GENERAL_MESSAGE]: (state, { generalMessage }) => ({
+        ...state,
+        errors: { ...state.errors, generalMessage },
+    }),
     DEFAULT: (state) => state,
 };
 

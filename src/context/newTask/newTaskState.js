@@ -1,8 +1,13 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useRef } from "react";
 import { newTaskReducer } from "./newTaskReducer";
 import Context from "./context";
 import { ARTIFICAL } from "../../types";
-import { CHANGE_VAR_COUNT, CHANGE_REF_COUNT, CHANGE_TYPE_DATA, CHANGE_GENERAL_MESSAGE } from "../../types";
+import {
+    CHANGE_VAR_COUNT,
+    CHANGE_REF_COUNT,
+    CHANGE_TYPE_DATA,
+    CHANGE_GENERAL_MESSAGE,
+} from "../../types";
 import { NO_ERROR } from "./messages";
 
 const NewTaskState = ({ children }) => {
@@ -12,6 +17,8 @@ const NewTaskState = ({ children }) => {
         typeData: ARTIFICAL,
         errors: NO_ERROR(),
     });
+
+    const inputValues = useRef({});
 
     const setVarCount = (varCount) => {
         dispatch({
@@ -40,15 +47,25 @@ const NewTaskState = ({ children }) => {
             generalMessage,
         });
     };
+    const setInputValue = (key, value) => {
+        inputValues.current = {...inputValues.current, [key]: value}
+    };
+
+    const clearInputValues = () => {
+        inputValues.current = {}
+    };
 
     return (
         <Context.Provider
             value={{
                 newTaskstate,
+                inputValues,
                 setVarCount,
                 setRefCount,
                 setTypeData,
                 setGeneralMessage,
+                setInputValue,
+                clearInputValues,
             }}
         >
             {children}

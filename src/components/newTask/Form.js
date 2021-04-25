@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { GRAPHICAL, ARTIFICAL, SIMPLEX, TYPE_FUNCTION, TYPE_REFERENCE, TYPE_BASIS } from "../../types";
 import { GAPHICAL_REF, SIMPLEX_REF } from "../../refs";
@@ -16,6 +16,7 @@ const Form = () => {
         setVarCount,
         setRefCount,
         setGeneralMessage,
+        clearInputValues,
     } = useContext(Context);
 
     const { setSolutionData } = useContext(SolutionContext);
@@ -85,6 +86,7 @@ const Form = () => {
         document.querySelectorAll("input[input_type]").forEach((item) => {
             item.value = 0;
         });
+        clearInputValues();
     };
 
     // сохранить данные в файл
