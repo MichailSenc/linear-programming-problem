@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { GRAPHICAL, ARTIFICAL, SIMPLEX, TYPE_FUNCTION, TYPE_REFERENCE, TYPE_BASIS } from "./taskTypes";
+import { GRAPHICAL, ARTIFICAL, SIMPLEX, TYPE_FUNCTION, TYPE_REFERENCE, TYPE_BASIS } from "../../types";
 import { GAPHICAL_REF, SIMPLEX_REF } from "../../refs";
 import VarInput from "./VarInput";
 import TaskInput from "./TaskTypeInput";
@@ -10,43 +10,17 @@ import Context from "../../context/newTask/context";
 import SolutionContext from "../../context/solution/solutionContext";
 
 const Form = () => {
-    const { typeData, setTypeData, varCount, refCount, setVarCount, setRefCount } = useContext(Context);
+    const {
+        newTaskstate: { varCount, refCount, typeData, errors },
+        setTypeData,
+        setVarCount,
+        setRefCount,
+        setGeneralMessage,
+    } = useContext(Context);
+
     const { setSolutionData } = useContext(SolutionContext);
 
     const history = useHistory();
-
-    const [dataState, setDataState] = useState({
-        messageForVar: "",
-        messageForRef: "",
-        generalMessage: "",
-        isError: false,
-    });
-
-    // при изменении числа переменных/ограничений проверить на ошибку
-    useEffect(() => {
-        if (varCount < refCount) {
-            setDataState({
-                messageForVar: "Число переменных должно быть не меньше числа ограничений",
-                messageForRef: "Число ограничений должно быть не больше числа переменных",
-                generalMessage: "При данных параметрах таблицы составить невозможно",
-                isError: true,
-            });
-        } else if (varCount < 1 || refCount < 1) {
-            setDataState({
-                messageForVar: varCount < 1 ? "Число переменных не может быть меньше 1" : "",
-                messageForRef: refCount < 1 ? "Число ограничений не может быть меньше 1" : "",
-                generalMessage: "При данных параметрах таблицы составить невозможно",
-                isError: true,
-            });
-        } else {
-            setDataState({
-                messageForVar: "",
-                messageForRef: "",
-                generalMessage: "",
-                isError: false,
-            });
-        }
-    }, [varCount, refCount]);
 
     // возвращает отсортированный массив данных функции/базиса
     const getDataArray = (type) => {
@@ -76,8 +50,8 @@ const Form = () => {
     const submitData = (e) => {
         e.preventDefault();
 
-        if (dataState.isError) {
-            setDataState({ ...dataState, generalMessage: "Ошибка, проверьте корректновсть введённых данных" });
+        if (errors.isError) {
+            setGeneralMessage("Ошибка, проверьте корректновсть введённых данных");
             return;
         }
 
@@ -120,8 +94,8 @@ const Form = () => {
     };
 
     const Tables = ({ children }) => {
-        if (dataState.isError) {
-            return <h6 className="text-danger">{dataState.generalMessage}</h6>;
+        if (errors.isError) {
+            return <h6 className="text-danger">{errors.generalMessage}</h6>;
         }
         return children;
     };
@@ -135,7 +109,7 @@ const Form = () => {
             <div className="d-flex">
                 <div className="col-sm-6">
                     <VarInput
-                        message={dataState.messageForVar}
+                        message={errors.messageForVar}
                         label="Число переменных"
                         def={varCount}
                         id="varCount"
@@ -143,7 +117,7 @@ const Form = () => {
                         setValue={setVarCount}
                     />
                     <VarInput
-                        message={dataState.messageForRef}
+                        message={errors.messageForRef}
                         label="Число ограничений"
                         def={refCount}
                         id="refCount"

@@ -1,5 +1,5 @@
 import React from "react";
-import { TYPE_FUNCTION } from "../taskTypes";
+import { TYPE_FUNCTION } from "../../../types";
 
 const Row = (props) => {
     const { rowNumb, count, type } = props;
