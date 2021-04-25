@@ -21,7 +21,7 @@ const VarInput = (props) => {
         setValue(valForState);
     };
 
-    const typeClass = message ? "border border-danger " : "";
+    const typeClass = message ? "border border-danger form-control" : "form-control";
     return (
         <div className="form-group row">
             <label htmlFor={id} className="col-sm-5 col-form-label">
@@ -30,7 +30,7 @@ const VarInput = (props) => {
             <div className="col-sm-10 pb-2">
                 <input
                     type="number"
-                    className={`${typeClass} form-control`}
+                    className={typeClass}
                     id={id}
                     placeholder={`например ${plValue}`}
                     onChange={(e) => changeValue(e)}

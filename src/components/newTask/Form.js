@@ -1,16 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { GRAPHICAL, ARTIFICAL, SIMPLEX, TYPE_FUNCTION, TYPE_REFERENCE, TYPE_BASIS } from "./taskTypes";
+import { SOLUTION_REF } from "../../refs";
 import VarInput from "./VarInput";
 import TaskInput from "./TaskTypeInput";
-import { GRAPHICAL, ARTIFICAL, SIMPLEX, TYPE_FUNCTION, TYPE_REFERENCE, TYPE_BASIS } from "./taskTypes";
 import Button from "react-bootstrap/Button";
 import Table from "./Table/Table";
 import Context from "../../context/newTask/context";
 import SolutionContext from "../../context/solution/solutionContext";
-import { SOLUTION_REF } from "../../refs";
 
 const Form = () => {
     const { typeData, setTypeData, varCount, refCount, setVarCount, setRefCount } = useContext(Context);
-    const { setSolutionData, solutionData } = useContext(SolutionContext);
+    const { setSolutionData } = useContext(SolutionContext);
+    const history = useHistory();
 
     const [dataState, setDataState] = useState({
         messageForVar: "",
@@ -20,11 +22,6 @@ const Form = () => {
     });
 
     useEffect(() => {
-        console.log(solutionData);
-    }, [solutionData])
-
-    useEffect(() => {
-        console.log("effect!");
         if (varCount < refCount) {
             setDataState({
                 messageForVar: "Число переменных должно быть не меньше числа ограничений",
@@ -48,10 +45,6 @@ const Form = () => {
             });
         }
     }, [varCount, refCount]);
-
-    const isChecked = (currentType) => {
-        return currentType === typeData;
-    };
 
     const getDataArray = (type) => {
         let data = [];
@@ -78,7 +71,6 @@ const Form = () => {
 
     const submitData = (e) => {
         e.preventDefault();
-        console.log("SUBMIT-EVENT!");
 
         if (dataState.isError) {
             setDataState({ ...dataState, generalMessage: "Ошибка, проверьте корректновсть введённых данных" });
@@ -94,29 +86,29 @@ const Form = () => {
             isArt: typeData === ARTIFICAL,
         });
 
-        // window.location.href = SOLUTION_REF;
-    };
-
-    const solveTask = () => {
-        console.log("SOLVE_TASK!");
+        history.push(SOLUTION_REF);
     };
 
     const clearParams = () => {
-        console.log("CLEAR!");
         document.querySelectorAll("input[input_type]").forEach((item) => {
             item.value = 0;
         });
     };
 
     const save = () => {
+        // TODO дописать сохранение конфигурации в файл
         console.log("SAVE!");
     };
 
-    const Tables = (jsx) => {
+    const Tables = ({ children }) => {
         if (dataState.isError) {
             return <h6 className="text-danger">{dataState.generalMessage}</h6>;
         }
-        return jsx;
+        return children;
+    };
+
+    const Basis = ({ children }) => {
+        return typeData !== ARTIFICAL ? children : null;
     };
 
     return (
@@ -125,23 +117,20 @@ const Form = () => {
                 <div className="col-sm-6">
                     <VarInput
                         message={dataState.messageForVar}
-                        border={dataState.borderStyle}
                         label="Число переменных"
                         id="varCount"
-                        value={varCount}
                         plValue="4"
                         setValue={setVarCount}
                     />
                     <VarInput
                         message={dataState.messageForRef}
-                        border={dataState.borderStyle}
                         label="Число ограничений"
                         id="refCount"
-                        value={refCount}
-                        plValue="4"
+                        plValue="2"
                         setValue={setRefCount}
                     />
                 </div>
+
                 <fieldset className="form-group col-sm-6">
                     <legend className="col-form-label col-sm-3 pl-0">
                         <strong>Тип задачи</strong>
@@ -150,19 +139,19 @@ const Form = () => {
                         <TaskInput
                             value={ARTIFICAL}
                             label="Метод исккусственного базиса"
-                            checked={isChecked(ARTIFICAL)}
+                            checked={ARTIFICAL === typeData}
                             setTypeData={setTypeData}
                         />
                         <TaskInput
                             value={SIMPLEX}
                             label="Симплекс метод"
-                            checked={isChecked(SIMPLEX)}
+                            checked={SIMPLEX === typeData}
                             setTypeData={setTypeData}
                         />
                         <TaskInput
                             value={GRAPHICAL}
                             label="Графический метод"
-                            checked={isChecked(GRAPHICAL)}
+                            checked={GRAPHICAL === typeData}
                             setTypeData={setTypeData}
                         />
                     </div>
@@ -171,20 +160,16 @@ const Form = () => {
 
             <hr />
 
-            {Tables(
-                <>
-                    <label>Функция</label>
-                    <Table varCount={varCount} refCount={1} type={TYPE_FUNCTION} />
-                    {typeData !== ARTIFICAL ? (
-                        <>
-                            <label>Базисный вектор</label>
-                            <Table varCount={varCount} refCount={1} type={TYPE_BASIS} />
-                        </>
-                    ) : null}
-                    <label>Ограничения</label>
-                    <Table varCount={varCount} refCount={refCount} type={TYPE_REFERENCE} />
-                </>
-            )}
+            <Tables>
+                <label>Функция</label>
+                <Table varCount={varCount} refCount={1} type={TYPE_FUNCTION} />
+                <Basis>
+                    <label>Базисный вектор</label>
+                    <Table varCount={varCount} refCount={1} type={TYPE_BASIS} />
+                </Basis>
+                <label>Ограничения</label>
+                <Table varCount={varCount} refCount={refCount} type={TYPE_REFERENCE} />
+            </Tables>
             <div className="d-flex justify-content-start p-3">
                 <Button className="mr-1" type="submit" variant="primary">
                     Решить задачу
