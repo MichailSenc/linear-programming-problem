@@ -137,6 +137,7 @@ const Form = () => {
                     <VarInput
                         message={dataState.messageForVar}
                         label="Число переменных"
+                        def={varCount}
                         id="varCount"
                         plValue="4"
                         setValue={setVarCount}
@@ -144,6 +145,7 @@ const Form = () => {
                     <VarInput
                         message={dataState.messageForRef}
                         label="Число ограничений"
+                        def={refCount}
                         id="refCount"
                         plValue="2"
                         setValue={setRefCount}

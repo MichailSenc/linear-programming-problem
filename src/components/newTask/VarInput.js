@@ -1,7 +1,7 @@
 import React from "react";
 
 const VarInput = (props) => {
-    const { label, id, plValue, setValue, message } = props;
+    const { label, id, plValue, setValue, message, def } = props;
 
     // вот ЭТО сильно... аааааа
     const changeValue = (e) => {
@@ -33,7 +33,7 @@ const VarInput = (props) => {
                     id={id}
                     placeholder={`например ${plValue}`}
                     onChange={(e) => changeValue(e)}
-                    defaultValue={1}
+                    defaultValue={def || 1}
                 />
                 <small className="form-text text-muted position-absolute w-100 mt-0">{message}</small>
             </div>

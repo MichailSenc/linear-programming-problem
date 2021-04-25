@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
+import Equations from "../components/Equations";
+import Context from "../context/solution/solutionContext";
 
 const SolveGraphical = () => {
-    return (
-        <h1>Hello SolveGraphical!</h1>
-    );
+    const { solutionData } = useContext(Context);
+    const { func } = solutionData;
+    console.log(func);
+    return <Equations func={func} />;
 };
 
 export default SolveGraphical;
