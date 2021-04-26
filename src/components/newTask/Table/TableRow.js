@@ -17,7 +17,7 @@ const Row = (props) => {
 
         setInputValue(
             `${t.getAttribute("input_type")}-${t.getAttribute("row_index")}-${t.getAttribute("position_index")}`,
-            initVal
+            +initVal
         );
     };
 

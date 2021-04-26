@@ -4,9 +4,8 @@ import Context from "../context/solution/solutionContext";
 
 const SolveGraphical = () => {
     const { solutionData } = useContext(Context);
-    const { func } = solutionData;
-    console.log(func);
-    return <Equations func={func} />;
+    const { func, baseVector, isNeedBase, restrictions } = solutionData;
+    return <Equations func={func} baseVector={baseVector} isNeedBase={isNeedBase} restrictions={restrictions} />;
 };
 
 export default SolveGraphical;

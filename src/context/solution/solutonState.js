@@ -8,7 +8,7 @@ const SolutionState = ({ children }) => {
         baseVector: [],
         varCount: 0,
         refCount: 0,
-        isArt: false,
+        isNeedBase: false,
     });
 
     return (

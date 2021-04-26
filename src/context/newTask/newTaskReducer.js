@@ -1,9 +1,4 @@
-import {
-    CHANGE_VAR_COUNT,
-    CHANGE_REF_COUNT,
-    CHANGE_TYPE_DATA,
-    CHANGE_GENERAL_MESSAGE,
-} from "../../types";
+import { CHANGE_VAR_COUNT, CHANGE_REF_COUNT, CHANGE_TYPE_DATA, CHANGE_GENERAL_MESSAGE } from "../../types";
 
 import { NO_ERROR, VAR_LOWER_REF, LOWER_THAN_ONE } from "./messages";
 

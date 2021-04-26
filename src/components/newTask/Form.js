@@ -21,6 +21,8 @@ const Form = () => {
 
     const { setSolutionData } = useContext(SolutionContext);
 
+
+
     const history = useHistory();
 
     // возвращает отсортированный массив данных функции/базиса
@@ -63,7 +65,7 @@ const Form = () => {
             varCount,
             refCount,
             type: typeData,
-            isArt: typeData === ARTIFICAL,
+            isNeedBase: typeData === ARTIFICAL,
         });
 
         switch (typeData) {
@@ -81,7 +83,7 @@ const Form = () => {
         }
     };
 
-    // очистить всем параматрам таблиц присвоить 0
+    // очистить всем параметрам таблиц присвоить 0
     const clearParams = () => {
         document.querySelectorAll("input[input_type]").forEach((item) => {
             item.value = 0;

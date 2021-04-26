@@ -2,12 +2,7 @@ import React, { useReducer, useRef } from "react";
 import { newTaskReducer } from "./newTaskReducer";
 import Context from "./context";
 import { ARTIFICAL } from "../../types";
-import {
-    CHANGE_VAR_COUNT,
-    CHANGE_REF_COUNT,
-    CHANGE_TYPE_DATA,
-    CHANGE_GENERAL_MESSAGE,
-} from "../../types";
+import { CHANGE_VAR_COUNT, CHANGE_REF_COUNT, CHANGE_TYPE_DATA, CHANGE_GENERAL_MESSAGE } from "../../types";
 import { NO_ERROR } from "./messages";
 
 const NewTaskState = ({ children }) => {
@@ -48,11 +43,11 @@ const NewTaskState = ({ children }) => {
         });
     };
     const setInputValue = (key, value) => {
-        inputValues.current = {...inputValues.current, [key]: value}
+        inputValues.current = { ...inputValues.current, [key]: value };
     };
 
     const clearInputValues = () => {
-        inputValues.current = {}
+        inputValues.current = {};
     };
 
     return (
