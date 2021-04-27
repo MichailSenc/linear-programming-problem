@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import Context from "./solutionContext";
 
 const SolutionState = ({ children }) => {
-    const [solutionData, setSolutionData] = useState({
+    const solutionData = useRef({
         func: [],
-        restrictions: [],
-        baseVector: [],
+        restrictions: {},
+        baseVector: {},
         varCount: 0,
         refCount: 0,
         isNeedBase: false,
     });
+
+    const setSolutionData = (data) => {
+        solutionData.current = data;
+    };
 
     return (
         <Context.Provider

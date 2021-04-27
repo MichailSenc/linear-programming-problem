@@ -1,11 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import Equations from "../components/Equations";
-import Context from "../context/solution/solutionContext";
 
 const SolveGraphical = () => {
-    const { solutionData } = useContext(Context);
-    const { func, baseVector, isNeedBase, restrictions } = solutionData;
-    return <Equations func={func} baseVector={baseVector} isNeedBase={isNeedBase} restrictions={restrictions} />;
+    // return <h1>Hello!</h1>
+    return <Equations />;
 };
 
 export default SolveGraphical;

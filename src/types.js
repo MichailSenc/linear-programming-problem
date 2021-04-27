@@ -4,6 +4,7 @@ export const SIMPLEX = "SIMPLEX"
 export const TYPE_FUNCTION = "TYPE_FUNCTION"
 export const TYPE_REFERENCE = "TYPE_REFERENCE"
 export const TYPE_BASIS = "TYPE_BASIS"
+export const TYPE_SIGN = "TYPE_SIGN"
 
 export const CHANGE_VAR_COUNT = "CHANGE_VAR_COUNT"
 export const CHANGE_REF_COUNT = "CHANGE_REF_COUNT"

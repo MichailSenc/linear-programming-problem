@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
-import { GRAPHICAL, ARTIFICAL, SIMPLEX, TYPE_FUNCTION, TYPE_REFERENCE, TYPE_BASIS } from "../../types";
+import { GRAPHICAL, ARTIFICAL, SIMPLEX, TYPE_FUNCTION, TYPE_REFERENCE } from "../../types";
 import { GAPHICAL_REF, SIMPLEX_REF } from "../../refs";
 import VarInput from "./VarInput";
+import Basis from "./Basis";
 import TaskInput from "./TaskTypeInput";
 import Button from "react-bootstrap/Button";
 import Table from "./Table/Table";
@@ -12,6 +13,7 @@ import SolutionContext from "../../context/solution/solutionContext";
 const Form = () => {
     const {
         newTaskstate: { varCount, refCount, typeData, errors },
+        inputValues,
         setTypeData,
         setVarCount,
         setRefCount,
@@ -19,9 +21,7 @@ const Form = () => {
         clearInputValues,
     } = useContext(Context);
 
-    const { setSolutionData } = useContext(SolutionContext);
-
-
+    const { setSolutionData, solutionData } = useContext(SolutionContext);
 
     const history = useHistory();
 
@@ -37,16 +37,29 @@ const Form = () => {
     };
 
     // возвращает матрицу функций-ограничений
-    const getRefArray = () => {
-        let data = [];
+    const getRestArray = () => {
+        let res = []; // each elem: { data: [], sign: "", pos: i, };
+
         for (let i = 0; i < refCount; i++) {
             let str = [];
             document.querySelectorAll(`[input_type='${TYPE_REFERENCE}'][row_index='${i + 1}']`).forEach((item) => {
                 str.push([item.value, +item.getAttribute("position_index")]);
             });
-            data.push(str.sort((a, b) => a[1] - b[1]).map((item) => item[0]));
+            res.push({
+                data: str.sort((a, b) => a[1] - b[1]).map((item) => item[0]),
+                sign: inputValues.current[`TYPE_SIGN-${i + 1}`] || "eq",
+                pos: i,
+            });
         }
-        return data;
+        return res;
+    };
+
+    const getBase = () => {
+        const res = [];
+        for (let i = 0; i < varCount; i++) {
+            res.push(inputValues.current[`base-vector-${i+1}`] || false);
+        }
+        return res;
     };
 
     // сабмит формы
@@ -59,9 +72,10 @@ const Form = () => {
         }
 
         setSolutionData({
+            growth: inputValues.current["min-max"] || "min",
             func: getDataArray(TYPE_FUNCTION),
-            restrictions: getRefArray(),
-            baseVector: typeData === ARTIFICAL ? [] : getDataArray(TYPE_BASIS),
+            restrictions: getRestArray(),
+            baseVector: typeData === ARTIFICAL ? [] : getBase(),
             varCount,
             refCount,
             type: typeData,
@@ -88,6 +102,7 @@ const Form = () => {
         document.querySelectorAll("input[input_type]").forEach((item) => {
             item.value = 0;
         });
+        setTypeData(typeData);
         clearInputValues();
     };
 
@@ -104,7 +119,7 @@ const Form = () => {
         return children;
     };
 
-    const Basis = ({ children }) => {
+    const GetBasis = ({ children }) => {
         return typeData !== ARTIFICAL ? children : null;
     };
 
@@ -156,17 +171,19 @@ const Form = () => {
                     </div>
                 </fieldset>
             </div>
-
             <hr />
 
             <Tables>
-                <label>Функция</label>
+                <GetBasis>
+                    <Basis {...{ varCount, solutionData }} />
+                </GetBasis>
+                <label className="w-100 text-center mb-3 mt-3">
+                    <strong>Целевая функция</strong>
+                </label>
                 <Table varCount={varCount} refCount={1} type={TYPE_FUNCTION} />
-                <Basis>
-                    <label>Базисный вектор</label>
-                    <Table varCount={varCount} refCount={1} type={TYPE_BASIS} />
-                </Basis>
-                <label>Ограничения</label>
+                <label className="w-100 text-center mb-3 mt-3">
+                    <strong>Ограничения</strong>
+                </label>
                 <Table varCount={varCount} refCount={refCount} type={TYPE_REFERENCE} />
             </Tables>
             <div className="d-flex justify-content-start p-3">

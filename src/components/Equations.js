@@ -1,21 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
+import Context from "../context/solution/solutionContext";
 
-const Equations = (props) => {
-    const { func, baseVector, isNeedBase, restrictions } = props;
-    // const { solutionData } = useContext(Context);
-    // const { func, baseVector, isNeedBase, restrictions } = solutionData;
+const Equations = () => {
+    const { solutionData } = useContext(Context);
+    const { func, restrictions } = solutionData.current;
 
     const Equality = (arr, delimiter) => {
         const res = [];
         let counter = 0;
         while (res.length === 0 && counter < arr.length - 1) {
-            if (+arr[counter] !== 0) 
-            res.push(
-                <span key={counter + 'ucount'}>
-                    {arr[counter] < 0 ? "-" : ""}
-                    {Math.abs(arr[counter])}&#8901;X<sub>{counter + 1}</sub>
-                </span>
-            );
+            const item = Math.abs(+arr[counter]) === 1 ? "" : `${Math.abs(arr[counter])} ⋅ `;
+            if (+arr[counter] !== 0)
+                res.push(
+                    <span key={counter + "ucount"}>
+                        {arr[counter] < 0 ? "-" : ""}
+                        {item}X<sub>{counter + 1}</sub>
+                    </span>
+                );
             counter++;
         }
 
@@ -30,13 +31,12 @@ const Equations = (props) => {
             );
         }
 
-        if (res.length === 0) res.push((
-            <span key={0}>0</span>
-        ))
+        if (res.length === 0) res.push(<span key={0}>0</span>);
 
         res.push(
             <span key={arr.length - 1}>
-                {delimiter} {arr[arr.length - 1]}
+                {delimiter}
+                {arr[arr.length - 1]}
             </span>
         );
         return res;
@@ -44,25 +44,18 @@ const Equations = (props) => {
 
     const GetFunc = () => {
         if (!func || func.length === 0) return <div>Функция не извеcтна</div>;
-        return Equality(func, "→");
+        return Equality(func, " → ");
     };
 
-    const GetBasis = () => {
-        if (isNeedBase) return null;
-        if (!baseVector || baseVector.length === 0) return <div>Базис не известен</div>;
-        return (
-            <span>
-                X<sup>(0)</sup> = ({baseVector.join(",")})
-            </span>
-        );
-    };
+    const sign = { eq: "=", le: "≤", ge: "≥" };
 
     const GetRest = () => {
         if (!restrictions || restrictions.length === 0) return <div>Ограничения не извеcтны</div>;
         const res = [];
-        restrictions.forEach((arr, i) => {
-            res.push(<div key={i}>{Equality(restrictions[i], "=")}</div>);
-        });
+        for (const key in restrictions) {
+            const element = restrictions[key];
+            res.push(<div key={key}>{Equality(element.data, ` ${sign[element.sign]} `)}</div>);
+        }
         return res;
     };
 
@@ -76,9 +69,7 @@ const Equations = (props) => {
                 <div>
                     <GetRest />
                 </div>
-                <div>
-                    <GetBasis />
-                </div>
+                <div>{/* <GetBasis /> */}</div>
             </div>
         </>
     );

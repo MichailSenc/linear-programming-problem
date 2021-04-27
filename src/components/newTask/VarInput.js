@@ -22,7 +22,7 @@ const VarInput = (props) => {
 
     const typeClass = message ? "border border-danger form-control" : "form-control";
     return (
-        <div className="form-group row">
+        <div className="form-group row mb-0">
             <label htmlFor={id} className="col-sm-5 col-form-label">
                 <strong>{label}</strong>
             </label>
