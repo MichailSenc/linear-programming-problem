@@ -7,8 +7,8 @@ import { NO_ERROR } from "./messages";
 
 const NewTaskState = ({ children }) => {
     const [newTaskstate, dispatch] = useReducer(newTaskReducer, {
-        varCount: 1,
-        refCount: 1,
+        varCount: 2,
+        refCount: 2,
         typeData: ARTIFICAL,
         errors: NO_ERROR(),
     });

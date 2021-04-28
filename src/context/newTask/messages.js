@@ -9,8 +9,8 @@ export const VAR_LOWER_REF = () => {
 
 export const LOWER_THAN_ONE = (varCount, refCount) => {
     return {
-        messageForVar: varCount < 1 ? "Число переменных не может быть меньше 1" : "",
-        messageForRef: refCount < 1 ? "Число ограничений не может быть меньше 1" : "",
+        messageForVar: varCount < 2 ? "Число переменных не может быть меньше 2" : "",
+        messageForRef: refCount < 2 ? "Число ограничений не может быть меньше 2" : "",
         generalMessage: "При данных параметрах таблицы составить невозможно",
         isError: true,
     };

@@ -39,9 +39,9 @@ const Basis = (props) => {
     };
 
     return (
-        <div className="d-flex mb-2 mt-0 w-100  justify-content-center align-items-center flex-column">
+        <div className="d-flex mb-2 mt-0">
             <label className="m-0">
-                <strong>Базис&emsp;</strong>
+                <strong>Базис:&emsp;</strong>
             </label>
             <div>
                 <GetCheckSet />
