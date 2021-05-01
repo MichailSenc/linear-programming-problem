@@ -15,14 +15,14 @@ const Table = (props) => {
         for (let i = 1; i < varCount + 1; i++) {
             colls.push(
                 <th key={i} scope="col">
-                    X<sub>{i}</sub>
+                    X<sub>{i}</sub>&ensp;
                 </th>
             );
         }
         if (type === TYPE_REFERENCE) colls.push(<th key={varCount + 1} style={{ width: "5%" }} scope="col"></th>);
         colls.push(
             <th key={varCount + 2} scope="col">
-                res
+                res&ensp;
             </th>
         );
         return colls;

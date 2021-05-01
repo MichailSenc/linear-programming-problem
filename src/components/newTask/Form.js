@@ -86,6 +86,8 @@ const Form = () => {
             type: typeData,
             isNeedBase: typeData === ARTIFICAL,
         });
+        
+        console.log(solutionData);
 
         console.log(solutionData.current);
 

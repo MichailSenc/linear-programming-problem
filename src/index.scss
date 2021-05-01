@@ -38,6 +38,32 @@ code {
     }
 }
 
+// .active:hover {
+//     background-color: #dcdcdc;
+// }
+
 .ref_table thead tr th {
     text-align: center;
+}
+
+.trans_blue {
+    background-color: rgba($color: #007bff, $alpha: 0.3);
+}
+
+.trans_blue:hover {
+    background-color: rgba($color: #007bff, $alpha: 0.5);
+}
+.trans_pink {
+    background-color: rgba($color: #e83e8c, $alpha: 0.3);
+}
+
+.trans_pink:hover {
+    background-color: rgba($color: #e83e8c, $alpha: 0.5);
+}
+.trans_green {
+    background-color: rgba($color: #28a745, $alpha: 0.3);
+}
+
+.trans_green:hover {
+    background-color: rgba($color: #28a745, $alpha: 0.5);
 }

@@ -1,5 +1,7 @@
 import React, { useContext } from "react";
 import Context from "../context/solution/solutionContext";
+import GetData from "../modules/getData"
+import Table from "./simplex/ArtificalTable"
 
 const Equations = () => {
     const { solutionData } = useContext(Context);
@@ -61,6 +63,7 @@ const Equations = () => {
 
     return (
         <>
+            <Table data={new GetData(solutionData.current)}/>
             <div className="d-flex flex-column">
                 <label>Функция</label>
                 <div>
@@ -69,7 +72,7 @@ const Equations = () => {
                 <div>
                     <GetRest />
                 </div>
-                <div>{/* <GetBasis /> */}</div>
+                {/* <div><GetBasis /></div> */}
             </div>
         </>
     );

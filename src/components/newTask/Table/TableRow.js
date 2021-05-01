@@ -37,7 +37,8 @@ const Row = (props) => {
                     input_type={type}
                     row_index={rowNumb}
                     position_index={key + 1}
-                    defaultValue={inputValues.current[`${type}-${rowNumb}-${key + 1}`] || 0 }
+                    placeholder="0"
+                    defaultValue={inputValues.current[`${type}-${rowNumb}-${key + 1}`]}
                     onChange={(e) => changeInput(e)}
                 />
             </td>
