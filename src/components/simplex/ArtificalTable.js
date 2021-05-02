@@ -2,29 +2,29 @@ import React, { useContext, useRef } from "react";
 import Context from "../../context/solution/solutionContext";
 
 const Table = (props) => {
-    const { data } = props;
-    const { resMatr, base, notBase, count } = data.startArt();
-    console.log(data);
+    const { data, table, setTables } = props;
+    const { resMatr, base, notBase, count } = table;
 
-    const tables = useRef([]);
+    const { solutionData } = useContext(Context);
+    const { varCount, refCount } = solutionData.current;
 
-    console.log(data);
-
-    const {
-        solutionData: {
-            current: { varCount, refCount },
-        },
-    } = useContext(Context);
+    const selectedItem = useRef(null);
 
     const onClick = (e) => {
         const t = e.target;
-        if (t.classList.contains("active")) {
-            document.querySelectorAll(".active").forEach((item) => {
+        console.log(data);
+        if (t.classList.contains("active") && t.classList.contains(`td-${data.curCount}`)) {
+            document.querySelectorAll(`.active.td-${data.curCount}`).forEach((item) => {
                 item.classList.remove("trans_pink");
                 item.classList.add("trans_green");
             });
             t.classList.remove("trans_green");
             t.classList.add("trans_pink");
+
+            selectedItem.current = {
+                var: +t.getAttribute("var"),
+                rest: +t.getAttribute("rest"),
+            };
 
             console.log(`click ${e.target.textContent}`);
         }
@@ -35,14 +35,18 @@ const Table = (props) => {
 
         const t = e.target;
 
-        data.nextStep(+t.getAttribute("var"), +t.getAttribute('rest'));
+        if (t.classList.contains(`td-${data.curCount}`)) {
+            console.log("Contains!");
+            data.addSelectdItem(selectedItem.current);
+            data.nextStep(+t.getAttribute("var"), +t.getAttribute("rest"));
+            setTables([...data.history]);
+        }
     };
 
     const MatRow = () => {
         // item - это массив значеий одногo равенства
         const reVal = resMatr.map((item, i) => {
             const res = [];
-            // console.log(`i: ${i}, notBase[i]: ${notBase[i]}`);
             res.push(
                 <th key={`row-${i}-${0}`} scope="row">
                     {(notBase[i] || notBase[i] === 0) && (
@@ -53,14 +57,22 @@ const Table = (props) => {
                 </th>
             );
             item.forEach((element, j) => {
-                const classes =
-                    element === 0 || i === refCount || j === varCount ? "" : `td-${count} active trans_green`;
+                const classes = [];
+                const selected = data.selected[count];
+                if (!(element === 0 || i === refCount || j === varCount)) {
+                    classes.push(`td-${count}`, "active");
+                    if (selected && selected.var === j && selected.rest === i) {
+                        classes.push("trans_pink");
+                    } else {
+                        classes.push("trans_green");
+                    }
+                }
                 res.push(
                     <td
                         key={`row-${i}-${j + 1}`}
                         onClick={onClick}
                         onDoubleClick={onDoubleClick}
-                        className={classes}
+                        className={classes.join(" ")}
                         rest={i}
                         var={j}
                     >
