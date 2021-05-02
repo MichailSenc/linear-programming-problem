@@ -21,10 +21,10 @@ const Table = (props) => {
             t.classList.remove("trans_green");
             t.classList.add("trans_pink");
 
-            selectedItem.current = {
+            data.addSelectdItem({
                 var: +t.getAttribute("var"),
                 rest: +t.getAttribute("rest"),
-            };
+            })
 
             console.log(`click ${e.target.textContent}`);
         }
@@ -37,7 +37,6 @@ const Table = (props) => {
 
         if (t.classList.contains(`td-${data.curCount}`)) {
             console.log("Contains!");
-            data.addSelectdItem(selectedItem.current);
             data.nextStep(+t.getAttribute("var"), +t.getAttribute("rest"));
             setTables([...data.history]);
         }
@@ -110,7 +109,7 @@ const Table = (props) => {
 
     return (
         <>
-            <table className="table table-striped table-bordered ref_table col-sm-6 text-center">
+            <table className="table table-striped table-bordered ref_table text-center">
                 <thead>
                     <tr>
                         <GetCols />

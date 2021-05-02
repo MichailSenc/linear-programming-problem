@@ -62,14 +62,12 @@ const Equations = () => {
     return (
         <>
             <div className="d-flex flex-column mb-4">
-                <label>Функция</label>
                 <div>
                     <GetFunc />
                 </div>
                 <div>
                     <GetRest />
                 </div>
-                <div>{/* <GetBasis /> */}</div>
             </div>
         </>
     );

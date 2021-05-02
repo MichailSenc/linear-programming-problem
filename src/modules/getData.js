@@ -4,12 +4,12 @@ export default class GetData {
         this.refCount = refCount;
         this.varCount = varCount;
         // startSettings - параметры на 1-м этапе решения
-        this.startSettings = {}; 
+        this.startSettings = {};
         // history - массив объектов {resMatr, base, notBase, count}
         this.history = [];
         // current - текущий объект {resMatr, base, notBase, count}
         this.current = {};
-        // curCount - счётчик текущего состояния 
+        // curCount - счётчик текущего состояния
         this.curCount = 0;
         // selected - выбранные элементы в качестве базиса
         this.selected = {};
@@ -18,7 +18,7 @@ export default class GetData {
 
     addSelectdItem = (value) => {
         this.selected[this.curCount] = value;
-    }
+    };
 
     // функция формирует первую(стартовую) симплекс таблицу
     _startArt = (restrictions) => {
@@ -46,7 +46,17 @@ export default class GetData {
         }
         this.current = { resMatr: res, base, notBase, count: 0 };
         this.history.push(JSON.parse(JSON.stringify(this.current)));
+        this.startSettings = { base, notBase };
         this.curCount = 0;
+    };
+
+    previousStep = () => {
+        if (this.curCount === 0) return false;
+        this.history.pop();
+        this.current = this.history[this.history.length - 1];
+        delete this.selected[this.curCount];
+        this.curCount--;
+        return true;
     };
 
     // следующий симплекс шаг (varnumb - индекс переменной; resnumb - номер ограничения)
@@ -54,7 +64,7 @@ export default class GetData {
         console.log(`nextStep, varnumb: ${varnumb}, resnumb: ${resnumb}`);
         const { resMatr, base, notBase, count } = this.current;
 
-        // поменять базисные переменные 
+        // поменять базисные переменные
         const baseItem = base[varnumb];
         base[varnumb] = notBase[resnumb];
         notBase[resnumb] = baseItem;
@@ -76,7 +86,7 @@ export default class GetData {
             subVector[i] = cloneMatr[resnumb][i];
         }
 
-        // столбец опорного элемента 
+        // столбец опорного элемента
         for (let i = 0; i < this.refCount + 1; i++) {
             if (i === resnumb) continue;
             cloneMatr[i][varnumb] *= -a;
@@ -88,14 +98,14 @@ export default class GetData {
             const element = resMatr[i];
 
             const multiplier = element[varnumb];
-            // j - номер переменной 
+            // j - номер переменной
             for (let j = 0; j < element.length; j++) {
                 if (j === varnumb) continue;
                 cloneMatr[i][j] -= multiplier * subVector[j];
             }
         }
-        
-        this.current = { resMatr: cloneMatr, base, notBase, count: count + 1 }
+
+        this.current = { resMatr: cloneMatr, base, notBase, count: count + 1 };
         this.history.push(JSON.parse(JSON.stringify(this.current)));
         this.curCount = count + 1;
     };
