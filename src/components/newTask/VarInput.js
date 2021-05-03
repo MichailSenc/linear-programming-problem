@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
+import Context from "../../context/newTask/context";
 
 const VarInput = (props) => {
-    const { label, id, plValue, setValue, message, def } = props;
+    const { label, id, message, def } = props;
+    const { setAll } = useContext(Context);
 
     // вот ЭТО сильно... аааааа
     const changeValue = (e) => {
@@ -17,21 +19,21 @@ const VarInput = (props) => {
             e.target.value = initVal;
         }
 
-        setValue(valForState);
+        setAll({[id]: valForState});
     };
 
     const typeClass = message ? "border border-danger form-control" : "form-control";
     return (
-        <div className="form-group row mb-0">
-            <label htmlFor={id} className="col-sm-12 col-form-label">
+        <div className="d-flex form-group row">
+            <label htmlFor={id} className="col-sm-3 col-form-label">
                 <strong>{label}</strong>
             </label>
-            <div className="col-sm-10 pb-2">
+            <div className="col-sm-9 p-0">
                 <input
                     type="number"
                     className={typeClass}
                     id={id}
-                    placeholder={`например ${plValue}`}
+                    placeholder="например 4"
                     onChange={(e) => changeValue(e)}
                     defaultValue={def || 1}
                 />

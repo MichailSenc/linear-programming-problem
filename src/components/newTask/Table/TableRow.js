@@ -15,6 +15,7 @@ const Row = (props) => {
 
         const t = e.target;
 
+        // тут крч создаётся ключ в контексте таблицы, содержащей данный input
         setInputValue(
             `${t.getAttribute("input_type")}-${t.getAttribute("row_index")}-${t.getAttribute("position_index")}`,
             initVal
@@ -23,10 +24,6 @@ const Row = (props) => {
 
     const changeMinMax = (e) => {
         setInputValue("min-max", e.target.value);
-    };
-
-    const changeSign = (e, row) => {
-        setInputValue(`${TYPE_SIGN}-${row}`, e.target.value);
     };
 
     const GetInput = (key, type, rowNumb) => {
@@ -59,30 +56,14 @@ const Row = (props) => {
                         input_type={type}
                         position_index={count + 1}
                         onChange={(e) => changeMinMax(e)}
-                        defaultValue={inputValues.current['min-max'] || 'min'}
+                        defaultValue={inputValues.current["min-max"] || "min"}
                     >
-                        <option label="min" value="min"/>
-                        <option label="max" value="max"/>
+                        <option label="min" value="min" />
+                        <option label="max" value="max" />
                     </select>
                 </td>
             );
         } else {
-            inputs.push(
-                <td key={count}>
-                    <select
-                        input_type={type}
-                        position_index={count + 1}
-                        sign={rowNumb}
-                        onChange={(e) => changeSign(e, rowNumb)}
-                        defaultValue={inputValues.current[`${TYPE_SIGN}-${rowNumb}`] || 'eq'}
-                    >
-                        <option label="&ge;" value="ge" />
-                        <option label="=" value="eq" />
-                        <option label="&le;" value="le" />
-                    </select>
-                </td>
-            );
-
             inputs.push(GetInput(count + 1, type, rowNumb));
         }
 

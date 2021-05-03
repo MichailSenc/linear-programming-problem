@@ -1,12 +1,15 @@
 import React, { useContext } from "react";
 import Context from "../../context/solution/solutionContext";
+import { SIMPLE } from "../../types";
 
 const Table = (props) => {
     const { data, table, setTables } = props;
     const { resMatr, base, notBase, count } = table;
 
     const { solutionData } = useContext(Context);
-    const { varCount, refCount } = solutionData.current;
+    const { varCount, refCount, fraction } = solutionData.current;
+    console.log(solutionData.current);
+    console.log(fraction);
 
     const onClick = (e) => {
         const t = e.target;
@@ -77,7 +80,7 @@ const Table = (props) => {
                         rest={i}
                         var={j}
                     >
-                        {element.simple()}
+                        {fraction === SIMPLE ? element.simple() : element.decimals()}
                     </td>
                 );
             });

@@ -1,19 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
+import Context from "../../context/newTask/context";
 
-const TaskInput = (props) => {
-    const { value, label, checked, setTypeData } = props;
+const FractionInput = (props) => {
+    const { value, label, checked } = props;
+    const { setAll } = useContext(Context);
 
     return (
-        <div className="form-check mb-2">
+        <div className="form-check col-sm-1 mr-3">
             <input
                 className="form-check-input"
                 type="radio"
-                name="gridRadios"
+                name="fractionRadios"
                 id={value}
                 defaultValue={value}
                 defaultChecked={checked}
                 onChange={(e) => {
-                    if (e.target.checked) setTypeData(value);
+                    if (e.target.checked) setAll({typeFraction: value});
                 }}
             />
             <label className="form-check-label" htmlFor={value}>
@@ -23,4 +25,4 @@ const TaskInput = (props) => {
     );
 };
 
-export default TaskInput;
+export default FractionInput;

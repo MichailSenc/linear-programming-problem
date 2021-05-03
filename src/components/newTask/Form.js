@@ -1,13 +1,12 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
-import { GRAPHICAL, ARTIFICAL, SIMPLEX, TYPE_FUNCTION, TYPE_REFERENCE } from "../../types";
+import { GRAPHICAL, ARTIFICAL, SIMPLEX, TYPE_FUNCTION, TYPE_REFERENCE, SIMPLE, DECIMAL } from "../../types";
 import { GAPHICAL_REF, SIMPLEX_REF } from "../../refs";
 import VarInput from "./VarInput";
 import Basis from "./Basis";
-import TaskInput from "./TaskTypeInput";
+import FractionInput from "./FractionTypeInput";
 import Button from "react-bootstrap/Button";
-import ModalWindow from "../ModalWindow";
-import ModalStart from "./Modal";
+import ModalSave from "../ModalWindow";
 import ModalContext from "../../context/modal/context";
 import Table from "./Table/Table";
 import Context from "../../context/newTask/context";
@@ -15,19 +14,11 @@ import Context from "../../context/newTask/context";
 import SolutionContext from "../../context/solution/solutionContext";
 
 const Form = () => {
-    const {
-        newTaskstate: { varCount, refCount, typeData, errors },
-        inputValues,
-        setTypeData,
-        setVarCount,
-        setRefCount,
-        setGeneralMessage,
-        clearInputValues,
-    } = useContext(Context);
+    const { newTaskstate, inputValues, setAll, clearInputValues } = useContext(Context);
+    const { varCount, refCount, typeData, typeFraction, errors } = newTaskstate;
 
     const { setSolutionData, solutionData } = useContext(SolutionContext);
-
-    const { handleShowStart, handleShowSave } = useContext(ModalContext);
+    const { handleShowSave } = useContext(ModalContext);
 
     const history = useHistory();
 
@@ -74,7 +65,7 @@ const Form = () => {
         console.log("sub!!");
 
         if (errors.isError) {
-            setGeneralMessage("Ошибка, проверьте корректновсть введённых данных");
+            setAll({ generalMessage: "Ошибка, проверьте корректновсть введённых данных" });
             return;
         }
 
@@ -86,6 +77,7 @@ const Form = () => {
             varCount,
             refCount,
             type: typeData,
+            fraction: typeFraction,
             isNeedBase: typeData === ARTIFICAL,
         });
 
@@ -113,14 +105,14 @@ const Form = () => {
         document.querySelectorAll("input[input_type]").forEach((item) => {
             item.value = 0;
         });
-        setTypeData(typeData);
+        setAll({ typeData });
         clearInputValues();
     };
 
     // сохранить данные в файл
     const save = () => {
         // TODO дописать сохранение конфигурации в файл
-        handleShowStart();
+        handleShowSave();
         console.log("SAVE!");
     };
 
@@ -137,73 +129,49 @@ const Form = () => {
 
     return (
         <>
-            <ModalWindow />
-            <ModalStart {...{errors,varCount,refCount}}/>
+            <ModalSave />
             <form onSubmit={(e) => submitData(e)}>
-                <div className="d-flex">
-                    <div className="col-sm-4">
+                <div className="d-flex flex-column">
+                    <div className="d-flex form-group col-sm-12 flex-column">
                         <VarInput
                             message={errors.messageForVar}
                             label="Число переменных"
                             def={varCount}
                             id="varCount"
-                            plValue="4"
-                            setValue={setVarCount}
                         />
                         <VarInput
                             message={errors.messageForRef}
                             label="Число ограничений"
                             def={refCount}
                             id="refCount"
-                            plValue="2"
-                            setValue={setRefCount}
                         />
                     </div>
 
-                    <fieldset className="form-group col-sm-3">
-                        <legend className="col-form-label pl-0">
-                            <strong>Тип задачи</strong>
-                        </legend>
-                        <div className="d-flex flex-column justify-content-around">
-                            <TaskInput
-                                value={ARTIFICAL}
-                                label="Метод исккусственного базиса"
-                                checked={ARTIFICAL === typeData}
-                                setTypeData={setTypeData}
-                            />
-                            <TaskInput
-                                value={SIMPLEX}
-                                label="Симплекс метод"
-                                checked={SIMPLEX === typeData}
-                                setTypeData={setTypeData}
-                            />
-                            <TaskInput
-                                value={GRAPHICAL}
-                                label="Графический метод"
-                                checked={GRAPHICAL === typeData}
-                                setTypeData={setTypeData}
-                            />
-                        </div>
-                    </fieldset>
-                    <fieldset className="form-group col-sm-4">
-                        <legend className="col-form-label pl-0">
+                    <div className="d-flex align-items-center form-group col-sm-12 ml-0 pl-0">
+                        <label className="col-form-label col-sm-3">
+                            <strong>Метод решения</strong>
+                        </label>
+                        <select
+                            className="w-100 h-100 m-0 p-0 form-control"
+                            onChange={(e) => {
+                                console.log(e.target.value);
+                                setAll({ typeData: e.target.value });
+                            }}
+                            defaultValue={newTaskstate.typeData || ARTIFICAL}
+                            id="select_data_type"
+                        >
+                            <option label="Графический метод" value={GRAPHICAL} />
+                            <option label="Симплекс метод" value={SIMPLEX} />
+                            <option label="Метод искусственного базиса" value={ARTIFICAL} />
+                        </select>
+                    </div>
+                    <div className="d-flex align-items-center form-group col-sm-12">
+                        <legend className="col-form-label col-sm-3 pl-0 w-auto">
                             <strong>Дроби в решении</strong>
                         </legend>
-                        <div className="d-flex flex-column justify-content-around">
-                            <TaskInput
-                                value={ARTIFICAL}
-                                label="Простые"
-                                checked={ARTIFICAL === typeData}
-                                setTypeData={setTypeData}
-                            />
-                            <TaskInput
-                                value={SIMPLEX}
-                                label="Десятичные"
-                                checked={SIMPLEX === typeData}
-                                setTypeData={setTypeData}
-                            />
-                        </div>
-                    </fieldset>
+                        <FractionInput value={SIMPLE} label="Простые" checked={SIMPLE === typeFraction} />
+                        <FractionInput value={DECIMAL} label="Десятичные" checked={DECIMAL === typeFraction} />
+                    </div>
                 </div>
                 <hr />
 

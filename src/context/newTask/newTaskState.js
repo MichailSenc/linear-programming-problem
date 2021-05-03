@@ -2,7 +2,15 @@ import React, { useReducer, useRef } from "react";
 import { newTaskReducer } from "./newTaskReducer";
 import Context from "./context";
 import { ARTIFICAL } from "../../types";
-import { CHANGE_VAR_COUNT, CHANGE_REF_COUNT, CHANGE_TYPE_DATA, CHANGE_GENERAL_MESSAGE, CHANGE_ALL } from "../../types";
+import {
+    CHANGE_VAR_COUNT,
+    CHANGE_REF_COUNT,
+    CHANGE_TYPE_DATA,
+    CHANGE_GENERAL_MESSAGE,
+    CHANGE_TYPE_FRACTION,
+    CHANGE_ALL,
+    SIMPLE,
+} from "../../types";
 import { NO_ERROR } from "./messages";
 
 const NewTaskState = ({ children }) => {
@@ -10,15 +18,27 @@ const NewTaskState = ({ children }) => {
         varCount: 2,
         refCount: 2,
         typeData: ARTIFICAL,
+        typeFraction: SIMPLE,
         errors: NO_ERROR(),
     });
 
     const inputValues = useRef({});
 
-    const setAll = ({ varCount, refCount }) => {
+    const setAll = ({ varCount, refCount, typeData, generalMessage, typeFraction }) => {
+        if ((refCount || refCount === 0) && (varCount || varCount === 0))
+            dispatch({ type: CHANGE_ALL, data: { varCount, refCount } });
+        else if (varCount || varCount === 0) setVarCount(varCount);
+        else if (refCount || refCount === 0) setRefCount(refCount);
+
+        if (typeData) setTypeData(typeData);
+        if (generalMessage || generalMessage === "") setGeneralMessage(generalMessage);
+        if (typeFraction) setTypeFraction(typeFraction);
+    };
+
+    const setTypeFraction = (typeFraction) => {
         dispatch({
-            type: CHANGE_ALL,
-            data: { varCount, refCount },
+            type: CHANGE_TYPE_FRACTION,
+            typeFraction,
         });
     };
 
@@ -37,6 +57,7 @@ const NewTaskState = ({ children }) => {
     };
 
     const setTypeData = (typeData) => {
+        console.log(`set type data ${typeData}`);
         dispatch({
             type: CHANGE_TYPE_DATA,
             typeData,
@@ -49,6 +70,7 @@ const NewTaskState = ({ children }) => {
             generalMessage,
         });
     };
+
     const setInputValue = (key, value) => {
         inputValues.current = { ...inputValues.current, [key]: value };
     };
@@ -62,11 +84,7 @@ const NewTaskState = ({ children }) => {
             value={{
                 newTaskstate,
                 inputValues,
-                setVarCount,
-                setRefCount,
-                setTypeData,
                 setAll,
-                setGeneralMessage,
                 setInputValue,
                 clearInputValues,
             }}

@@ -19,7 +19,6 @@ const Table = (props) => {
                 </th>
             );
         }
-        if (type === TYPE_REFERENCE) colls.push(<th key={varCount + 1} style={{ width: "5%" }} scope="col"></th>);
         colls.push(
             <th key={varCount + 2} scope="col">
                 res&ensp;
