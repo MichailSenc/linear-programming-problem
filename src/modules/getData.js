@@ -1,3 +1,5 @@
+import Fraction from "./fraction";
+
 export default class GetData {
     // solutionData
     constructor({ refCount, restrictions, varCount }) {
@@ -20,18 +22,27 @@ export default class GetData {
         this.selected[this.curCount] = value;
     };
 
+    _cloneFraction = (matrix) => {
+        return matrix.map((item) => {
+            return item.map((fraction) => new Fraction(fraction.numerator, fraction.denominator));
+        });
+    };
+
     // функция формирует первую(стартовую) симплекс таблицу
     _startArt = (restrictions) => {
         const res = [];
         for (let i = 0; i < this.refCount; i++) {
-            res[i] = restrictions[`${i}`].data.map((item) => +item);
-            if (res[i][res[i].length - 1] < 0) res[i] = res[i].map((item) => +item * -1);
+            res[i] = restrictions[`${i}`].data.map((item) => new Fraction(item, 1));
+            if (res[i][res[i].length - 1] < 0) res[i] = res[i].map((fraction) => fraction.changeSign());
         }
 
         // Сумма всех столбцов * -1 (нижняя строчка таблицы)
-        const total = Array(this.varCount + 1).fill(0);
+        const total = new Array(this.varCount + 1).fill(0).map((item) => new Fraction());
+        
         res.forEach((arr) => {
-            arr.forEach((item, i) => (total[i] -= item));
+            arr.forEach((fraction, i) => {
+                total[i].subtract(fraction);
+            });
         });
         res[this.refCount] = total;
 
@@ -45,8 +56,12 @@ export default class GetData {
             notBase[i] = i + 1 + this.varCount;
         }
         this.current = { resMatr: res, base, notBase, count: 0 };
-        this.history.push(JSON.parse(JSON.stringify(this.current)));
-        this.startSettings = { base, notBase };
+
+        const clone = JSON.parse(JSON.stringify(this.current));
+        clone.resMatr = this._cloneFraction(clone.resMatr);
+
+        this.history.push(clone);
+        this.startSettings = { base: [...base], notBase: [...notBase] };
         this.curCount = 0;
     };
 
@@ -62,7 +77,8 @@ export default class GetData {
     // следующий симплекс шаг (varnumb - индекс переменной; resnumb - номер ограничения)
     nextStep = (varnumb, resnumb) => {
         console.log(`nextStep, varnumb: ${varnumb}, resnumb: ${resnumb}`);
-        const { resMatr, base, notBase, count } = this.current;
+        let { resMatr, base, notBase, count } = JSON.parse(JSON.stringify(this.current));
+        resMatr = this._cloneFraction(resMatr);
 
         // поменять базисные переменные
         const baseItem = base[varnumb];
@@ -70,8 +86,8 @@ export default class GetData {
         notBase[resnumb] = baseItem;
 
         // далее модифицированный метод гаусса
-        let cloneMatr = JSON.parse(JSON.stringify(resMatr));
-        const a = 1 / cloneMatr[resnumb][varnumb];
+        let cloneMatr = this._cloneFraction(JSON.parse(JSON.stringify(resMatr)));
+        const a = new Fraction(1, 1).divide(cloneMatr[resnumb][varnumb]);
         cloneMatr[resnumb][varnumb] = a;
 
         const subVector = [];
@@ -82,14 +98,14 @@ export default class GetData {
                 subVector[i] = "*";
                 continue;
             }
-            cloneMatr[resnumb][i] *= a;
-            subVector[i] = cloneMatr[resnumb][i];
+            cloneMatr[resnumb][i].multiply(a);
+            subVector[i] = new Fraction(cloneMatr[resnumb][i].numerator, cloneMatr[resnumb][i].denominator);
         }
 
         // столбец опорного элемента
         for (let i = 0; i < this.refCount + 1; i++) {
             if (i === resnumb) continue;
-            cloneMatr[i][varnumb] *= -a;
+            cloneMatr[i][varnumb].multiply(a).changeSign();
         }
 
         // i - номер ограничения
@@ -97,16 +113,20 @@ export default class GetData {
             if (i === resnumb) continue;
             const element = resMatr[i];
 
-            const multiplier = element[varnumb];
+            const multiplier = new Fraction(element[varnumb].numerator, element[varnumb].denominator);
             // j - номер переменной
             for (let j = 0; j < element.length; j++) {
                 if (j === varnumb) continue;
-                cloneMatr[i][j] -= multiplier * subVector[j];
+                cloneMatr[i][j].subtract(multiplier.multiply(subVector[j]));
             }
         }
 
         this.current = { resMatr: cloneMatr, base, notBase, count: count + 1 };
-        this.history.push(JSON.parse(JSON.stringify(this.current)));
+
+        const clone = JSON.parse(JSON.stringify(this.current));
+        clone.resMatr = this._cloneFraction(clone.resMatr);
+
+        this.history.push(clone);
         this.curCount = count + 1;
     };
 }

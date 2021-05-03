@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Equations from "../components/Equations";
 import Context from "../context/solution/solutionContext";
 import GetData from "../modules/getData";
@@ -18,6 +18,10 @@ const SolveSimplex = () => {
         });
     };
 
+    useEffect(() => {
+        console.log(data.current);
+    }, [tables])
+
     const onNextClick = () => {
         const selected = data.current.selected[data.current.curCount]
         if (selected) {
@@ -29,6 +33,7 @@ const SolveSimplex = () => {
     const onPreviousClick = () => {
         data.current.previousStep();
         setTables([...data.current.history]);
+
     };
 
     return (

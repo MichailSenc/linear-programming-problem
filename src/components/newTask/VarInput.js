@@ -23,7 +23,7 @@ const VarInput = (props) => {
     const typeClass = message ? "border border-danger form-control" : "form-control";
     return (
         <div className="form-group row mb-0">
-            <label htmlFor={id} className="col-sm-5 col-form-label">
+            <label htmlFor={id} className="col-sm-12 col-form-label">
                 <strong>{label}</strong>
             </label>
             <div className="col-sm-10 pb-2">
@@ -35,7 +35,7 @@ const VarInput = (props) => {
                     onChange={(e) => changeValue(e)}
                     defaultValue={def || 1}
                 />
-                <small className="form-text text-muted position-absolute w-100 mt-0">{message}</small>
+                <small className="form-text text-muted position-absolute col-sm-12 mt-0">{message}</small>
             </div>
         </div>
     );

@@ -2,17 +2,25 @@ import React, { useState } from "react";
 import Context from "./context";
 
 const ModalState = ({ children }) => {
-    const [show, setShow] = useState(false);
+    const [showStart, setShowSart] = useState(false);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleCloseStart = () => setShowSart(false);
+    const handleShowStart = () => setShowSart(true);
+
+    const [showSave, setShowSave] = useState(false);
+
+    const handleCloseSave = () => setShowSave(false);
+    const handleShowSave = () => setShowSave(true);
 
     return (
         <Context.Provider
             value={{
-                show,
-                handleClose,
-                handleShow,
+                showSave,
+                handleCloseSave,
+                handleShowSave,
+                showStart,
+                handleCloseStart,
+                handleShowStart,
             }}
         >
             {children}

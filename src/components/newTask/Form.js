@@ -7,9 +7,11 @@ import Basis from "./Basis";
 import TaskInput from "./TaskTypeInput";
 import Button from "react-bootstrap/Button";
 import ModalWindow from "../ModalWindow";
+import ModalStart from "./Modal";
 import ModalContext from "../../context/modal/context";
 import Table from "./Table/Table";
 import Context from "../../context/newTask/context";
+
 import SolutionContext from "../../context/solution/solutionContext";
 
 const Form = () => {
@@ -25,7 +27,7 @@ const Form = () => {
 
     const { setSolutionData, solutionData } = useContext(SolutionContext);
 
-    const { handleShow } = useContext(ModalContext);
+    const { handleShowStart, handleShowSave } = useContext(ModalContext);
 
     const history = useHistory();
 
@@ -86,7 +88,7 @@ const Form = () => {
             type: typeData,
             isNeedBase: typeData === ARTIFICAL,
         });
-        
+
         console.log(solutionData);
 
         console.log(solutionData.current);
@@ -118,7 +120,7 @@ const Form = () => {
     // сохранить данные в файл
     const save = () => {
         // TODO дописать сохранение конфигурации в файл
-        handleShow();
+        handleShowStart();
         console.log("SAVE!");
     };
 
@@ -136,9 +138,10 @@ const Form = () => {
     return (
         <>
             <ModalWindow />
+            <ModalStart {...{errors,varCount,refCount}}/>
             <form onSubmit={(e) => submitData(e)}>
                 <div className="d-flex">
-                    <div className="col-sm-6">
+                    <div className="col-sm-4">
                         <VarInput
                             message={errors.messageForVar}
                             label="Число переменных"
@@ -157,11 +160,11 @@ const Form = () => {
                         />
                     </div>
 
-                    <fieldset className="form-group col-sm-6">
-                        <legend className="col-form-label col-sm-3 pl-0">
+                    <fieldset className="form-group col-sm-3">
+                        <legend className="col-form-label pl-0">
                             <strong>Тип задачи</strong>
                         </legend>
-                        <div className="d-flex flex-column  h-75 justify-content-around">
+                        <div className="d-flex flex-column justify-content-around">
                             <TaskInput
                                 value={ARTIFICAL}
                                 label="Метод исккусственного базиса"
@@ -178,6 +181,25 @@ const Form = () => {
                                 value={GRAPHICAL}
                                 label="Графический метод"
                                 checked={GRAPHICAL === typeData}
+                                setTypeData={setTypeData}
+                            />
+                        </div>
+                    </fieldset>
+                    <fieldset className="form-group col-sm-4">
+                        <legend className="col-form-label pl-0">
+                            <strong>Дроби в решении</strong>
+                        </legend>
+                        <div className="d-flex flex-column justify-content-around">
+                            <TaskInput
+                                value={ARTIFICAL}
+                                label="Простые"
+                                checked={ARTIFICAL === typeData}
+                                setTypeData={setTypeData}
+                            />
+                            <TaskInput
+                                value={SIMPLEX}
+                                label="Десятичные"
+                                checked={SIMPLEX === typeData}
                                 setTypeData={setTypeData}
                             />
                         </div>

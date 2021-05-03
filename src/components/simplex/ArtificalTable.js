@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext } from "react";
 import Context from "../../context/solution/solutionContext";
 
 const Table = (props) => {
@@ -8,11 +8,9 @@ const Table = (props) => {
     const { solutionData } = useContext(Context);
     const { varCount, refCount } = solutionData.current;
 
-    const selectedItem = useRef(null);
-
     const onClick = (e) => {
         const t = e.target;
-        console.log(data);
+        // console.log(data);
         if (t.classList.contains("active") && t.classList.contains(`td-${data.curCount}`)) {
             document.querySelectorAll(`.active.td-${data.curCount}`).forEach((item) => {
                 item.classList.remove("trans_pink");
@@ -24,19 +22,19 @@ const Table = (props) => {
             data.addSelectdItem({
                 var: +t.getAttribute("var"),
                 rest: +t.getAttribute("rest"),
-            })
+            });
 
             console.log(`click ${e.target.textContent}`);
         }
     };
 
     const onDoubleClick = (e) => {
-        console.log("DOUBLE!!!");
+        // console.log("DOUBLE!!!");
 
         const t = e.target;
 
         if (t.classList.contains(`td-${data.curCount}`)) {
-            console.log("Contains!");
+            // console.log("Contains!");
             data.nextStep(+t.getAttribute("var"), +t.getAttribute("rest"));
             setTables([...data.history]);
         }
@@ -58,7 +56,11 @@ const Table = (props) => {
             item.forEach((element, j) => {
                 const classes = [];
                 const selected = data.selected[count];
-                if (!(element === 0 || i === refCount || j === varCount)) {
+                if (data.startSettings.notBase.includes(base[j])) {
+                    classes.push("text-muted");
+                } else if (element.ifZero() && i !== refCount && j !== varCount) {
+                    classes.push("text-muted");
+                } else if (!(element.ifZero() || i === refCount || j === varCount)) {
                     classes.push(`td-${count}`, "active");
                     if (selected && selected.var === j && selected.rest === i) {
                         classes.push("trans_pink");
@@ -75,12 +77,13 @@ const Table = (props) => {
                         rest={i}
                         var={j}
                     >
-                        {element}
+                        {element.simple()}
                     </td>
                 );
             });
             return <tr>{res}</tr>;
         });
+        // console.log(data);
 
         return reVal;
     };
@@ -88,16 +91,18 @@ const Table = (props) => {
     // "X\u0305"
     const GetCols = () => {
         const colls = [];
-        console.log(`count: ${count}`);
+        // console.log(`count: ${count}`);
         colls.push(
             <th key="col-first" scope="col">
                 &ensp;{"X\u0303"}
                 <sup>({count})</sup>
             </th>
         );
+
         base.forEach((item, i) => {
+            const classes = data.startSettings.notBase.includes(base[i]) ? "text-muted" : "";
             colls.push(
-                <th key={i} scope="col">
+                <th key={i} scope="col" className={classes}>
                     &ensp;X<sub>{item}</sub>
                 </th>
             );

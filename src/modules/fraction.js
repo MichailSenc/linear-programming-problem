@@ -1,7 +1,11 @@
 export default class Fraction {
-    constructor(numerator, denominator) {
+    constructor(numerator = 0, denominator = 1) {
         this.numerator = parseInt(numerator);
         this.denominator = parseInt(denominator);
+        if (denominator < 0) {
+            this.numerator *= -1;
+            this.denominator *= -1;
+        }
     }
 
     // НОД двух чисел
@@ -15,10 +19,7 @@ export default class Fraction {
         const gcd = this._gcd(this.numerator, this.denominator);
         this.numerator /= gcd;
         this.denominator /= gcd;
-        return {
-            numerator: this.numerator,
-            denominator: this.denominator,
-        };
+        return this;
     };
 
     // сложение дробей
@@ -53,9 +54,18 @@ export default class Fraction {
         return this._applyGCD();
     };
 
+    changeSign = () => {
+        this.numerator *= -1;
+        return this;
+    };
+
+    ifZero = () => {
+        return this.numerator === 0;
+    }
+
     // простая дробь
     simple = () => {
-        return `${this.numerator}\\${this.denominator}`;
+        return this.denominator === 1 ? `${this.numerator}` : `${this.numerator}/${this.denominator}`;
     };
 
     // десятичная дробь
