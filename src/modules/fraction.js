@@ -61,7 +61,7 @@ export default class Fraction {
 
     ifZero = () => {
         return this.numerator === 0;
-    }
+    };
 
     // простая дробь
     simple = () => {
@@ -71,5 +71,9 @@ export default class Fraction {
     // десятичная дробь
     decimals = () => {
         return `${(this.numerator / this.denominator).toFixed(2)}`;
+    };
+
+    sign = () => {
+        return this.numerator === 0 ? 0 : this.numerator > 0 ? 1 : -1;
     };
 }

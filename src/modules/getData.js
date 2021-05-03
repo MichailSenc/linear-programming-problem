@@ -18,6 +18,39 @@ export default class GetData {
         this._startArt(restrictions);
     }
 
+    isOptimal = () => {
+        const { base } = this.current;
+        const sNotBase = this.startSettings.notBase;
+
+        for (let i = 0; i < sNotBase.length; i++) {
+            const item = sNotBase[i];
+            if (!base.includes(item)) return false;
+        }
+        return true;
+    };
+
+    isUnsolvable = () => {
+        const { resMatr, base, notBase } = this.current;
+        const sBase = this.startSettings.base;
+        const sNotBase = this.startSettings.notBase;
+
+        if (this.isOptimal()) return false;
+
+        // i-номер ограничения -1
+        for (let i = 0; i < resMatr.length - 1; i++) {
+            if (sBase.includes(notBase[i])) continue;
+            const arr = resMatr[i];
+            // j-номер переменной -1
+            for (let j = 0; j < arr.length - 1; j++) {
+                if (sNotBase.includes(base[j])) continue;
+                const fraction = arr[j];
+                if (!fraction.ifZero()) return false;
+            }
+        }
+
+        return true;
+    };
+
     addSelectdItem = (value) => {
         this.selected[this.curCount] = value;
     };
@@ -33,12 +66,12 @@ export default class GetData {
         const res = [];
         for (let i = 0; i < this.refCount; i++) {
             res[i] = restrictions[`${i}`].data.map((item) => new Fraction(item, 1));
-            if (res[i][res[i].length - 1] < 0) res[i] = res[i].map((fraction) => fraction.changeSign());
+            if (res[i][res[i].length - 1].sign() < 0) res[i] = res[i].map((fraction) => fraction.changeSign());
         }
 
         // Сумма всех столбцов * -1 (нижняя строчка таблицы)
         const total = new Array(this.varCount + 1).fill(0).map((item) => new Fraction());
-        
+
         res.forEach((arr) => {
             arr.forEach((fraction, i) => {
                 total[i].subtract(fraction);
@@ -113,11 +146,13 @@ export default class GetData {
             if (i === resnumb) continue;
             const element = resMatr[i];
 
-            const multiplier = new Fraction(element[varnumb].numerator, element[varnumb].denominator);
+            // const multiplier = new Fraction(element[varnumb].numerator, element[varnumb].denominator);
             // j - номер переменной
             for (let j = 0; j < element.length; j++) {
                 if (j === varnumb) continue;
-                cloneMatr[i][j].subtract(multiplier.multiply(subVector[j]));
+                cloneMatr[i][j].subtract(
+                    new Fraction(element[varnumb].numerator, element[varnumb].denominator).multiply(subVector[j])
+                );
             }
         }
 
