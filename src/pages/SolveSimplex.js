@@ -29,6 +29,11 @@ const SolveSimplex = () => {
         });
     };
 
+    useEffect(() => {
+        setError(data.current.isUnsolvable());
+        setOptimal(data.current.isOptimal());
+    }, []);
+
     const onNextClick = () => {
         const selected = data.current.selected[data.current.curCount];
         if (selected) {
@@ -50,7 +55,7 @@ const SolveSimplex = () => {
         if (error)
             return (
                 <h6 className="text-center mb-3 text-danger">
-                    Задача неразрешима, все Z<sub>is</sub> при каждом Z<sub>i0</sub> равны 0
+                    Задача неразрешима, все Z<sub>is</sub> при каждом Z<sub>i0</sub> из нового базиса равны 0
                 </h6>
             );
         return null;
@@ -91,7 +96,7 @@ const SolveSimplex = () => {
                     <Button className="btn-sm mb-2 mr-1" variant="secondary" onClick={onPreviousClick}>
                         Предыдущий шаг
                     </Button>
-                    <OptimalButton/>
+                    <OptimalButton />
                 </div>
                 <div className="col-sm-12">
                     <Tables />

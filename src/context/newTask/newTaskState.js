@@ -11,15 +11,15 @@ import {
     CHANGE_ALL,
     SIMPLE,
 } from "../../types";
-import { NO_ERROR } from "./messages";
 
 const NewTaskState = ({ children }) => {
     const [newTaskstate, dispatch] = useReducer(newTaskReducer, {
-        varCount: 2,
+        varCount: 3,
         refCount: 2,
         typeData: ARTIFICAL,
         typeFraction: SIMPLE,
-        errors: NO_ERROR(),
+        generalMessage: "",
+        errors: { isError: false },
     });
 
     const inputValues = useRef({});

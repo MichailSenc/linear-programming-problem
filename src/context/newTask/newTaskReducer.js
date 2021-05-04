@@ -7,11 +7,33 @@ import {
     CHANGE_TYPE_FRACTION,
 } from "../../types";
 
-import { NO_ERROR, VAR_LOWER_REF, LOWER_THAN_ONE } from "./messages";
+const VAR_LOWER_REF = () => {
+    return {
+        messageForVar: "Число переменных должно быть не меньше числа ограничений",
+        messageForRef: "Число ограничений должно быть не больше числа переменных",
+        generalMessage: "Количество переменных должно быть больше количества ограничений",
+        isError: true,
+    };
+};
+
+const LOWER_THAN_TWO = (varCount, refCount) => {
+    return {
+        messageForVar: varCount < 2 ? "Число переменных не может быть меньше 2" : "",
+        messageForRef: refCount < 2 ? "Число ограничений не может быть меньше 2" : "",
+        generalMessage: "При данных параметрах таблицы составить невозможно",
+        isError: true,
+    };
+};
+
+const NO_ERROR = () => {
+    return {
+        isError: false,
+    };
+};
 
 const checkData = ({ varCount, refCount }) => {
-    if (varCount < refCount) return VAR_LOWER_REF();
-    if (varCount < 2 || refCount < 2) return LOWER_THAN_ONE(varCount, refCount);
+    if (varCount < 2 || refCount < 2) return LOWER_THAN_TWO(varCount, refCount);
+    if (varCount <= refCount) return VAR_LOWER_REF();
     return NO_ERROR();
 };
 

@@ -36,11 +36,10 @@ const Form = () => {
     // возвращает матрицу функций-ограничений
     const getRestArray = () => {
         let res = []; // each elem: { data: [], sign: "", pos: i, };
-
         for (let i = 0; i < refCount; i++) {
             let str = [];
             document.querySelectorAll(`[input_type='${TYPE_REFERENCE}'][row_index='${i + 1}']`).forEach((item) => {
-                str.push([item.value, +item.getAttribute("position_index")]);
+                str.push([+item.value || 0, +item.getAttribute("position_index")]);
             });
             res.push({
                 data: str.sort((a, b) => a[1] - b[1]).map((item) => item[0]),
@@ -69,10 +68,32 @@ const Form = () => {
             return;
         }
 
+        const func = getDataArray(TYPE_FUNCTION);
+        const restrictions = getRestArray();
+        console.log(restrictions);
+
+        for (const { data, pos } of restrictions) {
+            let ifZero = true;
+            for (let i = 0; i < data.length - 1; i++) {
+                if (+data[i] !== 0) {
+                    ifZero = false;
+                    break;
+                }
+            }
+            console.log(+data[data.length - 1]);
+            console.log(+data[data.length - 1] !== 0);
+            if (ifZero && +data[data.length - 1] !== 0) {
+                setAll({ generalMessage: `Ошибка, ограничение №${pos + 1} некорректно. (слева 0, справа НЕ 0)` });
+                return;
+            }
+        }
+
+        setAll({ generalMessage: "" });
+
         setSolutionData({
             growth: inputValues.current["min-max"] || "min",
-            func: getDataArray(TYPE_FUNCTION),
-            restrictions: getRestArray(),
+            func,
+            restrictions,
             baseVector: typeData === ARTIFICAL ? [] : getBase(),
             varCount,
             refCount,
@@ -116,11 +137,32 @@ const Form = () => {
         console.log("SAVE!");
     };
 
-    const Tables = ({ children }) => {
-        if (errors.isError) {
-            return <h6 className="text-danger">{errors.generalMessage}</h6>;
+    const ErrorMessage = () => {
+        if (errors.generalMessage !== "") {
+            return <h6 className="text-danger text-center">{errors.generalMessage}</h6>;
         }
-        return children;
+        return null;
+    };
+
+    const Tables = () => {
+        if (!errors.isError) {
+            return (
+                <>
+                    <GetBasis>
+                        <Basis {...{ varCount, solutionData }} />
+                    </GetBasis>
+                    <label className="mb-3 mt-3">
+                        <strong>Целевая функция</strong>
+                    </label>
+                    <Table varCount={varCount} refCount={1} type={TYPE_FUNCTION} />
+                    <label className="mb-3 mt-3">
+                        <strong>Ограничения</strong>
+                    </label>
+                    <Table varCount={varCount} refCount={refCount} type={TYPE_REFERENCE} />
+                </>
+            );
+        }
+        return null;
     };
 
     const GetBasis = ({ children }) => {
@@ -173,21 +215,12 @@ const Form = () => {
                         <FractionInput value={DECIMAL} label="Десятичные" checked={DECIMAL === typeFraction} />
                     </div>
                 </div>
+
                 <hr />
 
-                <Tables>
-                    <GetBasis>
-                        <Basis {...{ varCount, solutionData }} />
-                    </GetBasis>
-                    <label className="mb-3 mt-3">
-                        <strong>Целевая функция</strong>
-                    </label>
-                    <Table varCount={varCount} refCount={1} type={TYPE_FUNCTION} />
-                    <label className="mb-3 mt-3">
-                        <strong>Ограничения</strong>
-                    </label>
-                    <Table varCount={varCount} refCount={refCount} type={TYPE_REFERENCE} />
-                </Tables>
+                <ErrorMessage />
+                <Tables />
+
                 <div className="d-flex justify-content-start p-3">
                     <Button className="mr-1" type="submit" variant="primary">
                         Решить задачу
