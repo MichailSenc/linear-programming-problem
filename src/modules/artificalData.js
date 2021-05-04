@@ -18,6 +18,47 @@ export default class ArtificalData {
         this._startArt(restrictions);
     }
 
+    // вычислить итоговые коэффициенты
+    calcCoeffs = (funcArray) => {
+        const { resMatr, base, notBase } = this.current;
+        const sNotBase = this.startSettings.notBase;
+        const sBase = this.startSettings.base;
+        const arr = new Array(notBase.length).fill(0).map((item) => new Fraction());
+        resMatr.forEach((item, i) => {
+            let j = 0;
+            for (let t = 0; t < item.length; t++) {
+                if (sNotBase.includes(base[t])) continue;
+                arr[j].add(
+                    new Fraction(item[t].numerator, item[t].denominator)
+                        .changeSign()
+                        .multiply(new Fraction(funcArray[notBase[i] - 1]))
+                );
+                j++;
+            }
+        });
+
+        sBase
+            .filter((el) => !notBase.includes(el))
+            .forEach((item, t) => {
+                arr[t].add(new Fraction(funcArray[item - 1]));
+            });
+
+        const clone = [];
+        this._cloneFraction(JSON.parse(JSON.stringify(resMatr))).forEach((arr) => {
+            let stringArr = [];
+            for (let t = 0; t < arr.length; t++) {
+                const item = arr[t];
+                if (sNotBase.includes(base[t])) continue;
+                stringArr.push(item);
+            }
+            clone.push(stringArr);
+            stringArr = [];
+        });
+
+        clone[clone.length - 1] = arr;
+        return clone;
+    };
+
     isOptimal = () => {
         const { base } = this.current;
         const sNotBase = this.startSettings.notBase;

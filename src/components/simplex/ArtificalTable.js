@@ -36,7 +36,7 @@ const Table = (props) => {
         // console.log("DOUBLE!!!");
 
         const t = e.target;
-        if (optClick) return;
+ 
         if (t.classList.contains(`td-${data.curCount}`)) {
             // console.log("Contains!");
             data.nextStep(+t.getAttribute("var"), +t.getAttribute("rest"));

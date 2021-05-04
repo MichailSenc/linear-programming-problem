@@ -54,7 +54,9 @@ const SolveArtifical = () => {
     };
 
     const onOptimalClick = () => {
-        setOptClick(true);
+        setOptClick(true); 
+        const startSimplexArray = data.current.calcCoeffs(solutionData.current.func);
+        console.log(startSimplexArray);
     };
 
     const Error = () => {
@@ -68,7 +70,6 @@ const SolveArtifical = () => {
     };
 
     const YeahOptimal = () => {
-        console.log(optimal);
         if (optimal) {
             return <h6 className="text-center mb-3 text-success">Задача достигла оптимального решения</h6>;
         }
@@ -78,7 +79,8 @@ const SolveArtifical = () => {
     const OptimalButton = () => {
         if (optimal) {
             return (
-                <Button className="btn-sm mb-2" variant="success" onClick={onOptimalClick}>
+                // <Button className="btn-sm mb-2" variant="success" onClick={onOptimalClick} disabled={optClick}>
+                <Button className="btn-sm mb-2" variant="success" onClick={onOptimalClick} >
                     Перейти к симплекс методу
                 </Button>
             );
@@ -96,10 +98,15 @@ const SolveArtifical = () => {
             <Error />
             <div className="row d-flex">
                 <div className="d-flex col-sm-12">
-                    <Button className="btn-sm mb-2 mr-1" variant="primary" onClick={onNextClick}>
+                    <Button className="btn-sm mb-2 mr-1" variant="primary" onClick={onNextClick} disabled={optClick}>
                         Следующий шаг
                     </Button>
-                    <Button className="btn-sm mb-2 mr-1" variant="secondary" onClick={onPreviousClick}>
+                    <Button
+                        className="btn-sm mb-2 mr-1"
+                        variant="secondary"
+                        onClick={onPreviousClick}
+                        disabled={optClick}
+                    >
                         Предыдущий шаг
                     </Button>
                     <OptimalButton />

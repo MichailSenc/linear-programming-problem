@@ -23,14 +23,16 @@ const Form = () => {
     const history = useHistory();
 
     // возвращает отсортированный массив данных функции/базиса
-    const getDataArray = (type) => {
+    const getFunctionArray = () => {
         let data = [];
 
-        document.querySelectorAll(`[input_type=${type}]`).forEach((item) => {
+        document.querySelectorAll(`[input_type=${TYPE_FUNCTION}]`).forEach((item) => {
             data.push([item.value, +item.getAttribute("position_index")]);
         });
 
-        return data.sort((a, b) => a[1] - b[1]).map((item) => item[0]);
+        data = data.sort((a, b) => a[1] - b[1]).map((item) => +item[0]);
+        data.pop();
+        return data;
     };
 
     // возвращает матрицу функций-ограничений
@@ -68,7 +70,7 @@ const Form = () => {
             return;
         }
 
-        const func = getDataArray(TYPE_FUNCTION);
+        const func = getFunctionArray();
         const restrictions = getRestArray();
         console.log(restrictions);
 
