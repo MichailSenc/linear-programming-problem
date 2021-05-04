@@ -1,6 +1,6 @@
 import Fraction from "./fraction";
 
-export default class GetData {
+export default class ArtificalData {
     // solutionData
     constructor({ refCount, restrictions, varCount }) {
         this.refCount = refCount;

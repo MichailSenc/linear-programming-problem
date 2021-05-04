@@ -3,7 +3,7 @@ import Context from "../../context/solution/solutionContext";
 import { SIMPLE } from "../../types";
 
 const Table = (props) => {
-    const { data, table, setTables, setError, setOptimal } = props;
+    const { data, table, setTables, setError, setOptimal, optClick } = props;
     const { resMatr, base, notBase, count } = table;
 
     const { solutionData } = useContext(Context);
@@ -14,6 +14,7 @@ const Table = (props) => {
     const onClick = (e) => {
         const t = e.target;
         // console.log(data);
+        if (optClick) return;
         if (t.classList.contains("active") && t.classList.contains(`td-${data.curCount}`)) {
             document.querySelectorAll(`.active.td-${data.curCount}`).forEach((item) => {
                 item.classList.remove("trans_pink");
@@ -35,7 +36,7 @@ const Table = (props) => {
         // console.log("DOUBLE!!!");
 
         const t = e.target;
-
+        if (optClick) return;
         if (t.classList.contains(`td-${data.curCount}`)) {
             // console.log("Contains!");
             data.nextStep(+t.getAttribute("var"), +t.getAttribute("rest"));

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { GRAPHICAL, ARTIFICAL, SIMPLEX, TYPE_FUNCTION, TYPE_REFERENCE, SIMPLE, DECIMAL } from "../../types";
-import { GAPHICAL_REF, SIMPLEX_REF } from "../../refs";
+import { GAPHICAL_REF, SIMPLEX_REF, ARTIFICAL_REF } from "../../refs";
 import VarInput from "./VarInput";
 import Basis from "./Basis";
 import FractionInput from "./FractionTypeInput";
@@ -111,7 +111,7 @@ const Form = () => {
                 history.push(GAPHICAL_REF);
                 break;
             case ARTIFICAL:
-                history.push(SIMPLEX_REF);
+                history.push(ARTIFICAL_REF);
                 break;
             case SIMPLEX:
                 history.push(SIMPLEX_REF);

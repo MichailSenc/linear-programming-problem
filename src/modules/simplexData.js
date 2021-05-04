@@ -1,4 +1,4 @@
-export default class GetData {
+export default class SimplexData {
     // solutionData
     constructor(table) {
         this.table = table;

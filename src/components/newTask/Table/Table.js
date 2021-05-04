@@ -1,6 +1,5 @@
 import React from "react";
 import Row from "./TableRow";
-import { TYPE_REFERENCE } from "../../../types";
 
 const Table = (props) => {
     const { varCount, refCount, type } = props;

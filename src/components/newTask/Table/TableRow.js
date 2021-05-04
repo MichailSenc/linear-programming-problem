@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { TYPE_FUNCTION, TYPE_SIGN } from "../../../types";
+import { TYPE_FUNCTION } from "../../../types";
 
 import Context from "../../../context/newTask/context";
 
