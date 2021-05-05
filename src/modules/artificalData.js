@@ -23,7 +23,9 @@ export default class ArtificalData {
         const { resMatr, base, notBase } = this.current;
         const sNotBase = this.startSettings.notBase;
         const sBase = this.startSettings.base;
-        const arr = new Array(notBase.length).fill(0).map((item) => new Fraction());
+        const arr = new Array(base.filter((item) => !sNotBase.includes(item)).length + 1)
+            .fill(0)
+            .map((item) => new Fraction());
         resMatr.forEach((item, i) => {
             let j = 0;
             for (let t = 0; t < item.length; t++) {
@@ -56,7 +58,11 @@ export default class ArtificalData {
         });
 
         clone[clone.length - 1] = arr;
-        return clone;
+        return {
+            matrix: clone,
+            base: base.filter((item) => !sNotBase.includes(item)),
+            notBase: [...notBase],
+        };
     };
 
     isOptimal = () => {

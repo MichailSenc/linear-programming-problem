@@ -73,6 +73,10 @@ export default class Fraction {
         return `${(this.numerator / this.denominator).toFixed(2)}`;
     };
 
+    demicalValue = () => {
+        return this.numerator/this.denominator;
+    }
+
     sign = () => {
         return this.numerator === 0 ? 0 : this.numerator > 0 ? 1 : -1;
     };
