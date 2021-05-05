@@ -17,11 +17,24 @@ export default class SimplexData {
         this.selected = {};
         // Это если мы решаем без искусственного базиса
         if (calcStart) this._startArt(restrictions);
-        console.log("SIMPLEXDATA!!!!");
     }
 
+    getSolution = () => {
+        const vector = new Array(this.varCount).fill(0).map((item) => new Fraction());
+        const { resMatr, notBase} = this.current;
+        for (let i = 0; i < resMatr.length - 1; i++) {
+            const arr = resMatr[i];
+            vector[notBase[i] - 1] = arr[arr.length - 1];
+        }
+        const arr = resMatr[resMatr.length - 1];
+        return {
+            vector,
+            value: new Fraction(arr[arr.length - 1].numerator, arr[arr.length - 1].denominator).changeSign(),
+        };
+    };
+
     // Если уже есть готовая симплекс таблица (исскуственный базис)
-    setReadySolution = ({matrix, base, notBase}) => {
+    setReadySolution = ({ matrix, base, notBase }) => {
         this.current = { resMatr: matrix, base: [...base], notBase: [...notBase], count: 0 };
         const clone = JSON.parse(JSON.stringify(this.current));
         clone.resMatr = this._cloneFraction(clone.resMatr);
@@ -33,9 +46,10 @@ export default class SimplexData {
     // TODO переделать !!!
     isOptimal = () => {
         const { resMatr } = this.current;
-        resMatr[resMatr.length - 1].forEach((item) => {
-            if (+item < 0) return false;
-        });
+        const arr = resMatr[resMatr.length - 1];
+        for (let i = 0; i < arr.length - 1; i++) {
+            if (arr[i].demicalValue() < 0) return false;
+        }
         return true;
     };
 

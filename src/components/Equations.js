@@ -3,9 +3,9 @@ import Context from "../context/solution/solutionContext";
 
 const Equations = () => {
     const { solutionData } = useContext(Context);
-    const { func, restrictions } = solutionData.current;
+    const { func, restrictions, growth } = solutionData.current;
 
-    const Equality = (arr, delimiter) => {
+    const Equality = (arr, delimiter, growth) => {
         const res = [];
         let counter = 0;
         while (res.length === 0 && counter < arr.length - 1) {
@@ -21,7 +21,7 @@ const Equations = () => {
         }
 
         for (let i = counter; i < arr.length - 1; i++) {
-            const item = Math.abs(+arr[i]) === 1 ? "" : `${Math.abs(arr[i])} ⋅ `;
+            const item = Math.abs(+arr[i]) === 1 ? "" : `${Math.abs(arr[i])}`;
             if (+arr[i] === 0) continue;
             res.push(
                 <span key={i}>
@@ -36,7 +36,7 @@ const Equations = () => {
         res.push(
             <span key={arr.length - 1}>
                 {delimiter}
-                {arr[arr.length - 1]}
+                {growth || arr[arr.length - 1]}
             </span>
         );
         return res;
@@ -44,7 +44,7 @@ const Equations = () => {
 
     const GetFunc = () => {
         if (!func || func.length === 0) return <div>Функция не извеcтна</div>;
-        return Equality(func, " → ");
+        return Equality([...func, 0], " → ", growth);
     };
 
     const sign = { eq: "=", le: "≤", ge: "≥" };
@@ -61,6 +61,7 @@ const Equations = () => {
 
     return (
         <>
+            <h6>Условие:</h6>
             <div className="d-flex flex-column mb-4">
                 <div>
                     <GetFunc />

@@ -19,13 +19,16 @@ export default class ArtificalData {
     }
 
     // вычислить итоговые коэффициенты
-    calcCoeffs = (funcArray) => {
+    calcCoeffs = ({ func, growth }) => {
         const { resMatr, base, notBase } = this.current;
         const sNotBase = this.startSettings.notBase;
         const sBase = this.startSettings.base;
         const arr = new Array(base.filter((item) => !sNotBase.includes(item)).length + 1)
             .fill(0)
-            .map((item) => new Fraction());
+            .map(() => new Fraction());
+            
+        let copyArr = [...func];
+        if (growth === "max") copyArr = copyArr.map((item) => +item * -1);
         resMatr.forEach((item, i) => {
             let j = 0;
             for (let t = 0; t < item.length; t++) {
@@ -33,7 +36,7 @@ export default class ArtificalData {
                 arr[j].add(
                     new Fraction(item[t].numerator, item[t].denominator)
                         .changeSign()
-                        .multiply(new Fraction(funcArray[notBase[i] - 1]))
+                        .multiply(new Fraction(copyArr[notBase[i] - 1]))
                 );
                 j++;
             }
@@ -42,7 +45,7 @@ export default class ArtificalData {
         sBase
             .filter((el) => !notBase.includes(el))
             .forEach((item, t) => {
-                arr[t].add(new Fraction(funcArray[item - 1]));
+                arr[t].add(new Fraction(copyArr[item - 1]));
             });
 
         const clone = [];
