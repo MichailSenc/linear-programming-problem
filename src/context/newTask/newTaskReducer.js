@@ -5,6 +5,7 @@ import {
     CHANGE_GENERAL_MESSAGE,
     CHANGE_ALL,
     CHANGE_TYPE_FRACTION,
+    CHANGE_MODE
 } from "../../types";
 
 const VAR_LOWER_REF = () => {
@@ -42,6 +43,7 @@ const handlers = {
     [CHANGE_REF_COUNT]: (state, { refCount }) => ({ ...state, refCount, errors: checkData({ ...state, refCount }) }),
     [CHANGE_ALL]: (state, { data }) => ({ ...state, ...data, errors: checkData({ ...state, ...data }) }),
     [CHANGE_TYPE_DATA]: (state, { typeData }) => ({ ...state, typeData }),
+    [CHANGE_MODE]: (state, { mode }) => ({ ...state, mode }),
     [CHANGE_TYPE_FRACTION]: (state, { typeFraction }) => ({ ...state, typeFraction }),
     [CHANGE_GENERAL_MESSAGE]: (state, { generalMessage }) => ({
         ...state,

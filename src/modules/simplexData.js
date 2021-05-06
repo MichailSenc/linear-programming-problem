@@ -19,9 +19,32 @@ export default class SimplexData {
         if (calcStart) this._startArt(restrictions);
     }
 
+    autoMode = () => {
+        while (!this.isUnsolvable() && !this.isOptimal()) {
+            const {i, j} = this.mainSupport();
+            this.addSelectdItem({ var: j, rest: i });
+            this.nextStep(+j, +i);
+        }
+        return true;
+    };
+
+    mainSupport = () => {
+        const { resMatr } = this.current;
+        let main = {};
+        for (let i = 0; i < resMatr.length - 1; i++) {
+            for (let j = 0; j < resMatr[i].length - 1; j++) {
+                if (resMatr[resMatr.length - 1][j].demicalValue() >= 0) continue;
+                if (resMatr[i][j].ifZero() || resMatr[i][j].demicalValue() <= 0) continue;
+                const value = resMatr[i][resMatr[i].length - 1].demicalValue() / resMatr[i][j].demicalValue();
+                if (!main.value || main.value > value) main = { value, i, j };
+            }
+        }
+        return main;
+    };
+
     getSolution = () => {
         const vector = new Array(this.varCount).fill(0).map((item) => new Fraction());
-        const { resMatr, notBase} = this.current;
+        const { resMatr, notBase } = this.current;
         for (let i = 0; i < resMatr.length - 1; i++) {
             const arr = resMatr[i];
             vector[notBase[i] - 1] = arr[arr.length - 1];

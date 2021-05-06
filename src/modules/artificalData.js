@@ -18,6 +18,22 @@ export default class ArtificalData {
         this._startArt(restrictions);
     }
 
+    autoMode = () => {
+        for (let i = 0; i < this.refCount; i++) {
+            if (this.isUnsolvable() || this.isOptimal()) return false;
+            const { resMatr, base } = this.current;
+            for (let j = 0; j < resMatr[i].length - 1; j++) {
+                if (this.startSettings.notBase.includes(base[j])) continue;
+                if (!resMatr[i][j].ifZero()) {
+                    this.addSelectdItem({var: i, rest: j})
+                    this.nextStep(i, j);
+                    break;
+                }
+            }
+        }
+        return true;
+    };
+
     // вычислить итоговые коэффициенты
     calcCoeffs = ({ func, growth }) => {
         const { resMatr, base, notBase } = this.current;
@@ -26,7 +42,7 @@ export default class ArtificalData {
         const arr = new Array(base.filter((item) => !sNotBase.includes(item)).length + 1)
             .fill(0)
             .map(() => new Fraction());
-            
+
         let copyArr = [...func];
         if (growth === "max") copyArr = copyArr.map((item) => +item * -1);
         resMatr.forEach((item, i) => {
@@ -85,20 +101,22 @@ export default class ArtificalData {
         const sNotBase = this.startSettings.notBase;
 
         if (this.isOptimal()) return false;
+        console.log("usolve!");
 
         // i-номер ограничения -1
-        for (let i = 0; i < resMatr.length - 1; i++) {
+        point: for (let i = 0; i < resMatr.length - 1; i++) {
             if (sBase.includes(notBase[i])) continue;
             const arr = resMatr[i];
             // j-номер переменной -1
             for (let j = 0; j < arr.length - 1; j++) {
                 if (sNotBase.includes(base[j])) continue;
                 const fraction = arr[j];
-                if (!fraction.ifZero()) return false;
+                if (!fraction.ifZero()) continue point;
             }
+            return true;
         }
 
-        return true;
+        return false;
     };
 
     addSelectdItem = (value) => {

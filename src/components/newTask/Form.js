@@ -1,21 +1,32 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
-import { GRAPHICAL, ARTIFICAL, SIMPLEX, TYPE_FUNCTION, TYPE_REFERENCE, SIMPLE, DECIMAL } from "../../types";
 import { GAPHICAL_REF, SIMPLEX_REF, ARTIFICAL_REF } from "../../refs";
 import VarInput from "./VarInput";
 import Basis from "./Basis";
 import FractionInput from "./FractionTypeInput";
+import ModeInput from "./OperatingModeInput";
 import Button from "react-bootstrap/Button";
 import ModalSave from "../ModalWindow";
 import ModalContext from "../../context/modal/context";
 import Table from "./Table/Table";
 import Context from "../../context/newTask/context";
+import {
+    GRAPHICAL,
+    ARTIFICAL,
+    SIMPLEX,
+    TYPE_FUNCTION,
+    TYPE_REFERENCE,
+    SIMPLE,
+    DECIMAL,
+    AUTO_MODE,
+    MANUAL_MODE,
+} from "../../types";
 
 import SolutionContext from "../../context/solution/solutionContext";
 
 const Form = () => {
     const { newTaskstate, inputValues, setAll, clearInputValues } = useContext(Context);
-    const { varCount, refCount, typeData, typeFraction, errors } = newTaskstate;
+    const { varCount, refCount, typeData, typeFraction, errors, mode } = newTaskstate;
 
     const { setSolutionData, solutionData } = useContext(SolutionContext);
     const { handleShowSave } = useContext(ModalContext);
@@ -98,6 +109,7 @@ const Form = () => {
             restrictions,
             baseVector: typeData === ARTIFICAL ? [] : getBase(),
             varCount,
+            mode,
             refCount,
             type: typeData,
             fraction: typeFraction,
@@ -215,6 +227,13 @@ const Form = () => {
                         </legend>
                         <FractionInput value={SIMPLE} label="Простые" checked={SIMPLE === typeFraction} />
                         <FractionInput value={DECIMAL} label="Десятичные" checked={DECIMAL === typeFraction} />
+                    </div>
+                    <div className="d-flex align-items-center form-group col-sm-12">
+                        <legend className="col-form-label col-sm-3 pl-0 w-auto">
+                            <strong>Режим</strong>
+                        </legend>
+                        <ModeInput value={MANUAL_MODE} label="Ручной" checked={MANUAL_MODE === mode} />
+                        <ModeInput value={AUTO_MODE} label="Автоматический" checked={AUTO_MODE === mode} />
                     </div>
                 </div>
 

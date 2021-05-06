@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Context from "../../context/newTask/context";
 
-const FractionInput = (props) => {
+const ModeInput = (props) => {
     const { value, label, checked } = props;
     const { setAll } = useContext(Context);
 
@@ -10,12 +10,12 @@ const FractionInput = (props) => {
             <input
                 className="form-check-input"
                 type="radio"
-                name="fractionRadios"
+                name="ModeRadios"
                 id={value}
                 defaultValue={value}
                 defaultChecked={checked}
                 onChange={(e) => {
-                    if (e.target.checked) setAll({typeFraction: value});
+                    if (e.target.checked) setAll({mode: value});
                 }}
             />
             <label className="form-check-label" htmlFor={value}>
@@ -25,4 +25,4 @@ const FractionInput = (props) => {
     );
 };
 
-export default FractionInput;
+export default ModeInput;

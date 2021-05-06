@@ -79,7 +79,11 @@ const SimplexMethod = (props) => {
 
     const YeahOptimal = () => {
         if (opt) {
-            return <h6 className="text-center mb-3 text-success">Задача достигла оптимального решения</h6>;
+            return (
+                <h6 className={`text-center mb-3 text-success ${optClick ? "d-none" : ""}`}>
+                    Задача достигла оптимального решения
+                </h6>
+            );
         }
         return null;
     };
@@ -87,7 +91,11 @@ const SimplexMethod = (props) => {
     const OptimalButton = () => {
         if (opt) {
             return (
-                <Button className="btn-sm mb-2" variant="success" onClick={onOptimalClick}>
+                <Button
+                    className={`btn-sm mb-2 ${optClick ? "d-none" : ""}`}
+                    variant="success"
+                    onClick={onOptimalClick}
+                >
                     Получить ответ
                 </Button>
             );
@@ -122,22 +130,43 @@ const SimplexMethod = (props) => {
         return null;
     };
 
+    const BackToSolveButton = () => {
+        if (optClick) {
+            return (
+                <Button
+                    className={`btn-sm mb-2`}
+                    variant="success"
+                    onClick={() =>{
+                        setOptClick(false)
+                    }}
+                >
+                    Вернутся к решению
+                </Button>
+            );
+        }
+        return null;
+    }
+
     return (
         <>
             <Solution />
             <h4 className="text-center mb-3">Симплекс Метод</h4>
+            <BackToSolveButton/>
             <YeahOptimal />
             <SimplexError />
             <div className="row d-flex">
                 <div className="d-flex col-sm-12">
-                    <Button className="btn-sm mb-2 mr-1" variant="primary" onClick={onNextClick} disabled={optClick}>
+                    <Button
+                        className={`btn-sm mb-2 ${optClick ? "d-none" : ""} mr-1`}
+                        variant="primary"
+                        onClick={onNextClick}
+                    >
                         Следующий шаг
                     </Button>
                     <Button
-                        className="btn-sm mb-2 mr-1"
+                        className={`btn-sm mb-2 ${optClick ? "d-none" : ""} mr-1`}
                         variant="secondary"
                         onClick={onPreviousClick}
-                        disabled={optClick}
                     >
                         Предыдущий шаг
                     </Button>

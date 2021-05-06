@@ -9,7 +9,9 @@ import {
     CHANGE_GENERAL_MESSAGE,
     CHANGE_TYPE_FRACTION,
     CHANGE_ALL,
+    CHANGE_MODE,
     SIMPLE,
+    MANUAL_MODE,
 } from "../../types";
 
 const NewTaskState = ({ children }) => {
@@ -20,11 +22,12 @@ const NewTaskState = ({ children }) => {
         typeFraction: SIMPLE,
         generalMessage: "",
         errors: { isError: false },
+        mode: MANUAL_MODE,
     });
 
     const inputValues = useRef({});
 
-    const setAll = ({ varCount, refCount, typeData, generalMessage, typeFraction }) => {
+    const setAll = ({ varCount, refCount, typeData, generalMessage, typeFraction, mode }) => {
         if ((refCount || refCount === 0) && (varCount || varCount === 0))
             dispatch({ type: CHANGE_ALL, data: { varCount, refCount } });
         else if (varCount || varCount === 0) setVarCount(varCount);
@@ -33,6 +36,7 @@ const NewTaskState = ({ children }) => {
         if (typeData) setTypeData(typeData);
         if (generalMessage || generalMessage === "") setGeneralMessage(generalMessage);
         if (typeFraction) setTypeFraction(typeFraction);
+        if (mode) setMode(mode);
     };
 
     const setTypeFraction = (typeFraction) => {
@@ -61,6 +65,14 @@ const NewTaskState = ({ children }) => {
         dispatch({
             type: CHANGE_TYPE_DATA,
             typeData,
+        });
+    };   
+    
+    const setMode = (mode) => {
+        console.log(`set type data ${mode}`);
+        dispatch({
+            type: CHANGE_MODE,
+            mode,
         });
     };
 

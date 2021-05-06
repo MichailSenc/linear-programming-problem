@@ -9,6 +9,8 @@ export const TYPE_SIGN = "TYPE_SIGN"
 export const SIMPLE = "TYPE_SIMPLE"
 export const DECIMAL = "TYPE_DECIMAL"
 
+export const AUTO_MODE = "AUTO_MODE"
+export const MANUAL_MODE = "MANUAL_MODE"
 
 export const CHANGE_VAR_COUNT = "CHANGE_VAR_COUNT"
 export const CHANGE_REF_COUNT = "CHANGE_REF_COUNT"
@@ -16,4 +18,5 @@ export const CHANGE_ALL = "CHANGE_ALL"
 export const CHANGE_TYPE_DATA = "CHANGE_TYPE_DATA"
 export const CHANGE_GENERAL_MESSAGE = "CHANGE_GENERAL_MESSAGE"
 export const CHANGE_TYPE_FRACTION = "CHANGE_TYPE_FRACTION"
+export const CHANGE_MODE = "CHANGE_TYPE_MODE"
 

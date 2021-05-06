@@ -6,6 +6,7 @@ import SimplexData from "../modules/simplexData";
 import ArtificalTable from "../components/simplex/ArtificalTable";
 import Button from "react-bootstrap/Button";
 import SimplexMethod from "../components/simplex/SimplexMethod";
+import { AUTO_MODE } from "../types";
 
 const SolveArtifical = () => {
     const { solutionData } = useContext(Context);
@@ -34,8 +35,22 @@ const SolveArtifical = () => {
     };
 
     useEffect(() => {
-        setArtificalError(artData.current.isUnsolvable());
-        setArtOptimal(artData.current.isOptimal());
+        if (solutionData.current.mode === AUTO_MODE) {
+            artData.current.autoMode();
+            setArtTables([...artData.current.history]);
+            setArtificalError(artData.current.isUnsolvable());
+            setArtOptimal(artData.current.isOptimal());
+            if (artData.current.isOptimal()) {
+                simData.current = new SimplexData(solutionData.current);
+                simData.current.setReadySolution(artData.current.calcCoeffs(solutionData.current));
+                simData.current.autoMode();
+                setOptClick(true);
+            }
+        } else {
+            setArtTables([...artData.current.history]);
+            setArtificalError(artData.current.isUnsolvable());
+            setArtOptimal(artData.current.isOptimal());
+        }
     }, []);
 
     const onNextClick = () => {
@@ -61,16 +76,14 @@ const SolveArtifical = () => {
         simData.current.setReadySolution(artData.current.calcCoeffs(solutionData.current));
         console.log("OPTIMAL!!!!!");
         console.log(simData.current);
-        // setArtTables(simData.current.history);
-        // setArtificalError(simData.current.isUnsolvable());
-        // setArtOptimal(simData.current.isOptimal());
     };
 
     const ArtificalError = () => {
         if (artificlaError)
             return (
                 <h6 className="text-center mb-3 text-danger">
-                    Задача неразрешима, все Z<sub>is</sub> при каждом Z<sub>i0</sub> из нового базиса равны 0
+                    Задача неразрешима. Существует Z<sub>i0</sub>, при котором все Z<sub>is</sub> из нового базиса равны
+                    0
                 </h6>
             );
         return null;
