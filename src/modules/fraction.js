@@ -1,8 +1,13 @@
 export default class Fraction {
     constructor(numerator = 0, denominator = 1) {
-        this.numerator = parseInt(numerator);
-        this.denominator = parseInt(denominator);
-        if (denominator < 0) {
+        if (typeof numerator === "object") {
+            this.numerator = numerator.numerator;
+            this.denominator = numerator.denominator;
+        } else {
+            this.numerator = parseInt(numerator);
+            this.denominator = parseInt(denominator);
+        }
+        if (this.denominator < 0) {
             this.numerator *= -1;
             this.denominator *= -1;
         }
@@ -19,6 +24,10 @@ export default class Fraction {
         const gcd = this._gcd(this.numerator, this.denominator);
         this.numerator /= gcd;
         this.denominator /= gcd;
+        if (this.denominator < 0) {
+            this.numerator *= -1;
+            this.denominator *= -1;
+        }
         return this;
     };
 
@@ -36,6 +45,10 @@ export default class Fraction {
         this.numerator = this.numerator * denominator - numerator * this.denominator;
         this.denominator *= denominator;
         return this._applyGCD();
+    };
+
+    asObject = () => {
+        return { numerator: this.numerator, denominator: this.denominator };
     };
 
     // умножение дробей
@@ -70,12 +83,12 @@ export default class Fraction {
 
     // десятичная дробь
     decimals = () => {
-        return `${(this.numerator / this.denominator).toFixed(2)}`;
+        return `${(this.numerator / this.denominator).toFixed(2).replace(/\.00/, "")}`;
     };
 
     demicalValue = () => {
-        return this.numerator/this.denominator;
-    }
+        return this.numerator / this.denominator;
+    };
 
     sign = () => {
         return this.numerator === 0 ? 0 : this.numerator > 0 ? 1 : -1;
