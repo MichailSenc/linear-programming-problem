@@ -2,32 +2,32 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import Context from "../context/solution/solutionContext";
 import SimplexData from "../modules/simplexData";
 import Button from "react-bootstrap/Button";
+import SimplexMethod from "../components/simplex/SimplexMethod";
 import Gaus from "../modules/gaus";
 import Equations from "../components/Equations";
 import CalcCoeffs from '../modules/calcCoeffs'
 
 const SolveSimplex = () => {
     const { solutionData } = useContext(Context);
-    const gaus = new Gaus(solutionData.current);
-    const coeffs = new CalcCoeffs(gaus, solutionData.current.func, solutionData.current.growth);
-    const simData = useRef(new SimplexData(solutionData.current));
-    const [tables, setTables] = useState([]);
-    const [error, setError] = useState(false);
-    const [opt, setOpt] = useState(false);
-    const [optClick, setOptClick] = useState(false);
+    const gaus = useRef(new Gaus(solutionData.current));
+    const simData = useRef(null);
 
     console.log(solutionData.current);
-    console.log(gaus);
-    console.log(gaus.matrix.map(arr => arr.map(item => item.simple())));
-    console.log(gaus.base);
-    console.log(gaus.notBase);
-    console.log(coeffs.createTable().matrix.map(arr => arr.map(item => item.simple())));
+    console.log(gaus.current);
+    console.log(gaus.current.matrix.map(arr => arr.map(item => item.simple())));
+    console.log(gaus.current.base);
+    console.log(gaus.current.notBase);
+
+    const setSimplexData = () => {
+        simData.current = new SimplexData(solutionData.current);
+        simData.current.setReadySolution(new CalcCoeffs(gaus.current, solutionData.current.func, solutionData.current.growth).createTable());
+    }
 
     const Error = () => {
-        if (gaus.error.isError) {
+        if (gaus.current.error.isError) {
             return (
                 <>
-                    <h6 dangerouslySetInnerHTML={gaus.error.message}></h6>
+                    <h6 dangerouslySetInnerHTML={gaus.current.error.message}></h6>
                 </>
             );
         }
@@ -37,10 +37,18 @@ const SolveSimplex = () => {
     const Basis = () => {
         return (
             <>
-                <h6 className="mb-3">X<sup>(0)</sup> = ({gaus.base.join(", ")})</h6>
+                <h6 className="mb-3">X<sup>(0)</sup> = ({gaus.current.base.join(", ")})</h6>
             </>
         );
     };
+
+    const Simplex = () => {
+        if (!gaus.current.error.isError) {
+            setSimplexData()
+            return <SimplexMethod data={simData} />;
+        }
+        return null;
+    }
 
     return (
         <>
@@ -50,6 +58,7 @@ const SolveSimplex = () => {
                 <Basis />
             </div>
             <Error />
+            <Simplex/>
         </>
     );
 };

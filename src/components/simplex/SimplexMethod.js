@@ -55,9 +55,7 @@ const SimplexMethod = (props) => {
     };
 
     const onPreviousClick = () => {
-        if (!simData.current.previousStep()) {
-            if (isArt) backToArt(false);
-        }
+        if (!simData.current.previousStep() && backToArt) backToArt(false);
         setError(simData.current.isUnsolvable());
         setOpt(simData.current.isOptimal());
         setTables([...simData.current.history]);
