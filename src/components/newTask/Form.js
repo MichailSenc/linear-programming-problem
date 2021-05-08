@@ -84,7 +84,9 @@ const Form = () => {
         const func = getFunctionArray();
         const restrictions = getRestArray();
         console.log(restrictions);
-
+        
+        console.log("RESTRICTIONS");
+        console.log(restrictions);
         for (const { data, pos } of restrictions) {
             let ifZero = true;
             for (let i = 0; i < data.length - 1; i++) {
@@ -93,21 +95,35 @@ const Form = () => {
                     break;
                 }
             }
-            console.log(+data[data.length - 1]);
-            console.log(+data[data.length - 1] !== 0);
+
             if (ifZero && +data[data.length - 1] !== 0) {
                 setAll({ generalMessage: `Ошибка, ограничение №${pos + 1} некорректно. (слева 0, справа НЕ 0)` });
                 return;
             }
+
+            if (ifZero && +data[data.length - 1] === 0) {
+                setAll({
+                    generalMessage: `Ошибка, ограничение №${
+                        pos + 1
+                    } не имеет смысла. Пожалуйста уберите или измените его`,
+                });
+                return;
+            }
         }
 
+        const baseVector = getBase();
+        if (typeData !== ARTIFICAL && baseVector.filter((item) => item).length !== refCount) {
+            setAll({ generalMessage: `Ошибка, количество базисных переменных должно ровнятся количеству ограничений` });
+            return;
+        }
+        console.log(getBase());
         setAll({ generalMessage: "" });
 
         setSolutionData({
             growth: inputValues.current["min-max"] || "min",
             func,
             restrictions,
-            baseVector: typeData === ARTIFICAL ? [] : getBase(),
+            baseVector,
             varCount,
             mode,
             refCount,

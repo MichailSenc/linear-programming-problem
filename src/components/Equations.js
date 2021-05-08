@@ -61,13 +61,15 @@ const Equations = () => {
 
     return (
         <>
-            <h6>Условие:</h6>
-            <div className="d-flex flex-column mb-4">
-                <div>
-                    <GetFunc />
-                </div>
-                <div>
-                    <GetRest />
+            <div className="mr-4">
+                <h6>Условие:</h6>
+                <div className="d-flex flex-column mb-2">
+                    <div>
+                        <GetFunc />
+                    </div>
+                    <div>
+                        <GetRest />
+                    </div>
                 </div>
             </div>
         </>

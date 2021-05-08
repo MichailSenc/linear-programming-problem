@@ -11,6 +11,7 @@ export default class Gaus {
                   const arr = new Array(varCount - refcount).fill(0).push.apply(new Array(refcount).fill(1));
                   return arr.reverse();
               };
+        this.notBase = this.base.map((item) => (item === 0 ? 1 : 0));
         this.error = { isError: false, errorCode: -1, message: "" };
         this.solveEquations();
     }

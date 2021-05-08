@@ -51,6 +51,7 @@ const SolveArtifical = () => {
             setArtificalError(artData.current.isUnsolvable());
             setArtOptimal(artData.current.isOptimal());
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onNextClick = () => {
