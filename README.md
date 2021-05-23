@@ -4,10 +4,10 @@
 - graphical method
 - simplex method
 
-##Readyt/Total
+## Readyt/Total
 70/100
 
-##Implemented
+## Implemented
 - artificial basis method
 - simplex method
 - choice of automatic / step-by-step solution
