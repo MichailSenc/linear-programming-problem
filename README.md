@@ -20,6 +20,18 @@
 
 # Getting Started with Create React App
 
+## Download repository
+
+### `git clone https://github.com/MichailSenc/linear-programming-problem.git`
+
+## Installing dependencies
+
+### `npm install`
+
+## Launch the application
+
+### `npm start`
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
