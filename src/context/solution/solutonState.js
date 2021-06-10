@@ -2,14 +2,7 @@ import React, { useRef } from "react";
 import Context from "./solutionContext";
 
 const SolutionState = ({ children }) => {
-    const solutionData = useRef({
-        func: [],
-        restrictions: {},
-        baseVector: {},
-        varCount: 0,
-        refCount: 0,
-        isNeedBase: false,
-    });
+    const solutionData = useRef(null);
 
     const setSolutionData = (data) => {
         solutionData.current = data;

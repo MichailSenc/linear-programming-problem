@@ -1,0 +1,26 @@
+[
+    {
+        "name": "simplex",
+        "date": "09.05.2021, 20:03:44",
+        "solution": {
+            "growth": "min",
+            "func": [7, 4, 0, 4, 63, 4],
+            "restrictions": [
+                { "data": [3, 5, 4, 6, 4, 64, 6], "sign": "eq", "pos": 0 },
+                { "data": [4, 6, 4, 7, 4, 7, 4], "sign": "eq", "pos": 1 },
+                { "data": [76, 5, 63, 6, 4, 6, 5], "sign": "eq", "pos": 2 }
+            ],
+            "baseVector": [true, false, true, false, true, false],
+            "varCount": 6,
+            "mode": "MANUAL_MODE",
+            "refCount": 3,
+            "type": "SIMPLEX",
+            "fraction": "TYPE_DECIMAL",
+            "isNeedBase": false
+        }
+    },
+    { "name": "324", "date": "09.05.2021, 20:27:34", "solution": null },
+    { "name": "save", "date": "10.06.2021, 15:22:16", "solution": null },
+    { "name": "asdsad", "date": "10.06.2021, 16:22:36", "solution": null },
+    { "name": "hsadhgsagduys", "date": "10.06.2021, 16:34:16", "solution": null }
+]

@@ -8,12 +8,9 @@ const Table = (props) => {
 
     const { solutionData } = useContext(Context);
     const { varCount, refCount, fraction } = solutionData.current;
-    console.log(solutionData.current);
-    console.log(fraction);
 
     const onClick = (e) => {
         const t = e.target;
-        // console.log(data);
         // if (optClick) return;
         if (t.classList.contains("active_simplex") && t.classList.contains(`td-${data.curCount}`)) {
             document.querySelectorAll(`.active_simplex.td-${data.curCount}`).forEach((item) => {
@@ -28,17 +25,13 @@ const Table = (props) => {
                 var: +t.getAttribute("var"),
                 rest: +t.getAttribute("rest"),
             });
-
-            console.log(`click ${e.target.textContent}`);
         }
     };
 
     const onDoubleClick = (e) => {
-        console.log("DOUBLE!");
         const t = e.target;
  
         if (t.classList.contains(`td-${data.curCount}`)) {
-            // console.log("Contains!");
             data.nextStep(+t.getAttribute("var"), +t.getAttribute("rest"));
             setError(data.isUnsolvable());
             setOptimal(data.isOptimal());
@@ -54,7 +47,6 @@ const Table = (props) => {
             for (let j = 0; j < resMatr[i].length - 1; j++) {
                 if (resMatr[resMatr.length - 1][j].demicalValue() >= 0) continue;
                 if (resMatr[i][j].ifZero() || resMatr[i][j].demicalValue() <= 0) continue;
-                console.log(resMatr[i][j].simple());
                 const value = resMatr[i][resMatr[i].length - 1].demicalValue() / resMatr[i][j].demicalValue();
                 elements[i][j] = true;
                 if (!elements.max || elements.max.value > value) elements.max = { value, i, j };
@@ -82,7 +74,6 @@ const Table = (props) => {
                 const classes = [];
                 const supports = getSupportElements();
                 const selected = data.selected[count];
-                console.log(supports);
                 if (element.demicalValue() > 0 && i !== refCount && j !== varCount && supports[i] && supports[i][j]) {
                     classes.push(`td-${count}`, "active_simplex");
                     if (supports.max.i === i && supports.max.j === j) {
@@ -109,7 +100,6 @@ const Table = (props) => {
             });
             return <tr>{res}</tr>;
         });
-        // console.log(data);
 
         return reVal;
     };
