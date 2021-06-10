@@ -35,7 +35,8 @@ app.route("/")
                 return;
             }
             const obj = JSON.parse(data);
-
+            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+            console.log(obj);
             obj.push(req.body);
             fs.writeFile(filepath, JSON.stringify(obj), (err, result) => {
                 if (err) console.log("error", err);
@@ -44,5 +45,5 @@ app.route("/")
     });
 
 app.listen(PORT, () => {
-    console.log(`server started at port ${PORT}`);
+    console.log(`server started at port ${PORT}...`);
 });

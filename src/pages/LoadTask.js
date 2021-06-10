@@ -1,16 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import Context from "../context/modal/context";
-import SolutionContext from "../context/solution/solutionContext";
+import { useHistory } from "react-router";
+import Context from "../context/newTask/context";
+import { HOST, NEW_REF } from "../refs";
 
 const LoadTask = () => {
-    const { solutionData } = useContext(SolutionContext);
+    const { setAll, inputValues } = useContext(Context);
+
     const [data, setData] = useState([]);
+    const history = useHistory();
 
     useEffect(() => {
         getJsonData();
-        console.log(solutionData);
     }, []);
 
     const getJsonData = async () => {
@@ -33,7 +34,7 @@ const LoadTask = () => {
             });
         };
 
-        await sendRequest("http://localhost:8888/")
+        await sendRequest(HOST)
             .then((data) => {
                 console.log(data);
                 console.log(typeof data);
@@ -43,6 +44,14 @@ const LoadTask = () => {
                 console.log(err);
             });
     };
+
+    const onLoad = (id) => {
+        setAll(data[id].newTaskstate);
+        inputValues.current = data[id].inputValues;
+        history.push(NEW_REF);
+    };
+
+    const onDelete = (id) => {};
 
     const GetData = () => {
         console.log(data);
@@ -62,17 +71,29 @@ const LoadTask = () => {
                             <th className="text-center" scope="row">
                                 {i + 1}
                             </th>
-                            <td className="text-center">{obj.name}</td>
-                            <td className="text-center">{obj.date}</td>
-                            <td className="text-center">
-                                <Button className="load_button" variant="primary" pointer={i}>
-                                    Загрузить
-                                </Button>
-                            </td>
-                            <td className="text-center">
-                                <Button className="load_button" variant="danger" pointer={i}>
-                                    Удалить
-                                </Button>
+                            <td className="text-center">{obj.name || "<пусто>"}</td>
+                            <td className="text-center">{obj.date || "<пусто>"}</td>
+                            <td className='p-2'>
+                                <div className='d-flex'>
+                                    <Button
+                                        className="w-50 ml-3"
+                                        variant="primary"
+                                        pointer={i}
+                                        size="sm"
+                                        onClick={() => onLoad(i)}
+                                    >
+                                        Загрузить
+                                    </Button>
+                                    <Button
+                                        className="w-50 ml-3"
+                                        variant="danger"
+                                        size="sm"
+                                        pointer={i}
+                                        onClick={() => onDelete(i)}
+                                    >
+                                        Удалить
+                                    </Button>
+                                </div>
                             </td>
                         </tr>
                     </>
@@ -90,7 +111,6 @@ const LoadTask = () => {
                             </th>
                             <th scope="col">Название</th>
                             <th scope="col">Дата загрузки</th>
-                            <th scope="col"></th>
                             <th scope="col"></th>
                         </tr>
                     </thead>

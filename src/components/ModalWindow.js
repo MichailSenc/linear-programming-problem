@@ -2,11 +2,12 @@ import React, { useContext, useRef, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Context from "../context/modal/context";
-import SolutionContext from "../context/solution/solutionContext";
+import NewContext from "../context/newTask/context";
+import { HOST } from "../refs";
 
 const ModalWindow = () => {
     const { showSave, handleCloseSave } = useContext(Context);
-    const { solutionData } = useContext(SolutionContext);
+    const { newTaskstate, inputValues } = useContext(NewContext);
     const input = useRef(null);
     const [error, setError] = useState(null);
 
@@ -38,22 +39,17 @@ const ModalWindow = () => {
         };
 
         sendRequest(
-            "http://localhost:8888/",
+            HOST,
             JSON.stringify({
                 name: input.current.value,
                 date: new Date().toLocaleString(),
-                solution: solutionData.current,
+                newTaskstate,
+                inputValues: inputValues.current,
             })
-        )
-            .then((data) => {
-                console.log(input.current.value);
-                console.log(typeof input.current.value);
-                console.log(data);
-            })
-            .catch((err) => {
-                setError("Произошла ошибка на стороне сервера");
-                console.log(err);
-            });
+        ).catch((err) => {
+            setError("Произошла ошибка на стороне сервера");
+            console.log(err);
+        });
 
         if (!error) handleCloseSave();
     };
