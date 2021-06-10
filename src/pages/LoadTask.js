@@ -3,15 +3,18 @@ import Button from "react-bootstrap/Button";
 import { useHistory } from "react-router";
 import Context from "../context/newTask/context";
 import { ADDHOST, DELHOST, NEW_REF } from "../refs";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const LoadTask = () => {
     const { setAll, inputValues } = useContext(Context);
 
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
     const history = useHistory();
 
     useEffect(() => {
         getJsonData();
+        setLoading(true);
     }, []);
 
     const sendRequest = (url) => {
@@ -38,6 +41,7 @@ const LoadTask = () => {
                 console.log(data);
                 console.log(typeof data);
                 setData(data);
+                setLoading(false);
             })
             .catch((err) => {
                 console.log(err);
@@ -83,7 +87,7 @@ const LoadTask = () => {
         if (data.length === 0) {
             return (
                 <>
-                    <h3>Список сохранённых конфигураций пуст!</h3>
+                    <h3 className='text-center'>Список сохранённых конфигураций пуст!</h3>
                 </>
             );
         }
@@ -149,7 +153,13 @@ const LoadTask = () => {
 
     return (
         <>
-            <GetData />
+            {loading ? (
+                <div className="d-flex justify-content-center">
+                    <ClipLoader color={"#1C1D1C"} loading={loading} size={50} />
+                </div>
+            ) : (
+                <GetData />
+            )}
         </>
     );
 };
