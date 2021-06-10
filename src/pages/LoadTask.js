@@ -50,7 +50,7 @@ const LoadTask = () => {
         history.push(NEW_REF);
     };
 
-    const sendRequest1 = (url, body = null) => {
+    const postFetch = (url, body = null) => {
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -71,13 +71,11 @@ const LoadTask = () => {
     };
 
     const onDelete = async (id) => {
-        setData(data.filter((item, i) => i !== id))
-        await sendRequest1(
-            DELHOST,
-            data
-        ).catch((err) => {
+        const d = data.filter((item, i) => i !== id);
+        setData(d);
+        await postFetch(DELHOST, d).catch((err) => {
             console.log(err);
-        });;
+        });
     };
 
     const GetData = () => {

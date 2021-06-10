@@ -42,7 +42,6 @@ app.route("/get-data")
     });
 
 app.route("/delete-data").post((req, res) => {
-    console.log('asdsadasdasdasdadsasdasdasdsadasd');
     console.log(req.body);
     fs.writeFile(filepath, JSON.stringify(req.body), (err, result) => {
         if (err) console.log("error", err);

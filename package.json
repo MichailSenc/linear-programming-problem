@@ -23,11 +23,12 @@
         "write-file-p": "^1.0.8"
     },
     "scripts": {
-        "start": "concurrently -k \"node server/index\" \"react-scripts start\"",
+        "start": "concurrently \"node server/index\" \"react-scripts start\"",
         "dev": "concurrently \"nodemon server/index\" \"react-scripts start\"",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "server": "nodemon server/index"
     },
     "eslintConfig": {
         "extends": [
