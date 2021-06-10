@@ -23,7 +23,7 @@
         "write-file-p": "^1.0.8"
     },
     "scripts": {
-        "start": "concurrently \"node server/index\" \"react-scripts start\"",
+        "start": "concurrently -k \"node server/index\" \"react-scripts start\"",
         "dev": "concurrently \"nodemon server/index\" \"react-scripts start\"",
         "build": "react-scripts build",
         "test": "react-scripts test",
