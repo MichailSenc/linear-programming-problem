@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { useHistory } from "react-router";
 import Context from "../context/newTask/context";
-import { HOST, NEW_REF } from "../refs";
+import { ADDHOST, DELHOST, NEW_REF } from "../refs";
 
 const LoadTask = () => {
     const { setAll, inputValues } = useContext(Context);
@@ -14,27 +14,26 @@ const LoadTask = () => {
         getJsonData();
     }, []);
 
-    const getJsonData = async () => {
-        const sendRequest = (url) => {
-            const requestOptions = {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-            };
-
-            return fetch(url, requestOptions).then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-
-                return response.json().then((error) => {
-                    const e = new Error("Что-то пошло не так");
-                    e.data = error;
-                    throw e;
-                });
-            });
+    const sendRequest = (url) => {
+        const requestOptions = {
+            headers: { "Content-Type": "application/json" },
         };
 
-        await sendRequest(HOST)
+        return fetch(url, requestOptions).then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+
+            return response.json().then((error) => {
+                const e = new Error("Что-то пошло не так");
+                e.data = error;
+                throw e;
+            });
+        });
+    };
+
+    const getJsonData = async () => {
+        await sendRequest(ADDHOST)
             .then((data) => {
                 console.log(data);
                 console.log(typeof data);
@@ -51,7 +50,35 @@ const LoadTask = () => {
         history.push(NEW_REF);
     };
 
-    const onDelete = (id) => {};
+    const sendRequest1 = (url, body = null) => {
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+        };
+
+        return fetch(url, requestOptions).then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+
+            return response.json().then((error) => {
+                const e = new Error("Что-то пошло не так");
+                e.data = error;
+                throw e;
+            });
+        });
+    };
+
+    const onDelete = async (id) => {
+        setData(data.filter((item, i) => i !== id))
+        await sendRequest1(
+            DELHOST,
+            data
+        ).catch((err) => {
+            console.log(err);
+        });;
+    };
 
     const GetData = () => {
         console.log(data);
@@ -73,8 +100,8 @@ const LoadTask = () => {
                             </th>
                             <td className="text-center">{obj.name || "<пусто>"}</td>
                             <td className="text-center">{obj.date || "<пусто>"}</td>
-                            <td className='p-2'>
-                                <div className='d-flex'>
+                            <td className="p-2">
+                                <div className="d-flex">
                                     <Button
                                         className="w-50 ml-3"
                                         variant="primary"

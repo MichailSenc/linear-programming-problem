@@ -14,16 +14,14 @@ app.use(
 );
 
 const filepath = path.join(__dirname, "/data/data.json");
-const PORT = 8888;
+const PORT = process.env.PORT || 8888;
 
-app.route("/")
+app.route("/get-data")
     .get((req, res) => {
         fs.readFile(filepath, "utf8", (err, data) => {
             if (err) {
-                console.error(err);
                 return;
             }
-            console.log(data);
             res.json(JSON.parse(data));
         });
     })
@@ -35,14 +33,21 @@ app.route("/")
                 return;
             }
             const obj = JSON.parse(data);
-            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-            console.log(obj);
+
             obj.push(req.body);
             fs.writeFile(filepath, JSON.stringify(obj), (err, result) => {
                 if (err) console.log("error", err);
             });
         });
     });
+
+app.route("/delete-data").post((req, res) => {
+    console.log('asdsadasdasdasdadsasdasdasdsadasd');
+    console.log(req.body);
+    fs.writeFile(filepath, JSON.stringify(req.body), (err, result) => {
+        if (err) console.log("error", err);
+    });
+});
 
 app.listen(PORT, () => {
     console.log(`server started at port ${PORT}...`);

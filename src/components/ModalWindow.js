@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Context from "../context/modal/context";
 import NewContext from "../context/newTask/context";
-import { HOST } from "../refs";
+import { ADDHOST } from "../refs";
 
 const ModalWindow = () => {
     const { showSave, handleCloseSave } = useContext(Context);
@@ -39,7 +39,7 @@ const ModalWindow = () => {
         };
 
         sendRequest(
-            HOST,
+            ADDHOST,
             JSON.stringify({
                 name: input.current.value,
                 date: new Date().toLocaleString(),
