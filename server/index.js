@@ -14,7 +14,7 @@ app.use(
 );
 
 const filepath = path.join(__dirname, "/data/data.json");
-const PORT = process.env.PORT || 8888;
+const PORT = 8888;
 
 app.route("/get-data")
     .get((req, res) => {
