@@ -14,7 +14,7 @@ app.use(
 );
 
 const filepath = path.join(__dirname, "/data/data.json");
-const PORT = 8888;
+const PORT = process.env.PORT || 3001;
 
 app.route("/get-data")
     .get((req, res) => {
@@ -46,6 +46,10 @@ app.route("/delete-data").post((req, res) => {
     fs.writeFile(filepath, JSON.stringify(req.body), (err, result) => {
         if (err) console.log("error", err);
     });
+});
+
+app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
 });
 
 app.listen(PORT, () => {
