@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const config = require('config');
 const fs = require("fs");
 const path = require("path");
 
@@ -14,7 +15,7 @@ app.use(
 );
 
 const filepath = path.join(__dirname, "/data/data.json");
-const PORT = process.env.PORT || 3001;
+const PORT = config.get('port') || 5000;
 
 app.route("/get-data")
     .get((req, res) => {
