@@ -1,16 +1,51 @@
+import { SIMPLE } from "../types";
+
+const dotRegex = /^([+-]?\d+)([+-]?\.(\d+))?$/;
+const slashRegex = /^([+-]?\d+)([+-]?\/(\d+))?$/;
+const emptyRegex = /^\s*$/;
+
 export default class Fraction {
     constructor(numerator = 0, denominator = 1) {
+        console.log(numerator, denominator);
         if (typeof numerator === "object") {
             this.numerator = numerator.numerator;
             this.denominator = numerator.denominator;
+        } else if (typeof numerator === "string") {
+            let matcher = numerator.trim().match(dotRegex);
+            if (matcher) {
+                console.log(matcher);
+                const newLocal = typeof matcher[3] === "undefined";
+                this.numerator = parseInt(matcher[1] + (newLocal ? "" : matcher[3]));
+                this.denominator = parseInt(`1${"0".repeat(newLocal ? 0 : matcher[3].length)}`);
+                this._applyGCD();
+                return;
+            }
+
+            matcher = numerator.trim().match(slashRegex);
+            if (matcher) {
+                const newLocal = typeof matcher[3] === "undefined";
+                this.numerator = parseInt(matcher[1]);
+                this.denominator = parseInt(newLocal ? "0" : matcher[3]);
+                this._applyGCD();
+                return;
+            }
+
+            matcher = numerator.trim().match(emptyRegex);
+            if (matcher) {
+                this.numerator = 0;
+                this.denominator = 1;
+                this._applyGCD();
+                return;
+            }
+
+            this.error = true;
+            this._applyGCD();
+            return;
         } else {
             this.numerator = parseInt(numerator);
             this.denominator = parseInt(denominator);
         }
-        if (this.denominator < 0) {
-            this.numerator *= -1;
-            this.denominator *= -1;
-        }
+        this._applyGCD();
     }
 
     // НОД двух чисел
@@ -83,11 +118,16 @@ export default class Fraction {
 
     // десятичная дробь
     decimals = () => {
+        console.log(this.numerator, this.denominator);
         return `${(this.numerator / this.denominator).toFixed(2).replace(/\.00/, "")}`;
     };
 
     demicalValue = () => {
         return this.numerator / this.denominator;
+    };
+
+    toString = (type) => {
+        return type === SIMPLE ? this.simple() : this.decimals();
     };
 
     sign = () => {

@@ -3,23 +3,17 @@ import Context from "../context/solution/solutionContext";
 
 const Equations = () => {
     const { solutionData } = useContext(Context);
-    const { func, restrictions, growth } = solutionData.current;
-
-    const getSign = (fract) => {
-        if (fract === "" || fract.search(/^\s*0+(\.0+)?\s*$/) !== -1 || fract.search(/^\s*0+(\\\d+)?\s*$/) !== -1)
-            return 0;
-        if (fract.search(/-/i) !== -1) return -1;
-        return 1;
-    };
+    console.log(solutionData);
+    const { func, restrictions, growth, fraction } = solutionData.current;
 
     const getRest = (rest, right, sign = "=") => {
         let isSetted = false;
         const arr = rest.map((item, i) => {
-            const sign = getSign(item);
+            const sign = item.sign();
             if (sign === 0) return null;
             const value = (
                 <span key={i}>
-                    {sign === 1 ? (isSetted ? "+" : "") : "-"} {`${item.replaceAll(/[+-]/g, "")}X`}
+                    {sign === 1 ? (isSetted ? "+" : "") : "-"} {`${item.toString(fraction).replaceAll(/[+-]/g, "")}X`}
                     <sub>{`${i + 1} `}</sub>
                 </span>
             );
@@ -32,6 +26,7 @@ const Equations = () => {
 
     const GetFunc = () => {
         if (!func || func.length === 0) return <div>Функция не извеcтна</div>;
+        console.log(func);
         return getRest(func, growth, "→");
     };
 

@@ -14,7 +14,7 @@ const Table = (props) => {
         for (let i = 1; i < varCount + 1; i++) {
             colls.push(
                 <th key={i} scope="col">
-                    X<sub>{i}</sub>&ensp;
+                    X<sub>{i}</sub>
                 </th>
             );
         }

@@ -10,6 +10,8 @@ import ModalSave from "../ModalWindow";
 import ModalContext from "../../context/modal/context";
 import Table from "./Table/Table";
 import Context from "../../context/newTask/context";
+import Fracrion from "../../modules/fraction";
+
 import {
     GRAPHICAL,
     ARTIFICAL,
@@ -36,31 +38,51 @@ const Form = () => {
     // возвращает отсортированный массив данных функции/базиса
     const getFunctionArray = () => {
         let data = [];
+        let err = false;
 
-        document.querySelectorAll(`[input_type=${TYPE_FUNCTION}]`).forEach((item) => {
-            data.push([item.value, +item.getAttribute("position_index")]);
-        });
+        for (const item of document.querySelectorAll(`[input_type=${TYPE_FUNCTION}]`)) {
+            if (item.value === "min" || item.value === "max") continue;
+            console.log(item);
+            console.log(item.value);
+            const fraction = new Fracrion(item.value);
+            data.push([fraction, +item.getAttribute("position_index")]);
+            if (fraction.error) {
+                err = true;
+                item.classList.add("trans_danger");
+                setTimeout(() => {
+                    item.classList.remove("trans_danger");
+                }, 2000);
+            }
+        }
 
-        data = data.sort((a, b) => a[1] - b[1]).map((item) => +item[0]);
-        data.pop();
-        return data;
+        data = data.sort((a, b) => a[1] - b[1]).map((item) => item[0]);
+        return [data, err];
     };
 
     // возвращает матрицу функций-ограничений
     const getRestArray = () => {
+        let err = false;
         let res = []; // each elem: { data: [], sign: "", pos: i, };
         for (let i = 0; i < refCount; i++) {
             let str = [];
+            // eslint-disable-next-line no-loop-func
             document.querySelectorAll(`[input_type='${TYPE_REFERENCE}'][row_index='${i + 1}']`).forEach((item) => {
-                str.push([+item.value || 0, +item.getAttribute("position_index")]);
+                const fraction = new Fracrion(item.value);
+                str.push([fraction, +item.getAttribute("position_index")]);
+                if (fraction.error) {
+                    err = true;
+                    item.classList.add("trans_danger");
+                    setTimeout(() => {
+                        item.classList.remove("trans_danger");
+                    }, 2000);
+                }
             });
             res.push({
                 data: str.sort((a, b) => a[1] - b[1]).map((item) => item[0]),
-                sign: inputValues.current[`TYPE_SIGN-${i + 1}`] || "eq",
                 pos: i,
             });
         }
-        return res;
+        return [res, err];
     };
 
     const getBase = () => {
@@ -81,10 +103,19 @@ const Form = () => {
             return;
         }
 
-        const func = getFunctionArray();
-        const restrictions = getRestArray();
+        const [func, err1] = getFunctionArray();
+        const [restrictions, err2] = getRestArray();
+
+        if (err1 || err2) {
+            const message = document.querySelector("#message");
+            if (message) {
+                message.classList.remove("d-none");
+                message.innerHTML = "Ошибка, проверьте корректновсть введённых данных";
+            }
+            return;
+        }
         console.log(restrictions);
-        
+
         console.log("RESTRICTIONS");
         console.log(restrictions);
         for (const { data, pos } of restrictions) {
@@ -162,16 +193,16 @@ const Form = () => {
 
     // сохранить данные в файл
     const save = () => {
-        // TODO дописать сохранение конфигурации в файл
         handleShowSave();
         console.log("SAVE!");
     };
 
     const ErrorMessage = () => {
-        if (errors.generalMessage !== "") {
-            return <h6 className="text-danger text-center">{errors.generalMessage}</h6>;
-        }
-        return null;
+        return (
+            <h6 id="message" className={`text-danger text-center ${errors.generalMessage || "d-none"}`}>
+                {errors.generalMessage}
+            </h6>
+        );
     };
 
     const Tables = () => {

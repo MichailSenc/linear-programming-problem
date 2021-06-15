@@ -8,13 +8,8 @@ const Row = (props) => {
     const { setInputValue, inputValues } = useContext(Context);
 
     const changeInput = (e) => {
-        let initVal = +e.target.value;
-        if (/(^0[0-9]+)/.exec(e.target.value)) {
-            e.target.value = initVal;
-        }
-
+        let initVal = e.target.value;
         const t = e.target;
-
         // тут крч создаётся ключ в контексте таблицы, содержащей данный input
         setInputValue(
             `${t.getAttribute("input_type")}-${t.getAttribute("row_index")}-${t.getAttribute("position_index")}`,
@@ -30,7 +25,7 @@ const Row = (props) => {
         return (
             <td key={key}>
                 <input
-                    type="number"
+                    type="text"
                     input_type={type}
                     row_index={rowNumb}
                     position_index={key + 1}
