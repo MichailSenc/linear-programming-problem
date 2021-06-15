@@ -5,74 +5,56 @@ const Equations = () => {
     const { solutionData } = useContext(Context);
     const { func, restrictions, growth } = solutionData.current;
 
-    const Equality = (arr, delimiter, growth) => {
-        const res = [];
-        let counter = 0;
-        while (res.length === 0 && counter < arr.length - 1) {
-            const item = Math.abs(+arr[counter]) === 1 ? "" : `${Math.abs(arr[counter])} ⋅ `;
-            if (+arr[counter] !== 0)
-                res.push(
-                    <span key={counter + "ucount"}>
-                        {arr[counter] < 0 ? "-" : ""}
-                        {item}X<sub>{counter + 1}</sub>
-                    </span>
-                );
-            counter++;
-        }
+    const getSign = (fract) => {
+        if (fract === "" || fract.search(/^\s*0+(\.0+)?\s*$/) !== -1 || fract.search(/^\s*0+(\\\d+)?\s*$/) !== -1)
+            return 0;
+        if (fract.search(/-/i) !== -1) return -1;
+        return 1;
+    };
 
-        for (let i = counter; i < arr.length - 1; i++) {
-            const item = Math.abs(+arr[i]) === 1 ? "" : `${Math.abs(arr[i])}`;
-            if (+arr[i] === 0) continue;
-            res.push(
+    const getRest = (rest, right, sign = "=") => {
+        let isSetted = false;
+        const arr = rest.map((item, i) => {
+            const sign = getSign(item);
+            if (sign === 0) return null;
+            const value = (
                 <span key={i}>
-                    {arr[i] >= 0 ? " + " : " - "}
-                    {item}X<sub>{i + 1}</sub>
+                    {sign === 1 ? (isSetted ? "+" : "") : "-"} {`${item.replaceAll(/[+-]/g, "")}X`}
+                    <sub>{`${i + 1} `}</sub>
                 </span>
             );
-        }
-
-        if (res.length === 0) res.push(<span key={0}>0</span>);
-
-        res.push(
-            <span key={arr.length - 1}>
-                {delimiter}
-                {growth || arr[arr.length - 1]}
-            </span>
-        );
-        return res;
+            isSetted = true;
+            return value;
+        });
+        arr.push(<span key={arr.length}>{` ${sign} ${right}`}</span>);
+        return arr;
     };
 
     const GetFunc = () => {
         if (!func || func.length === 0) return <div>Функция не извеcтна</div>;
-        return Equality([...func, 0], " → ", growth);
+        return getRest(func, growth, "→");
     };
-
-    const sign = { eq: "=", le: "≤", ge: "≥" };
 
     const GetRest = () => {
         if (!restrictions || restrictions.length === 0) return <div>Ограничения не извеcтны</div>;
-        const res = [];
-        for (const key in restrictions) {
-            const element = restrictions[key];
-            res.push(<div key={key}>{Equality(element.data, ` ${sign[element.sign]} `)}</div>);
-        }
-        return res;
+        return restrictions.map(({ data }, i) => {
+            console.log(data);
+            return <div key={i}>{getRest(data.slice(0, data.length - 1), data[data.length - 1])}</div>;
+        });
     };
 
     return (
-        <>
-            <div className="mr-4">
-                <h6>Условие:</h6>
-                <div className="d-flex flex-column mb-2">
-                    <div>
-                        <GetFunc />
-                    </div>
-                    <div>
-                        <GetRest />
-                    </div>
+        <div className="mr-4">
+            <h6>Условие:</h6>
+            <div className="d-flex flex-column mb-2">
+                <div>
+                    <GetFunc />
+                </div>
+                <div>
+                    <GetRest />
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 
