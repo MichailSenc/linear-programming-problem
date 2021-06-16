@@ -24,6 +24,13 @@ export default class Fraction {
             matcher = numerator.trim().match(slashRegex);
             if (matcher) {
                 const newLocal = typeof matcher[3] === "undefined";
+                if (!newLocal) {
+                    console.log(matcher[3]);
+                    if (matcher[3].match(/^0+$/)) {
+                        this.error = true;
+                        return;
+                    }
+                }
                 this.numerator = parseInt(matcher[1]);
                 this.denominator = parseInt(newLocal ? "0" : matcher[3]);
                 this._applyGCD();

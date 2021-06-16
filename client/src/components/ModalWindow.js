@@ -14,9 +14,8 @@ const ModalWindow = () => {
     const onSave = () => {
         if (!input.current.value) {
             setError("Введите название сохранения");
-        } else {
-            setError(null);
-        }
+            return;
+        } 
 
         const sendRequest = (url, body = null) => {
             const requestOptions = {
@@ -51,7 +50,8 @@ const ModalWindow = () => {
             console.log(err);
         });
 
-        if (!error) handleCloseSave();
+        setError(null);
+        handleCloseSave();
     };
 
     const Error = () => {
