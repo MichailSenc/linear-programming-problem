@@ -61,14 +61,17 @@ const Table = (props) => {
                 </th>
             );
             // j-номер переменной
+            // console.log(item.map(arr => arr.map(t => t.simple())));
+            console.log(item);
             item.forEach((element, j) => {
                 const classes = [];
                 const selected = data.selected[count];
+                console.log(element);
                 if (data.startSettings.notBase.includes(base[j])) {
                     classes.push("text-muted");
                 } else if (element.ifZero() && i !== refCount && j !== varCount) {
                     classes.push("text-muted");
-                } else if (!(element.ifZero() || i === refCount || j === varCount)) {
+                } else if (!(element.ifZero() || i === refCount || j === varCount || !element.isMin)) {
                     classes.push(`td-${count}`, "active");
                     if (selected && selected.var === j && selected.rest === i) {
                         classes.push("trans_pink");

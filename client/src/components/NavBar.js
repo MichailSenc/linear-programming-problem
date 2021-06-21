@@ -22,9 +22,6 @@ const MainNavbar = () => {
                     <NavLink className="mr-2 nav-link" to={INFO_REF}>
                         More deets
                     </NavLink>
-                    <NavLink className="mr-2 nav-link" to="/memes">
-                        Dank memes
-                    </NavLink>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

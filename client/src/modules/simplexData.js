@@ -105,9 +105,30 @@ export default class SimplexData {
 
     _cloneFraction = (matrix) => {
         return matrix.map((item) => {
-            return item.map((fraction) => new Fraction(fraction.numerator, fraction.denominator));
+            return item.map((fraction) => {
+                const fract = new Fraction(fraction.numerator, fraction.denominator);
+                fract.isMin = fraction.isMin;
+                return fract;
+            });
         });
     };
+
+
+    _getMaxIndex = (res, i1, j1, candidate) => {
+        console.log(res, i1, j1, candidate);
+        if (candidate < 0) return false;
+        let minvalue = candidate;
+        if (i1 === res.length - 1) return false;
+        for (const arr of res) {
+            if (arr[j1].ifZero()) continue;
+            if (arr[j1].sign() < 0) continue;
+            if (Math.abs(arr[arr.length - 1].demicalValue() / arr[j1].demicalValue()) < minvalue) {
+                return false;
+            }
+        }
+        return true;
+    };
+
 
     // TODO переделать - Нужно только для симплекс метода
     // функция формирует первую(стартовую) симплекс таблицу
@@ -137,6 +158,21 @@ export default class SimplexData {
         for (let i = 0; i < this.refCount; i++) {
             notBase[i] = i + 1 + this.varCount;
         }
+
+        res.forEach((arr, i) => {
+            arr.forEach((tmp, j) => {
+                if (!tmp.ifZero()) {
+                    tmp.isMin = this._getMaxIndex(
+                        res,
+                        i,
+                        j,
+                        Math.abs(arr[arr.length - 1].demicalValue() / tmp.demicalValue())
+                    );
+                    console.log(tmp.isMin);
+                }
+            });
+        });
+
         this.current = { resMatr: res, base, notBase, count: 0 };
 
         const clone = JSON.parse(JSON.stringify(this.current));
@@ -204,6 +240,20 @@ export default class SimplexData {
                 );
             }
         }
+
+        cloneMatr.forEach((arr, i) => {
+            arr.forEach((tmp, j) => {
+                if (!tmp.ifZero()) {
+                    tmp.isMin = this._getMaxIndex(
+                        cloneMatr,
+                        i,
+                        j,
+                        Math.abs(arr[arr.length - 1].demicalValue() / tmp.demicalValue())
+                    );
+                    console.log(tmp.isMin);
+                }
+            });
+        });
 
         this.current = { resMatr: cloneMatr, base, notBase, count: count + 1 };
 

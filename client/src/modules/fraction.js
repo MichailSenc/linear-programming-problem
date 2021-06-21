@@ -7,6 +7,7 @@ const emptyRegex = /^\s*$/;
 export default class Fraction {
     constructor(numerator = 0, denominator = 1) {
         console.log(numerator, denominator);
+        this.isMin = false;
         if (typeof numerator === "object") {
             this.numerator = numerator.numerator;
             this.denominator = numerator.denominator;

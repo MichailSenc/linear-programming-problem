@@ -15,7 +15,7 @@ const Table = (props) => {
         if (t.classList.contains("active_simplex") && t.classList.contains(`td-${data.curCount}`)) {
             document.querySelectorAll(`.active_simplex.td-${data.curCount}`).forEach((item) => {
                 item.classList.remove("trans_pink");
-                item.classList.add(item.classList.contains('main_sup') ? "trans_blue":"trans_green");
+                item.classList.add(item.classList.contains("main_sup") ? "trans_blue" : "trans_green");
             });
             t.classList.remove("trans_green");
             t.classList.remove("trans_blue");
@@ -30,7 +30,7 @@ const Table = (props) => {
 
     const onDoubleClick = (e) => {
         const t = e.target;
- 
+
         if (t.classList.contains(`td-${data.curCount}`)) {
             data.nextStep(+t.getAttribute("var"), +t.getAttribute("rest"));
             setError(data.isUnsolvable());
@@ -74,7 +74,14 @@ const Table = (props) => {
                 const classes = [];
                 const supports = getSupportElements();
                 const selected = data.selected[count];
-                if (element.demicalValue() > 0 && i !== refCount && j !== varCount && supports[i] && supports[i][j]) {
+                if (
+                    element.demicalValue() > 0 &&
+                    i !== refCount &&
+                    j !== varCount &&
+                    supports[i] &&
+                    supports[i][j] &&
+                    !element.isMin
+                ) {
                     classes.push(`td-${count}`, "active_simplex");
                     if (supports.max.i === i && supports.max.j === j) {
                         classes.push("main_sup", "trans_blue");

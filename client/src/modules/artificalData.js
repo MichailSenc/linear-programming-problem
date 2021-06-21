@@ -25,7 +25,7 @@ export default class ArtificalData {
             for (let j = 0; j < resMatr[i].length - 1; j++) {
                 if (this.startSettings.notBase.includes(base[j])) continue;
                 if (!resMatr[i][j].ifZero()) {
-                    this.addSelectdItem({var: i, rest: j})
+                    this.addSelectdItem({ var: i, rest: j });
                     this.nextStep(i, j);
                     break;
                 }
@@ -125,8 +125,25 @@ export default class ArtificalData {
 
     _cloneFraction = (matrix) => {
         return matrix.map((item) => {
-            return item.map((fraction) => new Fraction(fraction.numerator, fraction.denominator));
+            return item.map((fraction) => {
+                const fract = new Fraction(fraction.numerator, fraction.denominator);
+                fract.isMin = fraction.isMin;
+                return fract;
+            });
         });
+    };
+
+    _getMaxIndex = (res, i1, j1, candidate) => {
+        console.log(res, i1, j1, candidate);
+        let maxvalue = candidate;
+        if (i1 === res.length - 1) return false;
+        for (const arr of res) {
+            if (arr[j1].ifZero()) continue;
+            if (Math.abs(arr[arr.length - 1].demicalValue() / arr[j1].demicalValue()) < maxvalue) {
+                return false;
+            }
+        }
+        return true;
     };
 
     // функция формирует первую(стартовую) симплекс таблицу
@@ -156,10 +173,27 @@ export default class ArtificalData {
         for (let i = 0; i < this.refCount; i++) {
             notBase[i] = i + 1 + this.varCount;
         }
+
+        console.log(res);
+        res.forEach((arr, i) => {
+            arr.forEach((tmp, j) => {
+                if (!tmp.ifZero()) {
+                    tmp.isMin = this._getMaxIndex(
+                        res,
+                        i,
+                        j,
+                        Math.abs(arr[arr.length - 1].demicalValue() / tmp.demicalValue())
+                    );
+                    console.log(tmp.isMin);
+                }
+            });
+        });
         this.current = { resMatr: res, base, notBase, count: 0 };
 
         const clone = JSON.parse(JSON.stringify(this.current));
         clone.resMatr = this._cloneFraction(clone.resMatr);
+        console.log(JSON.parse(JSON.stringify(this.current)));
+        console.log(clone);
 
         this.history.push(clone);
         this.startSettings = { base: [...base], notBase: [...notBase] };
@@ -223,6 +257,20 @@ export default class ArtificalData {
                 );
             }
         }
+
+        cloneMatr.forEach((arr, i) => {
+            arr.forEach((tmp, j) => {
+                if (!tmp.ifZero()) {
+                    tmp.isMin = this._getMaxIndex(
+                        cloneMatr,
+                        i,
+                        j,
+                        Math.abs(arr[arr.length - 1].demicalValue() / tmp.demicalValue())
+                    );
+                    console.log(tmp.isMin);
+                }
+            });
+        });
 
         this.current = { resMatr: cloneMatr, base, notBase, count: count + 1 };
 
