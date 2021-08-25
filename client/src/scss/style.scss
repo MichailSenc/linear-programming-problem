@@ -1,6 +1,4 @@
 @use "sass:math";
-@import "bootstrap";
-@import "mixins";
 
 $fontFamily: "";
 $fontSize: 16;
@@ -15,7 +13,10 @@ $md4: 479.98;
 
 $mainColor: #000;
 
-// @import "null-style";
+@import "mixins";
+@import "null-style";
+@import "bootstrap";
+
 body {
     color: $mainColor;
     &._lock {

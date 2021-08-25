@@ -1,13 +1,13 @@
 import React from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import { NavLink } from "react-router-dom";
-import { NEW_REF, LOAD_REF, INFO_REF } from "../refs";
+import {NavLink} from "react-router-dom";
+import {NEW_REF, LOAD_REF, INFO_REF} from "../refs";
 
 const MainNavbar = () => {
     return (
         <Navbar className="w-100" collapseOnSelect expand="lg" bg="dark" variant="dark">
-            <Navbar.Brand>BestApp</Navbar.Brand>
+            <Navbar.Brand>LinProg</Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
