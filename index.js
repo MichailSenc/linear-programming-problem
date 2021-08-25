@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const config = require('config');
+const config = require("config");
 const fs = require("fs");
 const path = require("path");
 
@@ -8,6 +8,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "client", "dist")));
 app.use(
     express.urlencoded({
         extended: true,
@@ -15,7 +16,7 @@ app.use(
 );
 
 const filepath = path.join(__dirname, "/data/data.json");
-const PORT = config.get('port') || 5000;
+const PORT = config.get("port") || 5000;
 
 app.route("/get-data")
     .get((req, res) => {
@@ -50,7 +51,7 @@ app.route("/delete-data").post((req, res) => {
 });
 
 app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+    res.sendFile(path.join(__dirname, "./client/dist", "index.html"));
 });
 
 app.listen(PORT, () => {
