@@ -22,18 +22,16 @@ function App() {
                         <div className="row">
                             <BrowserRouter>
                                 <NavBar />
-                                <div className="container pt-4">
-                                    <Switch>
-                                        <Route exact path={Refs.NEW_REF} component={NewTask} />
-                                        <Route exact path={Refs.SOLUTION_REF} component={SolveTask} />
-                                        <Route exact path={Refs.GAPHICAL_REF} component={SolveGraphical} />
-                                        <Route exact path={Refs.ARTIFICAL_REF} component={SolveArtifical} />
-                                        <Route exact path={Refs.SIMPLEX_REF} component={SolveSimplex} />
-                                        <Route exact path={Refs.LOAD_REF} component={LoadTask} />
-                                        <Route exact path={Refs.INFO_REF} component={Info} />
-                                        <Redirect to={Refs.NEW_REF} />
-                                    </Switch>
-                                </div>
+                                <Switch>
+                                    <Route exact path={Refs.NEW_REF} component={NewTask} />
+                                    <Route exact path={Refs.SOLUTION_REF} component={SolveTask} />
+                                    <Route exact path={Refs.GAPHICAL_REF} component={SolveGraphical} />
+                                    <Route exact path={Refs.ARTIFICAL_REF} component={SolveArtifical} />
+                                    <Route exact path={Refs.SIMPLEX_REF} component={SolveSimplex} />
+                                    <Route exact path={Refs.LOAD_REF} component={LoadTask} />
+                                    <Route exact path={Refs.INFO_REF} component={Info} />
+                                    <Redirect to={Refs.NEW_REF} />
+                                </Switch>
                             </BrowserRouter>
                         </div>
                     </div>

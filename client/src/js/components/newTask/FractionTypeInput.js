@@ -1,14 +1,14 @@
-import React, { useContext } from "react";
+import React, {useContext} from "react";
 import Context from "../../context/newTask/context";
 
 const FractionInput = (props) => {
-    const { value, label, checked } = props;
-    const { setAll } = useContext(Context);
+    const {value, label, checked} = props;
+    const {setAll} = useContext(Context);
 
     return (
-        <div className="form-check col-sm-2 mr-3">
+        <div className="checkbox-container">
             <input
-                className="form-check-input"
+                className="checkbox-container__input input"
                 type="radio"
                 name="fractionRadios"
                 id={value}
@@ -18,9 +18,7 @@ const FractionInput = (props) => {
                     if (e.target.checked) setAll({typeFraction: value});
                 }}
             />
-            <label className="form-check-label" htmlFor={value}>
-                {label}
-            </label>
+            <p className="checkbox-container__label label">{label}</p>
         </div>
     );
 };

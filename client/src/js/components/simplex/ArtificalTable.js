@@ -1,13 +1,13 @@
-import React, { useContext } from "react";
+import React, {useContext} from "react";
 import Context from "../../context/solution/solutionContext";
-import { SIMPLE } from "../../types";
+import {SIMPLE} from "../../types";
 
 const Table = (props) => {
-    const { data, table, setTables, setError, setOptimal, optClick } = props;
-    const { resMatr, base, notBase, count } = table;
+    const {data, table, setTables, setError, setOptimal, optClick} = props;
+    const {resMatr, base, notBase, count} = table;
 
-    const { solutionData } = useContext(Context);
-    const { varCount, refCount, fraction } = solutionData.current;
+    const {solutionData} = useContext(Context);
+    const {varCount, refCount, fraction} = solutionData.current;
     console.log(solutionData.current);
     console.log(fraction);
 
@@ -36,7 +36,7 @@ const Table = (props) => {
         // console.log("DOUBLE!!!");
 
         const t = e.target;
- 
+
         if (t.classList.contains(`td-${data.curCount}`)) {
             // console.log("Contains!");
             data.nextStep(+t.getAttribute("var"), +t.getAttribute("rest"));
@@ -66,7 +66,6 @@ const Table = (props) => {
             item.forEach((element, j) => {
                 const classes = [];
                 const selected = data.selected[count];
-                console.log(element);
                 if (data.startSettings.notBase.includes(base[j])) {
                     classes.push("text-muted");
                 } else if (element.ifZero() && i !== refCount && j !== varCount) {

@@ -1,11 +1,10 @@
-import React, { useContext } from "react";
-import { useHistory } from "react-router-dom";
-import { GAPHICAL_REF, SIMPLEX_REF, ARTIFICAL_REF } from "../../refs";
+import React, {useContext} from "react";
+import {useHistory} from "react-router-dom";
+import {GAPHICAL_REF, SIMPLEX_REF, ARTIFICAL_REF} from "../../refs";
 import VarInput from "./VarInput";
 import Basis from "./Basis";
 import FractionInput from "./FractionTypeInput";
 import ModeInput from "./OperatingModeInput";
-import Button from "react-bootstrap/Button";
 import ModalSave from "../ModalWindow";
 import ModalContext from "../../context/modal/context";
 import Table from "./Table/Table";
@@ -27,11 +26,11 @@ import {
 import SolutionContext from "../../context/solution/solutionContext";
 
 const Form = () => {
-    const { newTaskstate, inputValues, setAll, clearInputValues } = useContext(Context);
-    const { varCount, refCount, typeData, typeFraction, errors, mode } = newTaskstate;
+    const {newTaskstate, inputValues, setAll, clearInputValues} = useContext(Context);
+    const {varCount, refCount, typeData, typeFraction, errors, mode} = newTaskstate;
 
-    const { setSolutionData, solutionData } = useContext(SolutionContext);
-    const { handleShowSave } = useContext(ModalContext);
+    const {setSolutionData, solutionData} = useContext(SolutionContext);
+    const {handleShowSave} = useContext(ModalContext);
 
     const history = useHistory();
 
@@ -99,7 +98,7 @@ const Form = () => {
         console.log("sub!!");
 
         if (errors.isError) {
-            setAll({ generalMessage: "Ошибка, проверьте корректновсть введённых данных" });
+            setAll({generalMessage: "Ошибка, проверьте корректновсть введённых данных"});
             return;
         }
 
@@ -118,7 +117,7 @@ const Form = () => {
 
         console.log("RESTRICTIONS");
         console.log(restrictions);
-        for (const { data, pos } of restrictions) {
+        for (const {data, pos} of restrictions) {
             let ifZero = true;
             for (let i = 0; i < data.length - 1; i++) {
                 if (+data[i] !== 0) {
@@ -128,7 +127,7 @@ const Form = () => {
             }
 
             if (ifZero && +data[data.length - 1] !== 0) {
-                setAll({ generalMessage: `Ошибка, ограничение №${pos + 1} некорректно. (слева 0, справа НЕ 0)` });
+                setAll({generalMessage: `Ошибка, ограничение №${pos + 1} некорректно. (слева 0, справа НЕ 0)`});
                 return;
             }
 
@@ -144,11 +143,11 @@ const Form = () => {
 
         const baseVector = getBase();
         if (typeData !== ARTIFICAL && baseVector.filter((item) => item).length !== refCount) {
-            setAll({ generalMessage: `Ошибка, количество базисных переменных должно ровнятся количеству ограничений` });
+            setAll({generalMessage: `Ошибка, количество базисных переменных должно ровнятся количеству ограничений`});
             return;
         }
         console.log(getBase());
-        setAll({ generalMessage: "" });
+        setAll({generalMessage: ""});
 
         setSolutionData({
             growth: inputValues.current["min-max"] || "min",
@@ -187,7 +186,7 @@ const Form = () => {
         document.querySelectorAll("input[input_type]").forEach((item) => {
             item.value = 0;
         });
-        setAll({ typeData });
+        setAll({typeData});
         clearInputValues();
     };
 
@@ -199,106 +198,83 @@ const Form = () => {
 
     const ErrorMessage = () => {
         return (
-            <h6 id="message" className={`text-danger text-center ${errors.generalMessage || "d-none"}`}>
+            <p id="message" className={`message message_error ${errors.generalMessage || "d-none"}`}>
                 {errors.generalMessage}
-            </h6>
+            </p>
         );
     };
 
     const Tables = () => {
-        if (!errors.isError) {
-            return (
-                <>
-                    <GetBasis>
-                        <Basis {...{ varCount, solutionData }} />
-                    </GetBasis>
-                    <label className="mb-3 mt-3">
-                        <strong>Целевая функция</strong>
-                    </label>
+        return (
+            <div className="main-form-tables">
+                <div className="table-content">
+                    <p className="table-content__label label">Целевая функция</p>
                     <Table varCount={varCount} refCount={1} type={TYPE_FUNCTION} />
-                    <label className="mb-3 mt-3">
-                        <strong>Ограничения</strong>
-                    </label>
+                </div>
+                <div className="table-content">
+                    <p className="table-content__label label">Ограничения</p>
                     <Table varCount={varCount} refCount={refCount} type={TYPE_REFERENCE} />
-                </>
-            );
-        }
-        return null;
+                </div>
+            </div>
+        );
     };
 
-    const GetBasis = ({ children }) => {
-        return typeData !== ARTIFICAL ? children : null;
+    const GetBasis = () => {
+        return typeData !== ARTIFICAL ? <Basis {...{varCount, solutionData}} /> : null;
     };
 
     return (
         <>
             <ModalSave />
-            <form onSubmit={(e) => submitData(e)}>
-                <div className="d-flex flex-column">
-                    <div className="d-flex form-group col-sm-12 flex-column">
-                        <VarInput
-                            message={errors.messageForVar}
-                            label="Число переменных"
-                            def={varCount}
-                            id="varCount"
-                        />
-                        <VarInput
-                            message={errors.messageForRef}
-                            label="Число ограничений"
-                            def={refCount}
-                            id="refCount"
-                        />
-                    </div>
+            <form className="main-form" onSubmit={(e) => submitData(e)}>
+                <div className="inputs">
+                    <VarInput label="Число переменных" def={varCount} id="varCount" />
+                    <VarInput label="Число ограничений" def={refCount} id="refCount" />
 
-                    <div className="d-flex align-items-center form-group col-sm-12 ml-0 pl-0">
-                        <label className="col-form-label col-sm-3">
-                            <strong>Метод решения</strong>
-                        </label>
+                    <div className="input-container">
+                        <p className="input-container__label label">Метод решения</p>
                         <select
-                            className="w-100 h-100 m-0 p-0 form-control"
-                            onChange={(e) => {
-                                console.log(e.target.value);
-                                setAll({ typeData: e.target.value });
-                            }}
+                            className="input-container__select select"
+                            onChange={(e) => setAll({typeData: e.target.value})}
                             defaultValue={newTaskstate.typeData || ARTIFICAL}
                             id="select_data_type"
                         >
-                            <option label="Графический метод" value={GRAPHICAL} />
-                            <option label="Симплекс метод" value={SIMPLEX} />
-                            <option label="Метод искусственного базиса" value={ARTIFICAL} />
+                            <option label="Графический" value={GRAPHICAL} />
+                            <option label="Симплекс" value={SIMPLEX} />
+                            <option label="Искусственный базис" value={ARTIFICAL} />
                         </select>
                     </div>
-                    <div className="d-flex align-items-center form-group col-sm-12">
-                        <legend className="col-form-label col-sm-3 pl-0 w-auto">
-                            <strong>Дроби в решении</strong>
-                        </legend>
-                        <FractionInput value={SIMPLE} label="Простые" checked={SIMPLE === typeFraction} />
-                        <FractionInput value={DECIMAL} label="Десятичные" checked={DECIMAL === typeFraction} />
+                    <div className="input-container">
+                        <p className="input-container__label label">Дроби в решении</p>
+                        <div className="checkbox-set">
+                            <FractionInput value={SIMPLE} label="Простые" checked={SIMPLE === typeFraction} />
+                            <FractionInput value={DECIMAL} label="Десятичные" checked={DECIMAL === typeFraction} />
+                        </div>
                     </div>
-                    <div className="d-flex align-items-center form-group col-sm-12">
-                        <legend className="col-form-label col-sm-3 pl-0 w-auto">
-                            <strong>Режим</strong>
-                        </legend>
-                        <ModeInput value={MANUAL_MODE} label="Ручной" checked={MANUAL_MODE === mode} />
-                        <ModeInput value={AUTO_MODE} label="Автоматический" checked={AUTO_MODE === mode} />
+                    <div className="input-container">
+                        <p className="input-container__label label">Режим</p>
+                        <div className="checkbox-set">
+                            <ModeInput value={MANUAL_MODE} label="Ручной" checked={MANUAL_MODE === mode} />
+                            <ModeInput value={AUTO_MODE} label="Автоматический" checked={AUTO_MODE === mode} />
+                        </div>
+                    </div>
+                    <ErrorMessage />
+                    <div className="form-buttons">
+                        <button className="form-buttons__button button button_primary" type="submit">
+                            Решить задачу
+                        </button>
+                        <button className="form-buttons__button button button_secondary" onClick={() => clearParams()}>
+                            Очистить параметры
+                        </button>
+                        <button className="form-buttons__button button button_success" onClick={() => save()}>
+                            Сохранить задачу
+                        </button>
                     </div>
                 </div>
 
-                <hr />
-
-                <ErrorMessage />
-                <Tables />
-
-                <div className="d-flex justify-content-start p-3">
-                    <Button className="mr-1" type="submit" variant="primary">
-                        Решить задачу
-                    </Button>
-                    <Button className="mr-1" variant="secondary" onClick={() => clearParams()}>
-                        Очистить параметры
-                    </Button>
-                    <Button className="mr-1" variant="success" onClick={() => save()}>
-                        Сохранить задачу
-                    </Button>
+                <div>
+                    <GetBasis />
+                    <Tables />
                 </div>
             </form>
         </>

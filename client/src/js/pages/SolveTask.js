@@ -2,7 +2,9 @@ import React from "react";
 
 const SolveTask = () => {
     return (
-        <h1>Hello SolveTask!</h1>
+        <div className="contiainer">
+            <h1>Hello SolveTask!</h1>
+        </div>
     );
 };
 

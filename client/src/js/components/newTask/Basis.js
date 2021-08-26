@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
+import React, {useContext} from "react";
 import Context from "../../context/newTask/context";
 
 const Basis = (props) => {
-    const { varCount } = props;
-    const { inputValues } = useContext(Context);
+    const {varCount} = props;
+    const {inputValues} = useContext(Context);
 
     const onChange = (e, id) => {
         inputValues.current[`base-vector-${id}`] = e.target.checked;
@@ -13,19 +13,19 @@ const Basis = (props) => {
         return inputValues.current[`base-vector-${id}`] || false;
     };
 
-    const CheckBox = ({ id, count }) => {
+    const CheckBox = ({id, count}) => {
         return (
-            <div className="form-check form-check-inline">
+            <div className="checkbox-set">
                 <input
-                    className="form-check-input"
+                    className="checkbox-set__input input"
                     type="checkbox"
                     id={`base-${id}`}
                     onClick={(e) => onChange(e, id)}
                     defaultChecked={defVal(id)}
                 />
-                <label className="form-check-label" htmlFor={`base-${id}`}>
+                <p className="checkbox-set__label label" htmlFor={`base-${id}`}>
                     X<sub>{count}</sub>
-                </label>
+                </p>
             </div>
         );
     };
@@ -39,11 +39,9 @@ const Basis = (props) => {
     };
 
     return (
-        <div className="d-flex mb-2 mt-0">
-            <label className="m-0">
-                <strong>Базис:&emsp;</strong>
-            </label>
-            <div>
+        <div className="basis">
+            <p className="basis__label label">Базис:</p>
+            <div className="basis__checkboxies">
                 <GetCheckSet />
             </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import Equations from "../components/Equations";
 import Context from "../context/solution/solutionContext";
 import ArtificalData from "../modules/artificalData";
@@ -6,10 +6,10 @@ import SimplexData from "../modules/simplexData";
 import ArtificalTable from "../components/simplex/ArtificalTable";
 import Button from "react-bootstrap/Button";
 import SimplexMethod from "../components/simplex/SimplexMethod";
-import { AUTO_MODE } from "../types";
+import {AUTO_MODE} from "../types";
 
 const SolveArtifical = () => {
-    const { solutionData } = useContext(Context);
+    const {solutionData} = useContext(Context);
     const artData = useRef(new ArtificalData(solutionData.current));
     const simData = useRef(new SimplexData(solutionData.current));
     const [artTables, setArtTables] = useState(artData.current.history);
@@ -51,7 +51,7 @@ const SolveArtifical = () => {
             setArtificalError(artData.current.isUnsolvable());
             setArtOptimal(artData.current.isOptimal());
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onNextClick = () => {
@@ -124,7 +124,7 @@ const SolveArtifical = () => {
     };
 
     return (
-        <>
+        <div className="container">
             <Equations />
             <Simplex />
             <h4 className="text-center mb-3">Метод искусственного базиса</h4>
@@ -152,7 +152,7 @@ const SolveArtifical = () => {
                     <ArtificalTables />
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

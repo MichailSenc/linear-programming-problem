@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import Context from "../context/solution/solutionContext";
 import SimplexData from "../modules/simplexData";
 import Button from "react-bootstrap/Button";
@@ -6,10 +6,10 @@ import SimplexMethod from "../components/simplex/SimplexMethod";
 import Gaus from "../modules/gaus";
 import Equations from "../components/Equations";
 import CalcCoeffs from "../modules/calcCoeffs";
-import { AUTO_MODE } from "../types";
+import {AUTO_MODE} from "../types";
 
 const SolveSimplex = () => {
-    const { solutionData } = useContext(Context);
+    const {solutionData} = useContext(Context);
     const gaus = useRef(new Gaus(solutionData.current));
     const simData = useRef(null);
     const [setted, setSetted] = useState(false);
@@ -64,7 +64,7 @@ const SolveSimplex = () => {
     };
 
     return (
-        <>
+        <div className="container">
             <h4 className="text-center mb-3">Симплекс Метод старт</h4>
             <div className="d-flex flex-column">
                 <Equations />
@@ -72,7 +72,7 @@ const SolveSimplex = () => {
             </div>
             <Error />
             <Simplex />
-        </>
+        </div>
     );
 };
 

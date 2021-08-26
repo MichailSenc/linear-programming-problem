@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
-import { useHistory } from "react-router";
+import {useHistory} from "react-router";
 import Context from "../context/newTask/context";
-import { ADDHOST, DELHOST, NEW_REF } from "../refs";
+import {ADDHOST, DELHOST, NEW_REF} from "../refs";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const LoadTask = () => {
-    const { setAll, inputValues } = useContext(Context);
+    const {setAll, inputValues} = useContext(Context);
 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -19,7 +19,7 @@ const LoadTask = () => {
 
     const sendRequest = (url) => {
         const requestOptions = {
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
         };
 
         return fetch(url, requestOptions).then((response) => {
@@ -57,7 +57,7 @@ const LoadTask = () => {
     const postFetch = (url, body = null) => {
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify(body),
         };
 
@@ -87,7 +87,7 @@ const LoadTask = () => {
         if (data.length === 0) {
             return (
                 <>
-                    <h3 className='text-center'>Список сохранённых конфигураций пуст!</h3>
+                    <h3 className="text-center">Список сохранённых конфигураций пуст!</h3>
                 </>
             );
         }
@@ -135,7 +135,7 @@ const LoadTask = () => {
                 <table className="table table-striped ref_table ">
                     <thead>
                         <tr>
-                            <th scope="col" style={{ width: "5%" }}>
+                            <th scope="col" style={{width: "5%"}}>
                                 #
                             </th>
                             <th scope="col">Название</th>
@@ -152,7 +152,7 @@ const LoadTask = () => {
     };
 
     return (
-        <>
+        <div className="container">
             {loading ? (
                 <div className="d-flex justify-content-center">
                     <ClipLoader color={"#1C1D1C"} loading={loading} size={50} />
@@ -160,7 +160,7 @@ const LoadTask = () => {
             ) : (
                 <GetData />
             )}
-        </>
+        </div>
     );
 };
 

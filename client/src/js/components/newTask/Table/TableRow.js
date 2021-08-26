@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
-import { TYPE_FUNCTION } from "../../../types";
+import React, {useContext} from "react";
+import {TYPE_FUNCTION} from "../../../types";
 
 import Context from "../../../context/newTask/context";
 
 const Row = (props) => {
-    const { rowNumb, count, type } = props;
-    const { setInputValue, inputValues } = useContext(Context);
+    const {rowNumb, count, type} = props;
+    const {setInputValue, inputValues} = useContext(Context);
 
     const changeInput = (e) => {
         let initVal = e.target.value;
@@ -23,8 +23,9 @@ const Row = (props) => {
 
     const GetInput = (key, type, rowNumb) => {
         return (
-            <td key={key}>
+            <div className="table__body-item" key={key}>
                 <input
+                    className="table__body-input input"
                     type="text"
                     input_type={type}
                     row_index={rowNumb}
@@ -33,7 +34,7 @@ const Row = (props) => {
                     defaultValue={inputValues.current[`${type}-${rowNumb}-${key + 1}`]}
                     onChange={(e) => changeInput(e)}
                 />
-            </td>
+            </div>
         );
     };
 
@@ -46,8 +47,9 @@ const Row = (props) => {
 
         if (type === TYPE_FUNCTION) {
             inputs.push(
-                <td key={count}>
+                <div className="table__body-item" key={count}>
                     <select
+                        className="table__body-select select"
                         input_type={type}
                         position_index={count + 1}
                         onChange={(e) => changeMinMax(e)}
@@ -56,7 +58,7 @@ const Row = (props) => {
                         <option label="min" value="min" />
                         <option label="max" value="max" />
                     </select>
-                </td>
+                </div>
             );
         } else {
             inputs.push(GetInput(count + 1, type, rowNumb));
@@ -66,12 +68,12 @@ const Row = (props) => {
     };
 
     return (
-        <tr>
-            <th className="text-center" scope="row">
+        <div className="table__body-row">
+            <div className="table__body-item" scope="row">
                 {rowNumb}
-            </th>
+            </div>
             {getRowInputs()}
-        </tr>
+        </div>
     );
 };
 

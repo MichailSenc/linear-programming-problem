@@ -1,14 +1,14 @@
-import React, { useContext } from "react";
+import React, {useContext} from "react";
 import Context from "../../context/newTask/context";
 
 const ModeInput = (props) => {
-    const { value, label, checked } = props;
-    const { setAll } = useContext(Context);
+    const {value, label, checked} = props;
+    const {setAll} = useContext(Context);
 
     return (
-        <div className="form-check col-sm-2 mr-3">
+        <div className="checkbox-container">
             <input
-                className="form-check-input"
+                className="checkbox-container__input input"
                 type="radio"
                 name="ModeRadios"
                 id={value}
@@ -18,7 +18,7 @@ const ModeInput = (props) => {
                     if (e.target.checked) setAll({mode: value});
                 }}
             />
-            <label className="form-check-label" htmlFor={value}>
+            <label className="checkbox-container__label label" htmlFor={value}>
                 {label}
             </label>
         </div>

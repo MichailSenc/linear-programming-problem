@@ -2,26 +2,26 @@ import React from "react";
 import Row from "./TableRow";
 
 const Table = (props) => {
-    const { varCount, refCount, type } = props;
+    const {varCount, refCount, type} = props;
 
     const GetCols = () => {
         const colls = [];
         colls.push(
-            <th key={0} scope="col" style={{ width: "5%" }}>
+            <div key={0} className="table__head-item">
                 #
-            </th>
+            </div>
         );
         for (let i = 1; i < varCount + 1; i++) {
             colls.push(
-                <th key={i} scope="col">
+                <div key={i} className="table__head-item">
                     X<sub>{i}</sub>
-                </th>
+                </div>
             );
         }
         colls.push(
-            <th key={varCount + 2} scope="col">
-                res&ensp;
-            </th>
+            <div key={varCount + 2} className="table__head-item">
+                res
+            </div>
         );
         return colls;
     };
@@ -35,16 +35,14 @@ const Table = (props) => {
     };
 
     return (
-        <table className="table table-striped ref_table table-bordered">
-            <thead>
-                <tr>
-                    <GetCols />
-                </tr>
-            </thead>
-            <tbody>
+        <div className="table-content__table table table_striped">
+            <div className="table__head">
+                <GetCols />
+            </div>
+            <div className="table__body">
                 <GetRows />
-            </tbody>
-        </table>
+            </div>
+        </div>
     );
 };
 
