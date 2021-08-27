@@ -38,14 +38,10 @@ const LoadTask = () => {
     const getJsonData = async () => {
         await sendRequest(ADDHOST)
             .then((data) => {
-                console.log(data);
-                console.log(typeof data);
                 setData(data);
                 setLoading(false);
             })
-            .catch((err) => {
-                console.log(err);
-            });
+            .catch((err) => {});
     };
 
     const onLoad = (id) => {
@@ -77,82 +73,50 @@ const LoadTask = () => {
     const onDelete = async (id) => {
         const d = data.filter((item, i) => i !== id);
         setData(d);
-        await postFetch(DELHOST, d).catch((err) => {
-            console.log(err);
-        });
+        await postFetch(DELHOST, d).catch((err) => {});
     };
 
     const GetData = () => {
-        console.log(data);
         if (data.length === 0) {
-            return (
-                <>
-                    <h3 className="text-center">Список сохранённых конфигураций пуст!</h3>
-                </>
-            );
+            return <p className="title">Список сохранённых конфигураций пуст!</p>;
         }
 
         const GetRows = () => {
             return data.map((obj, i) => {
                 return (
-                    <>
-                        <tr key={i}>
-                            <th className="text-center" scope="row">
-                                {i + 1}
-                            </th>
-                            <td className="text-center">{obj.name || "<пусто>"}</td>
-                            <td className="text-center">{obj.date || "<пусто>"}</td>
-                            <td className="p-2">
-                                <div className="d-flex">
-                                    <Button
-                                        className="w-50 ml-3"
-                                        variant="primary"
-                                        pointer={i}
-                                        size="sm"
-                                        onClick={() => onLoad(i)}
-                                    >
-                                        Загрузить
-                                    </Button>
-                                    <Button
-                                        className="w-50 ml-3"
-                                        variant="danger"
-                                        size="sm"
-                                        pointer={i}
-                                        onClick={() => onDelete(i)}
-                                    >
-                                        Удалить
-                                    </Button>
-                                </div>
-                            </td>
-                        </tr>
-                    </>
+                    <div className="table-16__body-row" key={i}>
+                        <div className="table-16__body-item">{i + 1}</div>
+                        <div className="table-16__body-item">{obj.name || "<пусто>"}</div>
+                        <div className="table-16__body-item">{obj.date || "<пусто>"}</div>
+
+                        <button className="button button_primary" type="button" pointer={i} onClick={() => onLoad(i)}>
+                            Загрузить
+                        </button>
+                        <button className="button button_danger" type="button" pointer={i} onClick={() => onDelete(i)}>
+                            Удалить
+                        </button>
+                    </div>
                 );
             });
         };
 
         return (
-            <>
-                <table className="table table-striped ref_table ">
-                    <thead>
-                        <tr>
-                            <th scope="col" style={{width: "5%"}}>
-                                #
-                            </th>
-                            <th scope="col">Название</th>
-                            <th scope="col">Дата загрузки</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <GetRows />
-                    </tbody>
-                </table>
-            </>
+            <div className="table-content__table table-16 table-16_striped table-16_load">
+                <div className="table-16__head">
+                    <div className="table-16__head-item">#</div>
+                    <div className="table-16__head-item">Название</div>
+                    <div className="table-16__head-item">Дата загрузки</div>
+                    <div className="table-16__head-item"></div>
+                </div>
+                <div className="table-16__body">
+                    <GetRows />
+                </div>
+            </div>
         );
     };
 
     return (
-        <div className="container">
+        <div className="container pt-3">
             {loading ? (
                 <div className="d-flex justify-content-center">
                     <ClipLoader color={"#1C1D1C"} loading={loading} size={50} />

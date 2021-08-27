@@ -23,9 +23,9 @@ const Row = (props) => {
 
     const GetInput = (key, type, rowNumb) => {
         return (
-            <div className="table__body-item" key={key}>
+            <div className="table-16__body-item" key={key}>
                 <input
-                    className="table__body-input input"
+                    className="table-16__body-input input"
                     type="text"
                     input_type={type}
                     row_index={rowNumb}
@@ -47,9 +47,9 @@ const Row = (props) => {
 
         if (type === TYPE_FUNCTION) {
             inputs.push(
-                <div className="table__body-item" key={count}>
+                <div className="table-16__body-item" key={count}>
                     <select
-                        className="table__body-select select"
+                        className="table-16__body-select select"
                         input_type={type}
                         position_index={count + 1}
                         onChange={(e) => changeMinMax(e)}
@@ -68,10 +68,8 @@ const Row = (props) => {
     };
 
     return (
-        <div className="table__body-row">
-            <div className="table__body-item" scope="row">
-                {rowNumb}
-            </div>
+        <div className="table-16__body-row">
+            <div className="table-16__body-item _bold">{rowNumb}</div>
             {getRowInputs()}
         </div>
     );

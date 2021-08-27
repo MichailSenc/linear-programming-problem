@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import Context from "../../context/solution/solutionContext";
 import SimplexData from "../../modules/simplexData";
 import SimplexTable from "./SimplexTable";
 import Button from "react-bootstrap/Button";
-import { SIMPLE } from "../../types";
+import {SIMPLE} from "../../types";
 
 const SimplexMethod = (props) => {
-    const { data, backToArt } = props;
-    const { solutionData } = useContext(Context);
+    const {data, backToArt} = props;
+    const {solutionData} = useContext(Context);
     let simData = useRef(new SimplexData(solutionData.current));
     const [tables, setTables] = useState([]);
     const [error, setError] = useState(false);
@@ -20,10 +20,8 @@ const SimplexMethod = (props) => {
     }
 
     const SimplexTabels = () => {
-        console.log(tables);
         // tabels - simData.current.history
         return [...tables].reverse().map((table, i) => {
-            console.log(table);
             return (
                 <SimplexTable
                     key={i}
@@ -89,13 +87,13 @@ const SimplexMethod = (props) => {
     const OptimalButton = () => {
         if (opt) {
             return (
-                <Button
-                    className={`btn-sm mb-2 ${optClick ? "d-none" : ""}`}
-                    variant="success"
+                <button
+                    className={`solve-buttons__button button button_success ${optClick ? "d-none" : ""}`}
+                    type="button"
                     onClick={onOptimalClick}
                 >
                     Получить ответ
-                </Button>
+                </button>
             );
         }
 
@@ -131,48 +129,40 @@ const SimplexMethod = (props) => {
     const BackToSolveButton = () => {
         if (optClick) {
             return (
-                <Button
-                    className={`btn-sm mb-2`}
-                    variant="success"
-                    onClick={() =>{
-                        setOptClick(false)
-                    }}
-                >
+                <button className="button button_success" variant="success" onClick={() => setOptClick(false)}>
                     Вернутся к решению
-                </Button>
+                </button>
             );
         }
         return null;
-    }
+    };
 
     return (
         <>
             <Solution />
-            <h4 className="text-center mb-3">Симплекс Метод</h4>
-            <BackToSolveButton/>
+            <p className="title">Симплекс Метод</p>
+            <BackToSolveButton />
             <YeahOptimal />
             <SimplexError />
-            <div className="row d-flex">
-                <div className="d-flex col-sm-12">
-                    <Button
-                        className={`btn-sm mb-2 ${optClick ? "d-none" : ""} mr-1`}
-                        variant="primary"
-                        onClick={onNextClick}
-                    >
-                        Следующий шаг
-                    </Button>
-                    <Button
-                        className={`btn-sm mb-2 ${optClick ? "d-none" : ""} mr-1`}
-                        variant="secondary"
-                        onClick={onPreviousClick}
-                    >
-                        Предыдущий шаг
-                    </Button>
-                    <OptimalButton />
-                </div>
-                <div className="col-sm-12">
-                    <SimplexTabels />
-                </div>
+            <div className="solve-buttons">
+                <button
+                    className={`solve-buttons__button button button_primary ${optClick ? "d-none" : ""}`}
+                    type="button"
+                    onClick={onNextClick}
+                >
+                    Следующий шаг
+                </button>
+                <button
+                    className={`solve-buttons__button button button_secondary ${optClick ? "d-none" : ""}`}
+                    type="button"
+                    onClick={onPreviousClick}
+                >
+                    Предыдущий шаг
+                </button>
+                <OptimalButton />
+            </div>
+            <div className="solve-tables">
+                <SimplexTabels />
             </div>
         </>
     );

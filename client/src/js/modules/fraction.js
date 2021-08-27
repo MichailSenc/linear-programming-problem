@@ -1,4 +1,4 @@
-import { SIMPLE } from "../types";
+import {SIMPLE} from "../types";
 
 const dotRegex = /^([+-]?\d+)([+-]?\.(\d+))?$/;
 const slashRegex = /^([+-]?\d+)([+-]?\/(\d+))?$/;
@@ -6,7 +6,6 @@ const emptyRegex = /^\s*$/;
 
 export default class Fraction {
     constructor(numerator = 0, denominator = 1) {
-        console.log(numerator, denominator);
         this.isMin = false;
         if (typeof numerator === "object") {
             this.numerator = numerator.numerator;
@@ -14,7 +13,6 @@ export default class Fraction {
         } else if (typeof numerator === "string") {
             let matcher = numerator.trim().match(dotRegex);
             if (matcher) {
-                console.log(matcher);
                 const newLocal = typeof matcher[3] === "undefined";
                 this.numerator = parseInt(matcher[1] + (newLocal ? "" : matcher[3]));
                 this.denominator = parseInt(`1${"0".repeat(newLocal ? 0 : matcher[3].length)}`);
@@ -26,7 +24,6 @@ export default class Fraction {
             if (matcher) {
                 const newLocal = typeof matcher[3] === "undefined";
                 if (!newLocal) {
-                    console.log(matcher[3]);
                     if (matcher[3].match(/^0+$/)) {
                         this.error = true;
                         return;
@@ -76,7 +73,7 @@ export default class Fraction {
 
     // сложение дробей
     add = (fraction) => {
-        const { numerator, denominator } = fraction;
+        const {numerator, denominator} = fraction;
         this.numerator = this.numerator * denominator + numerator * this.denominator;
         this.denominator *= denominator;
         return this._applyGCD();
@@ -84,19 +81,19 @@ export default class Fraction {
 
     // вычитание дробей
     subtract = (fraction) => {
-        const { numerator, denominator } = fraction;
+        const {numerator, denominator} = fraction;
         this.numerator = this.numerator * denominator - numerator * this.denominator;
         this.denominator *= denominator;
         return this._applyGCD();
     };
 
     asObject = () => {
-        return { numerator: this.numerator, denominator: this.denominator };
+        return {numerator: this.numerator, denominator: this.denominator};
     };
 
     // умножение дробей
     multiply = (fraction) => {
-        const { numerator, denominator } = fraction;
+        const {numerator, denominator} = fraction;
         this.numerator *= numerator;
         this.denominator *= denominator;
         return this._applyGCD();
@@ -104,7 +101,7 @@ export default class Fraction {
 
     // деление  дробей
     divide = (fraction) => {
-        const { numerator, denominator } = fraction;
+        const {numerator, denominator} = fraction;
         this.numerator *= denominator;
         this.denominator *= numerator;
         return this._applyGCD();
@@ -126,7 +123,6 @@ export default class Fraction {
 
     // десятичная дробь
     decimals = () => {
-        console.log(this.numerator, this.denominator);
         return `${(this.numerator / this.denominator).toFixed(2).replace(/\.00/, "")}`;
     };
 

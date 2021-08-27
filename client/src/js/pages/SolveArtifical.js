@@ -75,17 +75,15 @@ const SolveArtifical = () => {
         setOptClick(true);
         simData.current = new SimplexData(solutionData.current);
         simData.current.setReadySolution(artData.current.calcCoeffs(solutionData.current));
-        console.log("OPTIMAL!!!!!");
-        console.log(simData.current);
     };
 
     const ArtificalError = () => {
         if (artificlaError)
             return (
-                <h6 className="text-center mb-3 text-danger">
+                <p className="text-center mb-3 text-danger">
                     Задача неразрешима. Существует Z<sub>i0</sub>, при котором все Z<sub>is</sub> из нового базиса равны
                     0
-                </h6>
+                </p>
             );
         return null;
     };
@@ -104,14 +102,13 @@ const SolveArtifical = () => {
     const OptimalButton = () => {
         if (artOptimal) {
             return (
-                // <Button className="btn-sm mb-2" variant="success" onClick={onOptimalClick} disabled={optClick}>
-                <Button
-                    className={`btn-sm mb-2 ${optClick ? "d-none" : ""}`}
-                    variant="success"
+                <button
+                    className={`solve-buttons__button button button_success ${optClick ? "d-none" : ""}`}
+                    type="button"
                     onClick={onOptimalClick}
                 >
                     Перейти к симплекс методу
-                </Button>
+                </button>
             );
         }
 
@@ -119,37 +116,47 @@ const SolveArtifical = () => {
     };
 
     const Simplex = () => {
-        if (optClick) return <SimplexMethod data={simData} backToArt={setOptClick} />;
+        if (optClick)
+            return (
+                <div className="solution__container">
+                    <SimplexMethod data={simData} backToArt={setOptClick} />;
+                </div>
+            );
         return null;
     };
 
     return (
         <div className="container">
-            <Equations />
-            <Simplex />
-            <h4 className="text-center mb-3">Метод искусственного базиса</h4>
-            <YeahOptimal />
-            <ArtificalError />
-            <div className="row d-flex">
-                <div className="d-flex col-sm-12">
-                    <Button
-                        className={`btn-sm mb-2 ${optClick ? "d-none" : ""} mr-1`}
-                        variant="primary"
-                        onClick={onNextClick}
-                    >
-                        Следующий шаг
-                    </Button>
-                    <Button
-                        className={`btn-sm mb-2 ${optClick ? "d-none" : ""} mr-1`}
-                        variant="secondary"
-                        onClick={onPreviousClick}
-                    >
-                        Предыдущий шаг
-                    </Button>
-                    <OptimalButton />
+            <div className="solution">
+                <div className="solution__container">
+                    <p className="solution__title title">Начальные условия</p>
+                    <Equations />
                 </div>
-                <div className="col-sm-12">
-                    <ArtificalTables />
+                <Simplex />
+                <div className="solution__container">
+                    <h4 className="solution__title title">Метод искусственного базиса</h4>
+                    <YeahOptimal />
+                    <ArtificalError />
+                    <div className="solve-buttons">
+                        <button
+                            className={`solve-buttons__button button button_primary ${optClick ? "d-none" : ""}`}
+                            type="button"
+                            onClick={onNextClick}
+                        >
+                            Следующий шаг
+                        </button>
+                        <button
+                            className={`solve-buttons__button button button_secondary ${optClick ? "d-none" : ""}`}
+                            type="button"
+                            onClick={onPreviousClick}
+                        >
+                            Предыдущий шаг
+                        </button>
+                        <OptimalButton />
+                    </div>
+                    <div className="solve-tables">
+                        <ArtificalTables />
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,53 +1,64 @@
-import React, { useContext } from "react";
+import React, {useContext} from "react";
 import Context from "../context/solution/solutionContext";
+import {GetCols} from "./newTask/Table/Table";
 
 const Equations = () => {
-    const { solutionData } = useContext(Context);
+    const {solutionData} = useContext(Context);
+    const {func, restrictions, growth, fraction, varCount} = solutionData.current;
+
     console.log(solutionData);
-    const { func, restrictions, growth, fraction } = solutionData.current;
 
-    const getRest = (rest, right, sign = "=") => {
-        let isSetted = false;
-        const arr = rest.map((item, i) => {
-            const sign = item.sign();
-            if (sign === 0) return null;
-            const value = (
-                <span key={i}>
-                    {sign === 1 ? (isSetted ? "+" : "") : "-"} {`${item.toString(fraction).replaceAll(/[+-]/g, "")}X`}
-                    <sub>{`${i + 1} `}</sub>
-                </span>
+    const GetRows = ({source, growth}) => {
+        const rowItems = (row) => {
+            return row.map((item, i) => {
+                return (
+                    <div className="table-16__body-item" key={i}>
+                        {item.toString(fraction)}
+                    </div>
+                );
+            });
+        };
+        return source.map((row, i) => {
+            return (
+                <div
+                    className="table-16__body-row"
+                    style={{gridTemplate: `20px / 20px repeat(${varCount + 1}, 1fr)`}}
+                    key={i}
+                >
+                    <div className="table-16__body-item _bold">{i}</div>
+                    {rowItems(row)}
+                    {growth && (
+                        <div className="table-16__body-item" key="growth">
+                            {growth}
+                        </div>
+                    )}
+                </div>
             );
-            isSetted = true;
-            return value;
         });
-        arr.push(<span key={arr.length}>{` ${sign} ${right}`}</span>);
-        return arr;
     };
 
-    const GetFunc = () => {
-        if (!func || func.length === 0) return <div>Функция не извеcтна</div>;
-        console.log(func);
-        return getRest(func, growth, "→");
-    };
-
-    const GetRest = () => {
-        if (!restrictions || restrictions.length === 0) return <div>Ограничения не извеcтны</div>;
-        return restrictions.map(({ data }, i) => {
-            console.log(data);
-            return <div key={i}>{getRest(data.slice(0, data.length - 1), data[data.length - 1])}</div>;
-        });
+    const EqTable = ({source, growth}) => {
+        return (
+            <div className="table-content__table table-16 table-16_striped">
+                <div className="table-16__head" style={{gridTemplate: `20px / 20px repeat(${varCount + 1}, 1fr)`}}>
+                    <GetCols varCount={varCount} />
+                </div>
+                <div className="table-16__body">
+                    <GetRows source={source} growth={growth} />
+                </div>
+            </div>
+        );
     };
 
     return (
-        <div className="mr-4">
-            <h6>Условие:</h6>
-            <div className="d-flex flex-column mb-2">
-                <div>
-                    <GetFunc />
-                </div>
-                <div>
-                    <GetRest />
-                </div>
+        <div className="main-form-tables">
+            <div className="table-content">
+                <p className="table-content__label label">Целевая функция</p>
+                <EqTable source={[func]} growth={growth} />
+            </div>
+            <div className="table-content">
+                <p className="table-content__label label">Ограничения</p>
+                <EqTable source={restrictions.map((res) => res.data)} />
             </div>
         </div>
     );

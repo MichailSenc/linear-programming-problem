@@ -18,9 +18,8 @@ const SolveSimplex = () => {
         if (solutionData.current.mode === AUTO_MODE) {
             setSimplexData();
             simData.current.autoMode();
-            console.log(simData);
+
             setSetted(true);
-            //asddsad
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -36,22 +35,16 @@ const SolveSimplex = () => {
 
     const Error = () => {
         if (gaus.current.error.isError) {
-            return (
-                <>
-                    <h6 className="text-center text-danger" dangerouslySetInnerHTML={gaus.current.error.message}></h6>
-                </>
-            );
+            return <p className="text-center text-danger" dangerouslySetInnerHTML={gaus.current.error.message}></p>;
         }
         return null;
     };
 
     const Basis = () => {
         return (
-            <>
-                <h6 className="mb-3">
-                    X<sup>(0)</sup> = ({gaus.current.base.join(", ")})
-                </h6>
-            </>
+            <p className="mb-3 mt-3">
+                Базис: X<sup>(0)</sup> = ({gaus.current.base.join(", ")})
+            </p>
         );
     };
 
@@ -65,13 +58,13 @@ const SolveSimplex = () => {
 
     return (
         <div className="container">
-            <h4 className="text-center mb-3">Симплекс Метод старт</h4>
-            <div className="d-flex flex-column">
+            <div className="simplex">
+                <p className="simplex__title title">Начальные условия</p>
                 <Equations />
                 <Basis />
+                <Error />
+                <Simplex />
             </div>
-            <Error />
-            <Simplex />
         </div>
     );
 };

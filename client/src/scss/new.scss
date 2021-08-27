@@ -91,11 +91,12 @@
     // .form-buttons__button
     &__button {
         margin: 0px 0px 5px 0px;
+        width: 100%;
     }
 }
 .button {
-    width: 100%;
-    padding: 5px 0px;
+    display: inline-block;
+    padding: 5px 10px;
     text-align: center;
     border-radius: 20px;
     color: #ffffff;
@@ -121,6 +122,19 @@
         &:hover {
             background: #218838;
         }
+    }
+
+    // .button__danger
+    &_danger {
+        background: #dc3545;
+        &:hover {
+            background: #c82333;
+        }
+    }
+
+    // .button_100
+    &_100 {
+        min-width: 100px;
     }
 }
 .basis {
@@ -149,35 +163,37 @@
     &__table {
     }
 }
-.table {
+.table-16 {
     user-select: none;
     text-align: center;
     display: grid;
     grid-template: 20px 1fr / 1fr;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-    // .table__head
+    // .table-16__head
     &__head {
         display: grid;
         grid-template: 20px / 20px repeat(16, 1fr) 30px;
+        font-weight: 700;
     }
-    // .table__head-item
+    // .table-16__head-item
     &__head-item {
+        overflow: hidden;
     }
-    // .table__body
+    // .table-16__body
     &__body {
         display: grid;
         // grid-auto-rows: 20px;
     }
-    // .table__body-row
+    // .table-16__body-row
     &__body-row {
         display: grid;
         grid-template: 20px / 20px repeat(16, 1fr) 30px;
     }
-    // .table__body-item
+    // .table-16__body-item
     &__body-item {
-        // width: 100%;
+        overflow: hidden;
     }
-    // .table__body-input
+    // .table-16__body-input
     &__body-input {
         width: 100%;
         height: 100%;
@@ -195,7 +211,7 @@
             background: #d3d1d1;
         }
     }
-    // .table__body-select
+    // .table-16__body-select
     &__body-select {
         width: 100%;
         height: 100%;
@@ -209,14 +225,43 @@
         }
     }
 
-    // .table_stripped
+    // .table-16_stripped
     &_striped {
-        .table__body-row:nth-child(odd) {
+        .table-16__body-row:nth-child(odd) {
             background: #f2f2f2;
         }
     }
+
+    // .table-16_load
+    &_load {
+        grid-template: 30px 1fr / 1fr;
+        padding: 10px;
+        .table-16__body-row {
+            align-items: center;
+            grid-gap: 0 5px;
+            grid-template: 35px / 20px 3fr 3fr 1fr 1fr;
+        }
+        .table-16__head {
+            align-items: center;
+            grid-gap: 0 5px;
+            grid-template: 35px / 20px 3fr 3fr 1fr 1fr;
+        }
+    }
 }
+
+.table-wrapper {
+    min-height: 100vh;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    .table-16 {
+        box-shadow: none !important;
+    }
+}
+
 .select {
+}
+
+._bold {
+    font-weight: 700;
 }
 
 .message {
@@ -232,4 +277,81 @@
     &_error {
         // background: red;
     }
+}
+
+.solve-tables {
+    & > *:not(:last-child) {
+        margin: 0px 0px 10px 0px;
+    }
+}
+
+.title {
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.1em;
+}
+
+.solve-buttons {
+    margin: 0px 0px 1em 0px;
+    // .solve-buttons__button
+    &__button {
+        margin: 0px 5px 0px 0px;
+    }
+}
+
+._bigtext {
+    margin: 10px 0px;
+    font-size: 1.5em;
+}
+
+.simplex {
+    padding: 2em 0px 0px 0px;
+}
+
+.solution {
+    padding: 2em 0px 0px 0px;
+    // .solution__title
+    &__title {
+        margin: 0px 0px 2em 0px;
+    }
+    // .solution__container
+    &__container {
+        &:not(:last-child) {
+            margin: 0px 0px 2em 0px;
+        }
+    }
+}
+
+.load_button {
+    width: 50%;
+    height: 50%;
+}
+
+canvas {
+    background-color: #d3d3d3;
+}
+
+.trans_blue {
+    background-color: rgba($color: #007bff, $alpha: 0.3);
+
+    &:hover {
+        background-color: rgba($color: #007bff, $alpha: 0.5);
+    }
+}
+.trans_pink {
+    background-color: rgba($color: #e83e8c, $alpha: 0.3);
+    &:hover {
+        background-color: rgba($color: #e83e8c, $alpha: 0.5);
+    }
+}
+
+.trans_green {
+    background-color: rgba($color: #28a745, $alpha: 0.3);
+    &:hover {
+        background-color: rgba($color: #28a745, $alpha: 0.5);
+    }
+}
+
+.trans_danger {
+    background-color: rgba($color: #dc3545, $alpha: 0.5) !important;
 }

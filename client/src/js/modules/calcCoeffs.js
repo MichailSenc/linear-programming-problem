@@ -11,7 +11,6 @@ export default class CalcCoeffs {
     }
 
     createTable = () => {
-        console.log("asd");
         const result = [];
         // готовая матрица, но без нижней строчки
         this.matrix.forEach((arr) => {

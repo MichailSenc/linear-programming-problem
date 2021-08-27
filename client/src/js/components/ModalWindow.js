@@ -1,13 +1,13 @@
-import React, { useContext, useRef, useState } from "react";
+import React, {useContext, useRef, useState} from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Context from "../context/modal/context";
 import NewContext from "../context/newTask/context";
-import { ADDHOST } from "../refs";
+import {ADDHOST} from "../refs";
 
 const ModalWindow = () => {
-    const { showSave, handleCloseSave } = useContext(Context);
-    const { newTaskstate, inputValues } = useContext(NewContext);
+    const {showSave, handleCloseSave} = useContext(Context);
+    const {newTaskstate, inputValues} = useContext(NewContext);
     const input = useRef(null);
     const [error, setError] = useState(null);
 
@@ -15,12 +15,12 @@ const ModalWindow = () => {
         if (!input.current.value) {
             setError("Введите название сохранения");
             return;
-        } 
+        }
 
         const sendRequest = (url, body = null) => {
             const requestOptions = {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body,
             };
 
@@ -47,7 +47,6 @@ const ModalWindow = () => {
             })
         ).catch((err) => {
             setError("Произошла ошибка на стороне сервера");
-            console.log(err);
         });
 
         setError(null);
@@ -70,16 +69,16 @@ const ModalWindow = () => {
                 <Modal.Title>Сохранение конфигурации</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <input ref={input} className="form-control" type="text" placeholder="название сохранения" />
+                <input ref={input} className="input" type="text" placeholder="название сохранения" />
                 <Error />
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleCloseSave}>
+                <button className="button button_secondary button_100" type="button" onClick={handleCloseSave}>
                     Close
-                </Button>
-                <Button variant="primary" onClick={onSave}>
+                </button>
+                <button className="button button_primary button_100" type="button" onClick={onSave}>
                     Save
-                </Button>
+                </button>
             </Modal.Footer>
         </Modal>
     );

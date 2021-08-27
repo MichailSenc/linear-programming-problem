@@ -8,8 +8,6 @@ const Table = (props) => {
 
     const {solutionData} = useContext(Context);
     const {varCount, refCount, fraction} = solutionData.current;
-    console.log(solutionData.current);
-    console.log(fraction);
 
     const onClick = (e) => {
         const t = e.target;
@@ -27,8 +25,6 @@ const Table = (props) => {
                 var: +t.getAttribute("var"),
                 rest: +t.getAttribute("rest"),
             });
-
-            console.log(`click ${e.target.textContent}`);
         }
     };
 
@@ -52,17 +48,17 @@ const Table = (props) => {
         const reVal = resMatr.map((item, i) => {
             const res = [];
             res.push(
-                <th key={`row-${i}-${0}`} scope="row">
+                <div className="table-16__body-item _bold" key={`row-${i}-${0}`}>
                     {(notBase[i] || notBase[i] === 0) && (
                         <>
                             X<sub>{notBase[i]}</sub>
                         </>
                     )}
-                </th>
+                </div>
             );
             // j-номер переменной
             // console.log(item.map(arr => arr.map(t => t.simple())));
-            console.log(item);
+
             item.forEach((element, j) => {
                 const classes = [];
                 const selected = data.selected[count];
@@ -79,21 +75,24 @@ const Table = (props) => {
                     }
                 }
                 res.push(
-                    <td
+                    <div
+                        className={`table-16__body-item ` + classes.join(" ")}
                         key={`row-${i}-${j + 1}`}
                         onClick={onClick}
                         onDoubleClick={onDoubleClick}
-                        className={classes.join(" ")}
                         rest={i}
                         var={j}
                     >
                         {fraction === SIMPLE ? element.simple() : element.decimals()}
-                    </td>
+                    </div>
                 );
             });
-            return <tr>{res}</tr>;
+            return (
+                <div className="table-16__body-row" style={{gridTemplate: `20px / 40px repeat(${varCount + 1},1fr)`}}>
+                    {res}
+                </div>
+            );
         });
-        // console.log(data);
 
         return reVal;
     };
@@ -101,37 +100,34 @@ const Table = (props) => {
     // "X\u0305"
     const GetCols = () => {
         const colls = [];
-        // console.log(`count: ${count}`);
         colls.push(
-            <th key="col-first" scope="col">
-                &ensp;{"X\u0303"}
+            <div className="table-16__head-item" key="col-first">
+                {"X\u0303"}
                 <sup>({count})</sup>
-            </th>
+            </div>
         );
 
         base.forEach((item, i) => {
-            const classes = data.startSettings.notBase.includes(base[i]) ? "text-muted" : "";
+            const classes = data.startSettings.notBase.includes(base[i]) ? "text-muted " : "";
             colls.push(
-                <th key={i} scope="col" className={classes}>
-                    &ensp;X<sub>{item}</sub>
-                </th>
+                <div key={i} scope="col" className={`table-16__head-item ${classes}`}>
+                    X<sub>{item}</sub>
+                </div>
             );
         });
 
-        colls.push(<th key={varCount + 2} scope="col"></th>);
+        colls.push(<div className="table-16__head-item" key={varCount + 2}></div>);
         return colls;
     };
 
     return (
         <>
-            <table className="table table-striped table-bordered ref_table text-center">
-                <thead>
-                    <tr>
-                        <GetCols />
-                    </tr>
-                </thead>
-                <tbody>{MatRow()}</tbody>
-            </table>
+            <div className="table-16 table-16_striped">
+                <div className="table-16__head" style={{gridTemplate: `20px / 40px repeat(${varCount + 1},1fr)`}}>
+                    <GetCols />
+                </div>
+                <div className="table-16__body">{MatRow()}</div>
+            </div>
         </>
     );
 };

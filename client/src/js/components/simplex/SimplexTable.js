@@ -1,17 +1,16 @@
-import React, { useContext } from "react";
+import React, {useContext} from "react";
 import Context from "../../context/solution/solutionContext";
-import { SIMPLE } from "../../types";
+import {SIMPLE} from "../../types";
 
 const Table = (props) => {
-    const { table, data, setTables, setError, setOptimal } = props;
-    const { resMatr, base, notBase, count } = table; // table - объект текущей таблицы
+    const {table, data, setTables, setError, setOptimal} = props;
+    const {resMatr, base, notBase, count} = table; // table - объект текущей таблицы
 
-    const { solutionData } = useContext(Context);
-    const { varCount, refCount, fraction } = solutionData.current;
+    const {solutionData} = useContext(Context);
+    const {varCount, refCount, fraction} = solutionData.current;
 
     const onClick = (e) => {
         const t = e.target;
-        // if (optClick) return;
         if (t.classList.contains("active_simplex") && t.classList.contains(`td-${data.curCount}`)) {
             document.querySelectorAll(`.active_simplex.td-${data.curCount}`).forEach((item) => {
                 item.classList.remove("trans_pink");
@@ -49,7 +48,7 @@ const Table = (props) => {
                 if (resMatr[i][j].ifZero() || resMatr[i][j].demicalValue() <= 0) continue;
                 const value = resMatr[i][resMatr[i].length - 1].demicalValue() / resMatr[i][j].demicalValue();
                 elements[i][j] = true;
-                if (!elements.max || elements.max.value > value) elements.max = { value, i, j };
+                if (!elements.max || elements.max.value > value) elements.max = {value, i, j};
             }
         }
         return elements;
@@ -61,13 +60,13 @@ const Table = (props) => {
         const reVal = resMatr.map((item, i) => {
             const res = [];
             res.push(
-                <th key={`row-${i}-${0}`} scope="row">
+                <div className="table-16__body-item _bold" key={`row-${i}-${0}`}>
                     {(notBase[i] || notBase[i] === 0) && (
                         <>
                             X<sub>{notBase[i]}</sub>
                         </>
                     )}
-                </th>
+                </div>
             );
             // j-номер переменной
             item.forEach((element, j) => {
@@ -93,19 +92,26 @@ const Table = (props) => {
                 }
 
                 res.push(
-                    <td
+                    <div
+                        className={`table-16__body-item ${classes.join(" ")}`}
                         key={`row-${i}-${j + 1}`}
-                        className={classes.join(" ")}
                         rest={i}
                         var={j}
                         onClick={onClick}
                         onDoubleClick={onDoubleClick}
                     >
                         {fraction === SIMPLE ? element.simple() : element.decimals()}
-                    </td>
+                    </div>
                 );
             });
-            return <tr>{res}</tr>;
+            return (
+                <div
+                    className="table-16__body-row"
+                    style={{gridTemplate: `20px / 40px repeat(${varCount - refCount + 1},1fr)`}}
+                >
+                    {res}
+                </div>
+            );
         });
 
         return reVal;
@@ -114,34 +120,35 @@ const Table = (props) => {
     const GetCols = () => {
         const colls = [];
         colls.push(
-            <th key="col-first" scope="col">
-                &ensp;{"X\u0305"}
+            <div className="table-16__head-item" key="col-first">
+                {"X\u0305"}
                 <sup>({count})</sup>
-            </th>
+            </div>
         );
 
         base.forEach((item, i) => {
             colls.push(
-                <th key={i} scope="col">
-                    &ensp;X<sub>{item}</sub>
-                </th>
+                <div className="table-16__head-item" key={i}>
+                    X<sub>{item}</sub>
+                </div>
             );
         });
 
-        colls.push(<th key={varCount + 2} scope="col"></th>);
+        colls.push(<div className="table-16__head-item" key={varCount + 2}></div>);
         return colls;
     };
 
     return (
         <>
-            <table className="table table-striped table-bordered ref_table text-center">
-                <thead>
-                    <tr>
-                        <GetCols />
-                    </tr>
-                </thead>
-                <tbody>{MatRow()}</tbody>
-            </table>
+            <div className="table-16 table-16_striped">
+                <div
+                    className="table-16__head"
+                    style={{gridTemplate: `20px / 40px repeat(${varCount - refCount + 1},1fr)`}}
+                >
+                    <GetCols />
+                </div>
+                <div className="table-16__body">{MatRow()}</div>
+            </div>
         </>
     );
 };

@@ -2,7 +2,7 @@ import Fraction from "./fraction";
 
 export default class SimplexData {
     // solutionData
-    constructor({ refCount, restrictions, varCount }, calcStart = false) {
+    constructor({refCount, restrictions, varCount}, calcStart = false) {
         this.refCount = refCount;
         this.varCount = varCount;
         // startSettings - параметры на 1-м этапе решения
@@ -22,21 +22,21 @@ export default class SimplexData {
     autoMode = () => {
         while (!this.isUnsolvable() && !this.isOptimal()) {
             const {i, j} = this.mainSupport();
-            this.addSelectdItem({ var: j, rest: i });
+            this.addSelectdItem({var: j, rest: i});
             this.nextStep(+j, +i);
         }
         return true;
     };
 
     mainSupport = () => {
-        const { resMatr } = this.current;
+        const {resMatr} = this.current;
         let main = {};
         for (let i = 0; i < resMatr.length - 1; i++) {
             for (let j = 0; j < resMatr[i].length - 1; j++) {
                 if (resMatr[resMatr.length - 1][j].demicalValue() >= 0) continue;
                 if (resMatr[i][j].ifZero() || resMatr[i][j].demicalValue() <= 0) continue;
                 const value = resMatr[i][resMatr[i].length - 1].demicalValue() / resMatr[i][j].demicalValue();
-                if (!main.value || main.value > value) main = { value, i, j };
+                if (!main.value || main.value > value) main = {value, i, j};
             }
         }
         return main;
@@ -44,7 +44,7 @@ export default class SimplexData {
 
     getSolution = () => {
         const vector = new Array(this.varCount).fill(0).map((item) => new Fraction());
-        const { resMatr, notBase } = this.current;
+        const {resMatr, notBase} = this.current;
         for (let i = 0; i < resMatr.length - 1; i++) {
             const arr = resMatr[i];
             vector[notBase[i] - 1] = arr[arr.length - 1];
@@ -57,18 +57,18 @@ export default class SimplexData {
     };
 
     // Если уже есть готовая симплекс таблица (исскуственный базис)
-    setReadySolution = ({ matrix, base, notBase }) => {
-        this.current = { resMatr: matrix, base: [...base], notBase: [...notBase], count: 0 };
+    setReadySolution = ({matrix, base, notBase}) => {
+        this.current = {resMatr: matrix, base: [...base], notBase: [...notBase], count: 0};
         const clone = JSON.parse(JSON.stringify(this.current));
         clone.resMatr = this._cloneFraction(clone.resMatr);
         this.history.push(clone);
-        this.startSettings = { base: [...base], notBase: [...notBase] };
+        this.startSettings = {base: [...base], notBase: [...notBase]};
         this.curCount = 0;
     };
 
     // TODO переделать !!!
     isOptimal = () => {
-        const { resMatr } = this.current;
+        const {resMatr} = this.current;
         const arr = resMatr[resMatr.length - 1];
         for (let i = 0; i < arr.length - 1; i++) {
             if (arr[i].demicalValue() < 0) return false;
@@ -77,7 +77,7 @@ export default class SimplexData {
     };
 
     _getCurrentColumnByID = (id) => {
-        const { resMatr } = this.current;
+        const {resMatr} = this.current;
         const result = [];
         resMatr.forEach((arr) => {
             result.push(arr[id]);
@@ -87,7 +87,7 @@ export default class SimplexData {
 
     // TODO переделать !!!
     isUnsolvable = () => {
-        const { resMatr } = this.current;
+        const {resMatr} = this.current;
 
         if (this.isOptimal()) return false;
 
@@ -113,9 +113,7 @@ export default class SimplexData {
         });
     };
 
-
     _getMaxIndex = (res, i1, j1, candidate) => {
-        console.log(res, i1, j1, candidate);
         if (candidate < 0) return false;
         let minvalue = candidate;
         if (i1 === res.length - 1) return false;
@@ -128,7 +126,6 @@ export default class SimplexData {
         }
         return true;
     };
-
 
     // TODO переделать - Нужно только для симплекс метода
     // функция формирует первую(стартовую) симплекс таблицу
@@ -168,18 +165,17 @@ export default class SimplexData {
                         j,
                         Math.abs(arr[arr.length - 1].demicalValue() / tmp.demicalValue())
                     );
-                    console.log(tmp.isMin);
                 }
             });
         });
 
-        this.current = { resMatr: res, base, notBase, count: 0 };
+        this.current = {resMatr: res, base, notBase, count: 0};
 
         const clone = JSON.parse(JSON.stringify(this.current));
         clone.resMatr = this._cloneFraction(clone.resMatr);
 
         this.history.push(clone);
-        this.startSettings = { base: [...base], notBase: [...notBase] };
+        this.startSettings = {base: [...base], notBase: [...notBase]};
         this.curCount = 0;
     };
 
@@ -194,8 +190,7 @@ export default class SimplexData {
 
     // следующий симплекс шаг (varnumb - индекс переменной; resnumb - номер ограничения)
     nextStep = (varnumb, resnumb) => {
-        console.log(`nextStep, varnumb: ${varnumb}, resnumb: ${resnumb}`);
-        let { resMatr, base, notBase, count } = JSON.parse(JSON.stringify(this.current));
+        let {resMatr, base, notBase, count} = JSON.parse(JSON.stringify(this.current));
         resMatr = this._cloneFraction(resMatr);
 
         // поменять базисные переменные
@@ -250,12 +245,11 @@ export default class SimplexData {
                         j,
                         Math.abs(arr[arr.length - 1].demicalValue() / tmp.demicalValue())
                     );
-                    console.log(tmp.isMin);
                 }
             });
         });
 
-        this.current = { resMatr: cloneMatr, base, notBase, count: count + 1 };
+        this.current = {resMatr: cloneMatr, base, notBase, count: count + 1};
 
         const clone = JSON.parse(JSON.stringify(this.current));
         clone.resMatr = this._cloneFraction(clone.resMatr);

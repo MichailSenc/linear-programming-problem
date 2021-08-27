@@ -2,7 +2,7 @@ import Fraction from "./fraction";
 
 export default class ArtificalData {
     // solutionData
-    constructor({ refCount, restrictions, varCount }) {
+    constructor({refCount, restrictions, varCount}) {
         this.refCount = refCount;
         this.varCount = varCount;
         // startSettings - параметры на 1-м этапе решения
@@ -21,11 +21,11 @@ export default class ArtificalData {
     autoMode = () => {
         for (let i = 0; i < this.refCount; i++) {
             if (this.isUnsolvable() || this.isOptimal()) return false;
-            const { resMatr, base } = this.current;
+            const {resMatr, base} = this.current;
             for (let j = 0; j < resMatr[i].length - 1; j++) {
                 if (this.startSettings.notBase.includes(base[j])) continue;
                 if (!resMatr[i][j].ifZero()) {
-                    this.addSelectdItem({ var: i, rest: j });
+                    this.addSelectdItem({var: i, rest: j});
                     this.nextStep(i, j);
                     break;
                 }
@@ -35,8 +35,8 @@ export default class ArtificalData {
     };
 
     // вычислить итоговые коэффициенты
-    calcCoeffs = ({ func, growth }) => {
-        const { resMatr, base, notBase } = this.current;
+    calcCoeffs = ({func, growth}) => {
+        const {resMatr, base, notBase} = this.current;
         const sNotBase = this.startSettings.notBase;
         const sBase = this.startSettings.base;
         const arr = new Array(base.filter((item) => !sNotBase.includes(item)).length + 1)
@@ -85,7 +85,7 @@ export default class ArtificalData {
     };
 
     isOptimal = () => {
-        const { base } = this.current;
+        const {base} = this.current;
         const sNotBase = this.startSettings.notBase;
 
         for (let i = 0; i < sNotBase.length; i++) {
@@ -96,12 +96,11 @@ export default class ArtificalData {
     };
 
     isUnsolvable = () => {
-        const { resMatr, base, notBase } = this.current;
+        const {resMatr, base, notBase} = this.current;
         const sBase = this.startSettings.base;
         const sNotBase = this.startSettings.notBase;
 
         if (this.isOptimal()) return false;
-        console.log("usolve!");
 
         // i-номер ограничения -1
         point: for (let i = 0; i < resMatr.length - 1; i++) {
@@ -134,7 +133,6 @@ export default class ArtificalData {
     };
 
     _getMaxIndex = (res, i1, j1, candidate) => {
-        console.log(res, i1, j1, candidate);
         let maxvalue = candidate;
         if (i1 === res.length - 1) return false;
         for (const arr of res) {
@@ -174,7 +172,6 @@ export default class ArtificalData {
             notBase[i] = i + 1 + this.varCount;
         }
 
-        console.log(res);
         res.forEach((arr, i) => {
             arr.forEach((tmp, j) => {
                 if (!tmp.ifZero()) {
@@ -184,19 +181,16 @@ export default class ArtificalData {
                         j,
                         Math.abs(arr[arr.length - 1].demicalValue() / tmp.demicalValue())
                     );
-                    console.log(tmp.isMin);
                 }
             });
         });
-        this.current = { resMatr: res, base, notBase, count: 0 };
+        this.current = {resMatr: res, base, notBase, count: 0};
 
         const clone = JSON.parse(JSON.stringify(this.current));
         clone.resMatr = this._cloneFraction(clone.resMatr);
-        console.log(JSON.parse(JSON.stringify(this.current)));
-        console.log(clone);
 
         this.history.push(clone);
-        this.startSettings = { base: [...base], notBase: [...notBase] };
+        this.startSettings = {base: [...base], notBase: [...notBase]};
         this.curCount = 0;
     };
 
@@ -211,8 +205,7 @@ export default class ArtificalData {
 
     // следующий симплекс шаг (varnumb - индекс переменной; resnumb - номер ограничения)
     nextStep = (varnumb, resnumb) => {
-        console.log(`nextStep, varnumb: ${varnumb}, resnumb: ${resnumb}`);
-        let { resMatr, base, notBase, count } = JSON.parse(JSON.stringify(this.current));
+        let {resMatr, base, notBase, count} = JSON.parse(JSON.stringify(this.current));
         resMatr = this._cloneFraction(resMatr);
 
         // поменять базисные переменные
@@ -267,12 +260,11 @@ export default class ArtificalData {
                         j,
                         Math.abs(arr[arr.length - 1].demicalValue() / tmp.demicalValue())
                     );
-                    console.log(tmp.isMin);
                 }
             });
         });
 
-        this.current = { resMatr: cloneMatr, base, notBase, count: count + 1 };
+        this.current = {resMatr: cloneMatr, base, notBase, count: count + 1};
 
         const clone = JSON.parse(JSON.stringify(this.current));
         clone.resMatr = this._cloneFraction(clone.resMatr);
